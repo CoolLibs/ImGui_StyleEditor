@@ -1,4 +1,5 @@
 #include "ColorCategory.hpp"
+#include <algorithm>
 #include "imgui/imgui.h"
 
 namespace ImStyleEd {
