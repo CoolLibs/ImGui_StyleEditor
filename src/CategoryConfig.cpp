@@ -20,8 +20,8 @@ void CategoryConfig::categories_table()
                                              | ImGuiTableFlags_BordersH
                                              | ImGuiTableFlags_ContextMenuInBody;
 
-    auto const nb_columns = static_cast<int>(_categories.size());
-    if (nb_columns > 0 && ImGui::BeginTable("tex_library", nb_columns, flags))
+    auto const nb_columns = _categories.size();
+    if (nb_columns > 0 && ImGui::BeginTable("tex_library", static_cast<int>(nb_columns), flags))
     {
         for (auto& category : _categories)
         {
@@ -29,9 +29,9 @@ void CategoryConfig::categories_table()
         }
         ImGui::TableHeadersRow();
         ImGui::TableNextRow();
-        for (int column = 0; column < nb_columns; column++)
+        for (size_t column = 0; column < nb_columns; column++)
         {
-            ImGui::TableSetColumnIndex(column);
+            ImGui::TableSetColumnIndex(static_cast<int>(column));
             auto& category = _categories[column];
             ImGui::BeginGroup();
             for (auto& element : category.elements())
