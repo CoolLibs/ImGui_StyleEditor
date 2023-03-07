@@ -1,3 +1,4 @@
+#include "imgui.h"
 #define DOCTEST_CONFIG_IMPLEMENT
 #include <doctest/doctest.h>
 #include <ImStyleEd/ImStyleEd.hpp>
@@ -14,8 +15,14 @@ auto main(int argc, char* argv[]) -> int
         && exit_code == 0 // Only open the window if the tests passed; this makes it easier to notice when some tests fail
     )       
     {
-        quick_imgui::loop("ImStyleEd tests", []() { // Open a window and run all the ImGui-related code
-            ImGui::Begin("ImStyleEd tests");
+        quick_imgui::loop("ImStyleEd", []() { // Open a window and run all the ImGui-related code
+            ImGui::Begin("ImStyleEd");
+            {
+                ImGui::SeparatorText("Categories Config");
+                static auto category_config = ImStyleEd::CategoryConfig{};
+                category_config.widget();
+                ImGui::SeparatorText("Final Theme Picker UI");
+            }
             ImGui::End();
             ImGui::ShowDemoWindow();
         });

@@ -1,7 +1,5 @@
 #pragma once
 
-namespace ImStyleEd {
-
-
-    
-} // namespace ImStyleEd
+#include "../../src/CategoryConfig.h"
+#include "../../src/ColorCategory.h"
+#include "../../src/ColorElement.h"
