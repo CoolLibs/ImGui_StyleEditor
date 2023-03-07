@@ -32,13 +32,52 @@ void CategoryConfig::categories_table()
         for (int column = 0; column < nb_columns; column++)
         {
             ImGui::TableSetColumnIndex(column);
-            auto const& category = _categories[column];
-            for (auto const& element : category.elements())
+            auto& category = _categories[column];
+            ImGui::BeginGroup();
+            for (auto& element : category.elements())
             {
-                ImGui::Selectable(element.name());
+                element_widget(element);
+            }
+            ImGui::BeginDisabled();
+            ImGui::Button("Drag elements here");
+            ImGui::EndDisabled();
+            ImGui::EndGroup();
+            if (ImGui::BeginDragDropTarget())
+            {
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_DEMO_CELL"))
+                {
+                    IM_ASSERT(payload->DataSize == sizeof(ColorElement));
+                    ColorElement payload_element = *(const ColorElement*)payload->Data;
+                    remove_element_from_all_categories(payload_element);
+                    category.add_element(payload_element);
+                }
+                ImGui::EndDragDropTarget();
             }
         }
         ImGui::EndTable();
+    }
+}
+
+void CategoryConfig::remove_element_from_all_categories(ColorElement const& element)
+{
+    for (auto& category : _categories)
+        category.remove_element(element.id());
+}
+
+void CategoryConfig::element_widget(ColorElement& element)
+{
+    element.widget();
+    if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+    {
+        // Set payload to carry the index of our item (could be anything)
+        ImGui::SetDragDropPayload("DND_DEMO_CELL", &element, sizeof(ColorElement));
+
+        // Display preview (could be anything, e.g. when dragging an image we could decide to display
+        // the filename and a small preview of the image, etc.)
+
+        ImGui::Text("Move %s to another category", element.name());
+
+        ImGui::EndDragDropSource();
     }
 }
 

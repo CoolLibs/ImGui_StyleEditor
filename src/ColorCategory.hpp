@@ -12,6 +12,9 @@ public:
         : _elements{std::move(elements)}
     {}
 
+    void add_element(ColorElement const&);
+    void remove_element(ImGuiCol);
+
     void apply(ImGuiStyle&);
 
     auto name() -> auto& { return _name; }

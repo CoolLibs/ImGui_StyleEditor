@@ -14,12 +14,14 @@ public:
     {}
 
     void apply(ImGuiStyle&, ImVec4 color) const;
+    void widget();
 
     auto color() -> auto& { return _color; }
     auto color() const -> auto const& { return _color; }
     auto brightness_change() -> auto& { return _brightness_change; }
     auto brightness_change() const -> auto const& { return _brightness_change; }
     auto name() const -> const char* { return color_id_to_string(_id); }
+    auto id() const -> ImGuiCol { return _id; }
 
 private:
     ImGuiCol _id{};

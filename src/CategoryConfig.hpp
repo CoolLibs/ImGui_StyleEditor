@@ -13,6 +13,8 @@ public:
 
 private:
     void categories_table();
+    void element_widget(ColorElement&);
+    void remove_element_from_all_categories(ColorElement const&);
 
 private:
     std::vector<ColorCategory> _categories;
