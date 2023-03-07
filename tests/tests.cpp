@@ -6,6 +6,17 @@
 
 // Learn how to use Dear ImGui: https://coollibs.github.io/contribute/Programming/dear-imgui
 
+static auto create_category_config() -> ImStyleEd::CategoryConfig
+{
+    auto category_config = ImStyleEd::CategoryConfig{{
+        ImStyleEd::category_with_all_color_elements(),
+        ImStyleEd::ColorCategory{},
+    }};
+    ImGui::StyleColorsDark();
+    category_config.set_from_style(ImGui::GetStyle());
+    return category_config;
+}
+
 auto main(int argc, char* argv[]) -> int
 {
     const int exit_code = doctest::Context{}.run(); // Run all unit tests
@@ -15,13 +26,10 @@ auto main(int argc, char* argv[]) -> int
         && exit_code == 0 // Only open the window if the tests passed; this makes it easier to notice when some tests fail
     )       
     {
-        quick_imgui::loop("ImStyleEd", []() { // Open a window and run all the ImGui-related code
+        quick_imgui::loop("ImStyleEd", [&]() { // Open a window and run all the ImGui-related code
+            static auto category_config = create_category_config();
             ImGui::Begin("Categories Config");
             {
-                static auto category_config = ImStyleEd::CategoryConfig{{
-                    ImStyleEd::category_with_all_color_elements(),
-                    ImStyleEd::ColorCategory{},
-                }};
                 category_config.widget();
             }
             ImGui::End();

@@ -7,9 +7,13 @@ namespace ImStyleEd {
 void ColorCategory::apply(ImGuiStyle& style)
 {
     for (auto& element : _elements)
-    {
         element.apply(style, _color);
-    }
+}
+
+void ColorCategory::set_from_style(ImGuiStyle const& style)
+{
+    for (auto& element : _elements)
+        element.set_from_style(style);
 }
 
 void ColorCategory::add_element(ColorElement const& element)

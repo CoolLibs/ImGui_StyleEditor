@@ -15,6 +15,7 @@ public:
 
     void apply(ImGuiStyle&, ImVec4 color) const;
     void widget();
+    void set_from_style(ImGuiStyle const&);
 
     auto color() -> auto& { return _color; }
     auto color() const -> auto const& { return _color; }

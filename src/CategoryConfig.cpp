@@ -11,6 +11,12 @@ void CategoryConfig::widget()
     categories_table();
 }
 
+void CategoryConfig::set_from_style(ImGuiStyle const& style)
+{
+    for (auto& category : _categories)
+        category.set_from_style(style);
+}
+
 void CategoryConfig::categories_table()
 {
     static constexpr ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchSame
