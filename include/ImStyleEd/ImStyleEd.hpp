@@ -1,5 +1,5 @@
 #pragma once
 
-#include "../../src/CategoryConfig.h"
-#include "../../src/ColorCategory.h"
-#include "../../src/ColorElement.h"
+#include "../../src/CategoryConfig.hpp"
+#include "../../src/ColorCategory.hpp"
+#include "../../src/ColorElement.hpp"

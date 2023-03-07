@@ -1,13 +1,17 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "ColorElement.h"
+#include "ColorElement.hpp"
 #include "imgui/imgui.h"
 
 namespace ImStyleEd {
 
 class ColorCategory {
 public:
+    explicit ColorCategory(std::vector<ColorElement> elements = {})
+        : _elements{std::move(elements)}
+    {}
+
     void apply(ImGuiStyle&);
 
     auto name() -> auto& { return _name; }
@@ -20,5 +24,7 @@ private:
     ImVec4                    _color{};
     std::vector<ColorElement> _elements;
 };
+
+auto category_with_all_color_elements() -> ColorCategory;
 
 } // namespace ImStyleEd

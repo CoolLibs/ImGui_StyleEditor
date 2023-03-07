@@ -16,12 +16,17 @@ auto main(int argc, char* argv[]) -> int
     )       
     {
         quick_imgui::loop("ImStyleEd", []() { // Open a window and run all the ImGui-related code
-            ImGui::Begin("ImStyleEd");
+            ImGui::Begin("Categories Config");
             {
-                ImGui::SeparatorText("Categories Config");
-                static auto category_config = ImStyleEd::CategoryConfig{};
+                static auto category_config = ImStyleEd::CategoryConfig{{
+                    ImStyleEd::category_with_all_color_elements(),
+                    ImStyleEd::ColorCategory{},
+                }};
                 category_config.widget();
-                ImGui::SeparatorText("Final Theme Picker UI");
+            }
+            ImGui::End();
+            ImGui::Begin("Final Theme Picker UI");
+            {
             }
             ImGui::End();
             ImGui::ShowDemoWindow();

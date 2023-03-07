@@ -1,4 +1,4 @@
-#include "CategoryConfig.h"
+#include "CategoryConfig.hpp"
 #include "imgui/imgui.h"
 
 namespace ImStyleEd {
