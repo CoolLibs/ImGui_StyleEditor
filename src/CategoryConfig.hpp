@@ -11,6 +11,7 @@ public:
     void widget();
     void add_category(ColorCategory const& category) { _categories.push_back(category); }
     void set_from_style(ImGuiStyle const&);
+    void apply_to(ImGuiStyle&);
 
 private:
     void categories_table();

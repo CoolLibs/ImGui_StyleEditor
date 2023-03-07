@@ -15,7 +15,7 @@ public:
     void add_element(ColorElement const&);
     void remove_element(ImGuiCol);
 
-    void apply(ImGuiStyle&);
+    void apply_to(ImGuiStyle&) const;
     void set_from_style(ImGuiStyle const&);
 
     auto name() -> auto& { return _name; }

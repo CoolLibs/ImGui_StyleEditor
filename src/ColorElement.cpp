@@ -3,9 +3,9 @@
 
 namespace ImStyleEd {
 
-void ColorElement::apply(ImGuiStyle& style, ImVec4 color) const
+void ColorElement::apply_to(ImGuiStyle& style) const
 {
-    style.Colors[_id] = color; // TODO(JF) Apply the _brightness_change
+    style.Colors[_id] = _color; // TODO(JF) Apply the _brightness_change
 }
 
 void ColorElement::set_from_style(ImGuiStyle const& style)

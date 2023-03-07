@@ -9,6 +9,13 @@ void CategoryConfig::widget()
         _categories.emplace_back();
 
     categories_table();
+    apply_to(ImGui::GetStyle());
+}
+
+void CategoryConfig::apply_to(ImGuiStyle& style)
+{
+    for (auto& category : _categories)
+        category.apply_to(style);
 }
 
 void CategoryConfig::set_from_style(ImGuiStyle const& style)

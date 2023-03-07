@@ -4,10 +4,10 @@
 
 namespace ImStyleEd {
 
-void ColorCategory::apply(ImGuiStyle& style)
+void ColorCategory::apply_to(ImGuiStyle& style) const
 {
-    for (auto& element : _elements)
-        element.apply(style, _color);
+    for (auto const& element : _elements)
+        element.apply_to(style);
 }
 
 void ColorCategory::set_from_style(ImGuiStyle const& style)

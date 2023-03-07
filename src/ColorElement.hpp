@@ -13,7 +13,7 @@ public:
         , _brightness_change{brightness_change}
     {}
 
-    void apply(ImGuiStyle&, ImVec4 color) const;
+    void apply_to(ImGuiStyle&) const;
     void widget();
     void set_from_style(ImGuiStyle const&);
 
