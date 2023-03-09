@@ -22,6 +22,11 @@ if(WARNINGS_AS_ERRORS_FOR_IMSTYLEED)
     endif()
 endif()
 
+# ---Set executable output directory---
+get_filename_component(PARENT_DIR ${CMAKE_SOURCE_DIR} DIRECTORY)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PARENT_DIR}/bin/${CMAKE_BUILD_TYPE})
+
 # ---Include our library---
 add_subdirectory(.. ${CMAKE_CURRENT_SOURCE_DIR}/build/ImStyleEd)
 target_link_libraries(${PROJECT_NAME} PRIVATE ImStyleEd::ImStyleEd)
