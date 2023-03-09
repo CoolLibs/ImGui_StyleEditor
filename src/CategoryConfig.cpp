@@ -1,4 +1,8 @@
 #include "CategoryConfig.hpp"
+#include <exe_path/exe_path.h>
+#include <cereal/archives/json.hpp>
+#include <filesystem>
+#include <fstream>
 #include "imgui/imgui.h"
 
 namespace ImStyleEd {
@@ -10,6 +14,7 @@ void CategoryConfig::widget()
 
     categories_table();
     apply_to(ImGui::GetStyle());
+    save_to_disk();
 }
 
 void CategoryConfig::apply_to(ImGuiStyle& style)
@@ -91,6 +96,36 @@ void CategoryConfig::element_widget(ColorElement& element)
         ImGui::Text("Move %s to another category", element.name());
 
         ImGui::EndDragDropSource();
+    }
+}
+
+static auto path() -> std::filesystem::path const&
+{
+    static auto const p = exe_path::dir() / "color_config.json";
+    return p;
+}
+
+void CategoryConfig::save_to_disk()
+{
+    std::ofstream os{path()};
+    {
+        cereal::JSONOutputArchive archive{os};
+        archive(cereal::make_nvp("Config", *this));
+    }
+}
+
+void CategoryConfig::load_from_disk()
+{
+    std::ifstream is{path()};
+    if (!is.is_open())
+        return;
+    try
+    {
+        cereal::JSONInputArchive archive{is};
+        archive(*this);
+    }
+    catch (...)
+    {
     }
 }
 

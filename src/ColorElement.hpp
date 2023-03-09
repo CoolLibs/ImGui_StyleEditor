@@ -1,4 +1,5 @@
 #pragma once
+#include <cereal/cereal.hpp>
 #include <string>
 #include "color_id_to_string.hpp"
 #include "imgui/imgui.h"
@@ -7,6 +8,7 @@ namespace ImStyleEd {
 
 class ColorElement {
 public:
+    ColorElement() = default;
     explicit ColorElement(ImGuiCol id, ImVec4 color = {}, float brightness_change = 0.f)
         : _id{id}
         , _color{color}
@@ -30,6 +32,19 @@ private:
     ImVec4   _color{};                // TODO(JF) Color should be computed based on the category, the _brightness_change and the _opacity.
     float    _brightness_change{0.f}; // 0 means using the same color as the category, > 0 means using a brighter one, and < 0 a darker one;
     float    _opacity{1.f};
+
+private:
+    // Serialization
+    friend class cereal::access;
+    template<class Archive>
+    void serialize(Archive& archive)
+    {
+        archive(
+            cereal::make_nvp("ID", _id),
+            cereal::make_nvp("Brightness change", _brightness_change),
+            cereal::make_nvp("Opacity", _opacity)
+        );
+    }
 };
 
 } // namespace ImStyleEd
