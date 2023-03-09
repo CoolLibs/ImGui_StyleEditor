@@ -7,3 +7,6 @@ build/*
 .cache
 .DS_Store
 __pycache__
+bin/Debug/ImStyleEd-tests.exe
+bin/Debug/ImStyleEd-tests.ilk
+bin/Debug/ImStyleEd-tests.pdb

@@ -26,6 +26,10 @@ if(WARNINGS_AS_ERRORS_FOR_IMSTYLEED)
     endif()
 endif()
 
+# ---Set executable output directory---
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin/${CMAKE_BUILD_TYPE})
+
 # ---Cereal library---
 include(FetchContent)
 FetchContent_Declare(
