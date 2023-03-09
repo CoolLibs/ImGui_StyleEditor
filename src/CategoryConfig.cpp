@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <fstream>
 #include "imgui/imgui.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace ImStyleEd {
 
@@ -51,6 +52,9 @@ void CategoryConfig::categories_table()
         {
             ImGui::TableSetColumnIndex(static_cast<int>(column));
             auto& category = _categories[column];
+            ImGui::PushID(&category);
+            ImGui::InputText("Name", &category.name());
+            ImGui::PopID();
             ImGui::BeginGroup();
             for (auto& element : category.elements())
             {
