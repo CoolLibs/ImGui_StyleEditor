@@ -14,13 +14,13 @@ static auto lerp(float a, float b, float t) -> float
     return a + t * (b - a);
 }
 
-void ColorElement::update_color(std::array<float, 3> const& color)
+void ColorElement::update_color(std::array<float, 3> const& color, bool is_dark_mode)
 {
     auto cielab = CIELAB_from_sRGB({color[0], color[1], color[2]});
     if (_brightness_change > 0.f)
-        cielab.x = lerp(cielab.x, 1.f, _brightness_change);
+        cielab.x = lerp(cielab.x, is_dark_mode ? 1.f : 0.f, _brightness_change);
     else
-        cielab.x = lerp(cielab.x, 0.f, -_brightness_change);
+        cielab.x = lerp(cielab.x, is_dark_mode ? 0.f : 1.f, -_brightness_change);
 
     auto srgb = sRGB_from_CIELAB(cielab);
 

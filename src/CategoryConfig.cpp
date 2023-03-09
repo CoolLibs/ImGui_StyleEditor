@@ -11,12 +11,16 @@ namespace ImStyleEd {
 void CategoryConfig::widget()
 {
     bool b = false;
+    b |= ImGui::Checkbox("Is Dark Mode", &_is_dark_mode);
     for (auto& category : _categories)
     {
-        b |= category.widget();
+        b |= category.widget(_is_dark_mode);
     }
     if (b)
+    {
+        update_colors();
         apply_to(ImGui::GetStyle());
+    }
 }
 
 void CategoryConfig::category_creation_widget()
@@ -75,7 +79,7 @@ void CategoryConfig::categories_table()
             for (auto& element : category.elements())
             {
                 if (element_widget(element))
-                    element.update_color(category.color());
+                    element.update_color(category.color(), _is_dark_mode);
             }
             ImGui::BeginDisabled();
             ImGui::Button("Drag elements here");
@@ -88,7 +92,7 @@ void CategoryConfig::categories_table()
                     IM_ASSERT(payload->DataSize == sizeof(ColorElement));
                     ColorElement payload_element = *(const ColorElement*)payload->Data;
                     remove_element_from_all_categories(payload_element);
-                    category.add_element(payload_element);
+                    category.add_element(payload_element, _is_dark_mode);
                 }
                 ImGui::EndDragDropTarget();
             }
@@ -154,7 +158,7 @@ void CategoryConfig::load_from_disk()
 void CategoryConfig::update_colors()
 {
     for (auto& category : _categories)
-        category.update_colors();
+        category.update_colors(_is_dark_mode);
 }
 
 } // namespace ImStyleEd

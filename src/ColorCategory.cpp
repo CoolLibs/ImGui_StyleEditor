@@ -16,17 +16,17 @@ void ColorCategory::set_from_style(ImGuiStyle const& style)
         element.set_from_style(style);
 }
 
-void ColorCategory::update_colors()
+void ColorCategory::update_colors(bool is_dark_mode)
 {
     for (auto& element : _elements)
-        element.update_color(_color);
+        element.update_color(_color, is_dark_mode);
 }
 
-void ColorCategory::add_element(ColorElement const& element)
+void ColorCategory::add_element(ColorElement const& element, bool is_dark_mode)
 {
     _elements.push_back(element);
     sort();
-    update_colors();
+    update_colors(is_dark_mode);
     apply_to(ImGui::GetStyle());
 }
 
@@ -50,13 +50,13 @@ auto category_with_all_color_elements() -> ColorCategory
     }};
 }
 
-auto ColorCategory::widget() -> bool
+auto ColorCategory::widget(bool is_dark_mode) -> bool
 {
     bool b = ImGui::ColorEdit3(name().c_str(), color().data(), ImGuiColorEditFlags_NoInputs);
     if (b)
     {
         for (auto& element : _elements)
-            element.update_color(_color);
+            element.update_color(_color, is_dark_mode);
     }
     return b;
 }

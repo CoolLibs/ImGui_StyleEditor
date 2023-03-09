@@ -30,6 +30,7 @@ private:
 
 private:
     std::vector<ColorCategory> _categories;
+    bool                       _is_dark_mode{true};
 
 private:
     // Serialization
@@ -38,7 +39,8 @@ private:
     void serialize(Archive& archive)
     {
         archive(
-            cereal::make_nvp("Categories", _categories)
+            cereal::make_nvp("Categories", _categories),
+            cereal::make_nvp("Is Dark Mode", _is_dark_mode)
         );
     }
 };

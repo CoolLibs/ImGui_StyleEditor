@@ -17,15 +17,15 @@ public:
         : _elements{std::move(elements)}
     {}
 
-    void add_element(ColorElement const&);
+    void add_element(ColorElement const&, bool is_dark_mode);
     void remove_element(ImGuiCol);
 
     void apply_to(ImGuiStyle&) const;
     void set_from_style(ImGuiStyle const&);
 
-    void update_colors();
+    void update_colors(bool is_dark_mode);
 
-    auto widget() -> bool;
+    auto widget(bool is_dark_mode) -> bool;
 
     auto name() -> auto& { return _name; }
     auto name() const -> auto const& { return _name; }
