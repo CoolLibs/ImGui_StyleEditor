@@ -19,7 +19,7 @@ public:
 
 private:
     void categories_table();
-    void element_widget(ColorElement&);
+    auto element_widget(ColorElement&) -> bool;
     void remove_element_from_all_categories(ColorElement const&);
     void save_to_disk();
     void load_from_disk();

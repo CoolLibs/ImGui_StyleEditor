@@ -19,7 +19,7 @@ public:
     void apply_to(ImGuiStyle&) const;
     void update_color(std::array<float, 3> const& color);
 
-    void widget();
+    auto widget() -> bool;
     void set_from_style(ImGuiStyle const&);
 
     [[nodiscard]] auto color() -> auto& { return _color; }

@@ -44,3 +44,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(exe_path)
 target_link_libraries(ImStyleEd PRIVATE exe_path::exe_path)
+
+# ---exe_path library---
+include(FetchContent)
+FetchContent_Declare(
+    glm
+    GIT_REPOSITORY https://github.com/CoolLibs/glm
+    GIT_TAG 41628991f848835d36042173eb45874c1859e1c2
+)
+target_include_directories(ImStyleEd PRIVATE ${glm_SOURCE_DIR})

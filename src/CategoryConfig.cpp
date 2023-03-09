@@ -69,7 +69,8 @@ void CategoryConfig::categories_table()
             ImGui::BeginGroup();
             for (auto& element : category.elements())
             {
-                element_widget(element);
+                if (element_widget(element))
+                    element.update_color(category.color());
             }
             ImGui::BeginDisabled();
             ImGui::Button("Drag elements here");
@@ -97,9 +98,9 @@ void CategoryConfig::remove_element_from_all_categories(ColorElement const& elem
         category.remove_element(element.id());
 }
 
-void CategoryConfig::element_widget(ColorElement& element)
+auto CategoryConfig::element_widget(ColorElement& element) -> bool
 {
-    element.widget();
+    bool const b = element.widget();
     if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
     {
         // Set payload to carry the index of our item (could be anything)
@@ -112,6 +113,7 @@ void CategoryConfig::element_widget(ColorElement& element)
 
         ImGui::EndDragDropSource();
     }
+    return b;
 }
 
 static auto path() -> std::filesystem::path const&
