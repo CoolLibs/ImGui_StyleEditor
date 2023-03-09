@@ -19,11 +19,20 @@ void ColorCategory::set_from_style(ImGuiStyle const& style)
 void ColorCategory::add_element(ColorElement const& element)
 {
     _elements.push_back(element);
+    sort();
 }
 
 void ColorCategory::remove_element(ImGuiCol id)
 {
     _elements.erase(std::remove_if(_elements.begin(), _elements.end(), [&](ColorElement const& elem) { return elem.id() == id; }), _elements.end());
+    sort();
+}
+
+void ColorCategory::sort()
+{
+    std::sort(_elements.begin(), _elements.end(), [](ColorElement const& a, ColorElement const& b) {
+        return std::string{a.name()} < std::string{b.name()};
+    });
 }
 
 auto category_with_all_color_elements() -> ColorCategory
