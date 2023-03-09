@@ -1,4 +1,5 @@
 #pragma once
+#include <array>
 #include <string>
 #include <vector>
 #include "ColorElement.hpp"
@@ -25,7 +26,7 @@ public:
 
 private:
     std::string               _name{"Give me a name by clicking HERE"};
-    ImVec4                    _color{};
+    std::array<float, 3>      _color{0.f, 0.f, 0.f}; // Not a vec4, the opacity is handled by each element separately
     std::vector<ColorElement> _elements;
 };
 
