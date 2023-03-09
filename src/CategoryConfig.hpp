@@ -12,6 +12,7 @@ public:
         load_from_disk();
     }
     void widget();
+    void category_creation_widget();
     void add_category(ColorCategory const& category) { _categories.push_back(category); }
     void set_from_style(ImGuiStyle const&);
     void apply_to(ImGuiStyle&);

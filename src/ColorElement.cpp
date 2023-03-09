@@ -5,7 +5,15 @@ namespace ImStyleEd {
 
 void ColorElement::apply_to(ImGuiStyle& style) const
 {
-    style.Colors[_id] = _color; // TODO(JF) Apply the _brightness_change
+    style.Colors[_id] = _color;
+}
+
+void ColorElement::update_color(std::array<float, 3> const& color)
+{
+    _color.x = color[0];
+    _color.y = color[1];
+    _color.z = color[2];
+    _color.w = _opacity;
 }
 
 void ColorElement::set_from_style(ImGuiStyle const& style)

@@ -10,6 +10,17 @@ namespace ImStyleEd {
 
 void CategoryConfig::widget()
 {
+    bool b = false;
+    for (auto& category : _categories)
+    {
+        b |= category.widget();
+    }
+    if (b)
+        apply_to(ImGui::GetStyle());
+}
+
+void CategoryConfig::category_creation_widget()
+{
     if (ImGui::Button("Add Category"))
         _categories.emplace_back();
 

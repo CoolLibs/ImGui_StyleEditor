@@ -23,10 +23,14 @@ public:
     void apply_to(ImGuiStyle&) const;
     void set_from_style(ImGuiStyle const&);
 
+    auto widget() -> bool;
+
     auto name() -> auto& { return _name; }
     auto name() const -> auto const& { return _name; }
     auto elements() -> auto& { return _elements; }
     auto elements() const -> auto const& { return _elements; }
+    auto color() -> auto& { return _color; }
+    auto color() const -> auto const& { return _color; }
 
 private:
     std::string               _name{"Unnamed"};

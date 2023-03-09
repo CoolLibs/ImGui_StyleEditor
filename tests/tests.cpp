@@ -30,11 +30,12 @@ auto main(int argc, char* argv[]) -> int
             static auto category_config = create_category_config();
             ImGui::Begin("Categories Config");
             {
-                category_config.widget();
+                category_config.category_creation_widget();
             }
             ImGui::End();
             ImGui::Begin("Final Theme Picker UI");
             {
+                category_config.widget();
             }
             ImGui::End();
             ImGui::ShowDemoWindow();

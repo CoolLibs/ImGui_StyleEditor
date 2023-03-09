@@ -33,4 +33,15 @@ auto category_with_all_color_elements() -> ColorCategory
     }};
 }
 
+auto ColorCategory::widget() -> bool
+{
+    bool b = ImGui::ColorEdit3(name().c_str(), color().data(), ImGuiColorEditFlags_NoInputs);
+    if (b)
+    {
+        for (auto& element : _elements)
+            element.update_color(_color);
+    }
+    return b;
+}
+
 } // namespace ImStyleEd

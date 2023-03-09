@@ -1,4 +1,5 @@
 #pragma once
+#include <array>
 #include <cereal/cereal.hpp>
 #include <string>
 #include "color_id_to_string.hpp"
@@ -9,7 +10,7 @@ namespace ImStyleEd {
 class ColorElement {
 public:
     ColorElement() = default;
-    explicit ColorElement(ImGuiCol id, ImVec4 color = {}, float brightness_change = 0.f)
+    explicit ColorElement(ImGuiCol id, ImVec4 color = {0.f, 0.f, 0.f, 1.f}, float brightness_change = 0.f)
         : _id{id}
         , _color{color}
         , _brightness_change{brightness_change}
@@ -17,15 +18,17 @@ public:
     {}
 
     void apply_to(ImGuiStyle&) const;
+    void update_color(std::array<float, 3> const& color);
+
     void widget();
     void set_from_style(ImGuiStyle const&);
 
-    auto color() -> auto& { return _color; }
-    auto color() const -> auto const& { return _color; }
-    auto brightness_change() -> auto& { return _brightness_change; }
-    auto brightness_change() const -> auto const& { return _brightness_change; }
-    auto name() const -> const char* { return color_id_to_string(_id); }
-    auto id() const -> ImGuiCol { return _id; }
+    [[nodiscard]] auto color() -> auto& { return _color; }
+    [[nodiscard]] auto color() const -> auto const& { return _color; }
+    [[nodiscard]] auto brightness_change() -> auto& { return _brightness_change; }
+    [[nodiscard]] auto brightness_change() const -> auto const& { return _brightness_change; }
+    [[nodiscard]] auto name() const -> const char* { return color_id_to_string(_id); }
+    [[nodiscard]] auto id() const -> ImGuiCol { return _id; }
 
 private:
     ImGuiCol _id{};
