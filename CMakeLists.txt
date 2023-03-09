@@ -13,7 +13,7 @@ target_sources(ImStyleEd PRIVATE ${SRC_FILES})
 if(MSVC)
     target_compile_options(ImStyleEd PRIVATE /W4)
 else()
-    target_compile_options(ImStyleEd PRIVATE -Wall -Wextra -Wpedantic -pedantic-errors -Wconversion -Wsign-conversion)
+    target_compile_options(ImStyleEd PRIVATE -Wall -Wextra -Wpedantic -pedantic-errors)
 endif()
 
 # ---Maybe enable warnings as errors---
