@@ -1,6 +1,7 @@
 #pragma once
 #include <cereal/types/vector.hpp>
 #include "ColorCategory.hpp"
+#include "imgui/imgui.h"
 
 namespace ImStyleEd {
 
@@ -10,6 +11,8 @@ public:
         : _categories{std::move(categories)}
     {
         load_from_disk();
+        update_colors();
+        apply_to(ImGui::GetStyle());
     }
     void widget();
     void category_creation_widget();
@@ -23,6 +26,7 @@ private:
     void remove_element_from_all_categories(ColorElement const&);
     void save_to_disk();
     void load_from_disk();
+    void update_colors();
 
 private:
     std::vector<ColorCategory> _categories;

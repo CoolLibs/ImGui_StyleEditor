@@ -16,10 +16,18 @@ void ColorCategory::set_from_style(ImGuiStyle const& style)
         element.set_from_style(style);
 }
 
+void ColorCategory::update_colors()
+{
+    for (auto& element : _elements)
+        element.update_color(_color);
+}
+
 void ColorCategory::add_element(ColorElement const& element)
 {
     _elements.push_back(element);
     sort();
+    update_colors();
+    apply_to(ImGui::GetStyle());
 }
 
 void ColorCategory::remove_element(ImGuiCol id)

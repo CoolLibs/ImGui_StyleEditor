@@ -23,6 +23,8 @@ public:
     void apply_to(ImGuiStyle&) const;
     void set_from_style(ImGuiStyle const&);
 
+    void update_colors();
+
     auto widget() -> bool;
 
     auto name() -> auto& { return _name; }

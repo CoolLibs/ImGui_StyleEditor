@@ -41,11 +41,11 @@ auto ColorElement::widget() -> bool
         ImGuiColorEditFlags_None
             // |ImGuiColorEditFlags_InputHSV
             | ImGuiColorEditFlags_NoInputs
-            | ImGuiColorEditFlags_NoPicker
+            // | ImGuiColorEditFlags_NoPicker
             | ImGuiColorEditFlags_AlphaPreview
     );
     bool b = false;
-    if (ImGui::BeginPopupContextItem(std::to_string(_id).c_str(), ImGuiPopupFlags_MouseButtonLeft))
+    if (ImGui::BeginPopupContextItem(std::to_string(_id).c_str()))
     {
         b |= ImGui::SliderFloat("Opacity", &_color.w, 0.f, 1.f);
         b |= ImGui::SliderFloat("Brightness Delta", &_brightness_change, -1.f, 1.f);

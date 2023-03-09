@@ -23,6 +23,12 @@ void CategoryConfig::category_creation_widget()
 {
     if (ImGui::Button("Add Category"))
         _categories.emplace_back();
+    ImGui::SameLine();
+    if (ImGui::Button("Apply All"))
+    {
+        update_colors();
+        apply_to(ImGui::GetStyle());
+    }
 
     categories_table();
     apply_to(ImGui::GetStyle());
@@ -47,8 +53,7 @@ void CategoryConfig::categories_table()
                                              | ImGuiTableFlags_Resizable
                                              | ImGuiTableFlags_BordersOuter
                                              | ImGuiTableFlags_BordersV
-                                             | ImGuiTableFlags_BordersH
-                                             | ImGuiTableFlags_ContextMenuInBody;
+                                             | ImGuiTableFlags_BordersH;
 
     auto const nb_columns = _categories.size();
     if (nb_columns > 0 && ImGui::BeginTable("tex_library", static_cast<int>(nb_columns), flags))
@@ -64,7 +69,7 @@ void CategoryConfig::categories_table()
             ImGui::TableSetColumnIndex(static_cast<int>(column));
             auto& category = _categories[column];
             ImGui::PushID(&category);
-            ImGui::InputText("Name", &category.name());
+            ImGui::InputText("", &category.name());
             ImGui::PopID();
             ImGui::BeginGroup();
             for (auto& element : category.elements())
@@ -144,6 +149,12 @@ void CategoryConfig::load_from_disk()
     catch (...)
     {
     }
+}
+
+void CategoryConfig::update_colors()
+{
+    for (auto& category : _categories)
+        category.update_colors();
 }
 
 } // namespace ImStyleEd

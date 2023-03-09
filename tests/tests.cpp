@@ -12,8 +12,8 @@ static auto create_category_config() -> ImStyleEd::CategoryConfig
         ImStyleEd::category_with_all_color_elements(),
         ImStyleEd::ColorCategory{},
     }};
-    ImGui::StyleColorsDark();
-    category_config.set_from_style(ImGui::GetStyle());
+    // ImGui::StyleColorsDark();
+    // category_config.set_from_style(ImGui::GetStyle());
     return category_config;
 }
 
