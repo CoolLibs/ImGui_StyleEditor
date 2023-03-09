@@ -4,9 +4,9 @@
             {
                 "Name": "Main Color",
                 "Color": {
-                    "value0": 0.140715092420578,
-                    "value1": 0.15184208750724793,
-                    "value2": 0.23529410362243653
+                    "value0": 0.1813725233078003,
+                    "value1": 0.1813725233078003,
+                    "value2": 0.1813725233078003
                 },
                 "Elements": [
                     {
@@ -21,7 +21,7 @@
                     },
                     {
                         "ID": 7,
-                        "Brightness change": 0.0,
+                        "Brightness change": 0.25999999046325686,
                         "Opacity": 0.5400000214576721
                     },
                     {
@@ -36,22 +36,22 @@
                     },
                     {
                         "ID": 24,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.3100000023841858
+                        "Brightness change": 0.10000000149011612,
+                        "Opacity": 1.0
                     },
                     {
                         "ID": 26,
-                        "Brightness change": 0.0,
+                        "Brightness change": 0.6669999957084656,
                         "Opacity": 1.0
                     },
                     {
                         "ID": 25,
-                        "Brightness change": 0.0,
+                        "Brightness change": 0.6669999957084656,
                         "Opacity": 0.800000011920929
                     },
                     {
                         "ID": 13,
-                        "Brightness change": 0.0,
+                        "Brightness change": 0.10000000149011612,
                         "Opacity": 1.0
                     },
                     {
@@ -96,8 +96,8 @@
                     },
                     {
                         "ID": 15,
-                        "Brightness change": 0.843999981880188,
-                        "Opacity": 1.0
+                        "Brightness change": 1.0,
+                        "Opacity": 0.5
                     },
                     {
                         "ID": 17,
@@ -111,8 +111,8 @@
                     },
                     {
                         "ID": 27,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.5
+                        "Brightness change": 0.10000000149011612,
+                        "Opacity": 1.0
                     },
                     {
                         "ID": 29,
@@ -138,16 +138,6 @@
                         "ID": 33,
                         "Brightness change": 0.0,
                         "Opacity": 0.8619999885559082
-                    },
-                    {
-                        "ID": 35,
-                        "Brightness change": 0.2809999883174896,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 34,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.800000011920929
                     },
                     {
                         "ID": 36,
@@ -214,9 +204,9 @@
             {
                 "Name": "Accent Color",
                 "Color": {
-                    "value0": 0.22863802313804627,
-                    "value1": 0.35616177320480349,
-                    "value2": 0.8480392098426819
+                    "value0": 0.49754902720451357,
+                    "value1": 0.5707181096076965,
+                    "value2": 0.8529411554336548
                 },
                 "Elements": [
                     {
@@ -283,6 +273,16 @@
                         "ID": 41,
                         "Brightness change": 0.375,
                         "Opacity": 1.0
+                    },
+                    {
+                        "ID": 35,
+                        "Brightness change": -0.5099999904632568,
+                        "Opacity": 1.0
+                    },
+                    {
+                        "ID": 34,
+                        "Brightness change": -0.5,
+                        "Opacity": 0.800000011920929
                     }
                 ]
             },
