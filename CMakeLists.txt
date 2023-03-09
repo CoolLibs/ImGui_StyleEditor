@@ -33,6 +33,7 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/USCiLab/cereal
     GIT_TAG ddd467244713ea4fe63733628992efcdd6a9187d
 )
+FetchContent_Populate(cereal)
 target_include_directories(ImStyleEd PUBLIC ${cereal_SOURCE_DIR}/include)
 
 # ---exe_path library---
@@ -52,4 +53,5 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/CoolLibs/glm
     GIT_TAG 41628991f848835d36042173eb45874c1859e1c2
 )
+FetchContent_Populate(glm)
 target_include_directories(ImStyleEd PRIVATE ${glm_SOURCE_DIR})
