@@ -24,6 +24,8 @@ public:
 
     auto widget(bool is_dark_mode) -> bool;
 
+    void add_brightness_group();
+
     auto name() -> auto& { return _name; }
     auto name() const -> auto const& { return _name; }
     auto brightness_groups() -> auto& { return _brightness_groups; }

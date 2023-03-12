@@ -9,8 +9,7 @@ namespace ImStyleEd {
 
 class BrightnessGroup {
 public:
-    BrightnessGroup() = default;
-    BrightnessGroup(std::vector<ImGuiCol> ids, ImVec4 color = {0.f, 0.f, 0.f, 1.f}, float brightness_level = 0.f)
+    BrightnessGroup(std::vector<ImGuiCol> ids = {}, ImVec4 color = {0.f, 0.f, 0.f, 1.f}, float brightness_level = 0.f)
         : _ids{ids}
         , _color{color}
         , _brightness_level{brightness_level}

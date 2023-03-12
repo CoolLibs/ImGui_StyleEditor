@@ -19,7 +19,7 @@ void CategoryConfig::widget()
     if (b)
     {
         update_colors();
-        // apply_to(ImGui::GetStyle());
+        apply_to(ImGui::GetStyle());
     }
 }
 
@@ -35,7 +35,7 @@ void CategoryConfig::category_creation_widget()
     }
 
     categories_table();
-    // apply_to(ImGui::GetStyle());
+    apply_to(ImGui::GetStyle());
     save_to_disk();
 }
 
@@ -74,38 +74,43 @@ void CategoryConfig::categories_table()
             auto& category = _categories[column];
             ImGui::PushID(&category);
             ImGui::InputText("", &category.name());
-            ImGui::PopID();
-            ImGui::BeginGroup();
+            int i = 0;
             for (auto& group : category.brightness_groups())
             {
+                ImGui::BeginGroup();
+                ImGui::SeparatorText(("Group " + std::to_string(i++)).c_str());
                 if (group.widget())
                     group.update_color(category.color(), _is_dark_mode);
+                ImGui::EndGroup();
+
+                if (ImGui::BeginDragDropTarget())
+                {
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_DEMO_CELL"))
+                    {
+                        IM_ASSERT(payload->DataSize == sizeof(ImGuiCol));
+                        ImGuiCol payload_element = *(const ImGuiCol*)payload->Data;
+                        remove_element_from_all_groups(payload_element);
+                        group.add_element(payload_element, category.color(), _is_dark_mode);
+                    }
+                    ImGui::EndDragDropTarget();
+                }
             }
-            ImGui::BeginDisabled();
-            ImGui::Button("Drag elements here");
-            ImGui::EndDisabled();
-            ImGui::EndGroup();
-            if (ImGui::BeginDragDropTarget())
+            if (ImGui::Button("Add brightness group"))
             {
-                // if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_DEMO_CELL"))
-                // {
-                //     IM_ASSERT(payload->DataSize == sizeof(ImGuiCol));
-                //     ImGuiCol payload_element = *(const ImGuiCol*)payload->Data;
-                //     remove_element_from_all_categories(payload_element);
-                //     category.add_element(payload_element, _is_dark_mode);
-                // }
-                ImGui::EndDragDropTarget();
+                category.add_brightness_group();
             }
+            ImGui::PopID();
         }
         ImGui::EndTable();
     }
 }
 
-// void CategoryConfig::remove_element_from_all_categories(ColorElement const& element)
-// {
-//     for (auto& category : _categories)
-//         category.remove_element(element.id());
-// }
+void CategoryConfig::remove_element_from_all_groups(ImGuiCol element)
+{
+    for (auto& category : _categories)
+        for (auto& group : category.brightness_groups())
+            group.remove_element(element);
+}
 
 static auto path() -> std::filesystem::path const&
 {

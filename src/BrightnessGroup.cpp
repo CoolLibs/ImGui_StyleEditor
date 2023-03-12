@@ -59,7 +59,7 @@ void BrightnessGroup::set_from_style(ImGuiStyle const& style)
 
 auto BrightnessGroup::name() const -> std::string
 {
-    return std::string{"Brightness level: "}
+    return std::string{"Brightness: "}
            + (_brightness_level < 0.f ? "-" : "+")
            + std::to_string(static_cast<int>(std::round(std::abs(_brightness_level) * 100.f)))
            + "%";
@@ -67,6 +67,7 @@ auto BrightnessGroup::name() const -> std::string
 
 auto BrightnessGroup::widget() -> bool
 {
+    ImGui::PushID(this);
     ImGui::ColorEdit4(
         name().c_str(), (float*)&_color,
         ImGuiColorEditFlags_None
@@ -76,26 +77,44 @@ auto BrightnessGroup::widget() -> bool
             | ImGuiColorEditFlags_AlphaPreview
     );
     bool b = false;
-    if (ImGui::BeginPopupContextItem("dsfdsf"))
+    if (ImGui::BeginPopupContextItem("hello"))
     {
+        b |= ImGui::SliderFloat("Brightness", &_brightness_level, -1.f, 1.f);
         b |= ImGui::SliderFloat("Opacity", &_color.w, 0.f, 1.f);
-        b |= ImGui::SliderFloat("Brightness Level", &_brightness_level, -1.f, 1.f);
 
         ImGui::EndPopup();
     }
 
-    // if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+    // if (ImGui::BeginChild(std::to_string((int)this).c_str(), {}, true))
     // {
-    //     // Set payload to carry the index of our item (could be anything)
-    //     ImGui::SetDragDropPayload("DND_DEMO_CELL", &id, sizeof(ImGuiCol));
+    for (auto const id : _ids)
+    {
+        ImGui::ColorEdit4(
+            color_id_to_string(id), (float*)&ImGui::GetStyle().Colors[id],
+            ImGuiColorEditFlags_None
+                // |ImGuiColorEditFlags_InputHSV
+                | ImGuiColorEditFlags_NoInputs
+                // | ImGuiColorEditFlags_NoPicker
+                | ImGuiColorEditFlags_AlphaPreview
+        );
 
-    //     // Display preview (could be anything, e.g. when dragging an image we could decide to display
-    //     // the filename and a small preview of the image, etc.)
+        if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+        {
+            // Set payload to carry the index of our item (could be anything)
+            ImGui::SetDragDropPayload("DND_DEMO_CELL", &id, sizeof(ImGuiCol));
 
-    //     ImGui::Text("Move %s to another category", element.name());
+            // Display preview (could be anything, e.g. when dragging an image we could decide to display
+            // the filename and a small preview of the image, etc.)
 
-    //     ImGui::EndDragDropSource();
+            ImGui::TextUnformatted(color_id_to_string(id));
+
+            ImGui::EndDragDropSource();
+        }
+    }
     // }
+    // ImGui::EndChild();
+    ImGui::PopID();
+
     return b;
 }
 

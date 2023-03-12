@@ -47,4 +47,9 @@ auto ColorCategory::widget(bool is_dark_mode) -> bool
     return b;
 }
 
+void ColorCategory::add_brightness_group()
+{
+    _brightness_groups.emplace_back();
+}
+
 } // namespace ImStyleEd
