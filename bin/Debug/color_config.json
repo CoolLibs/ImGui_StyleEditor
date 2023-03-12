@@ -4,307 +4,91 @@
             {
                 "Name": "Main Color",
                 "Color": {
-                    "value0": 0.1666666865348816,
-                    "value1": 0.1666666865348816,
-                    "value2": 0.1666666865348816
+                    "value0": 1.0,
+                    "value1": 0.0,
+                    "value2": 0.0
                 },
-                "Elements": [
+                "Brightness groups": [
                     {
-                        "ID": 6,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.0
-                    },
-                    {
-                        "ID": 3,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.0
-                    },
-                    {
-                        "ID": 7,
-                        "Brightness change": 0.25999999046325686,
-                        "Opacity": 0.5400000214576721
-                    },
-                    {
-                        "ID": 9,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.6700000166893005
-                    },
-                    {
-                        "ID": 8,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.4000000059604645
-                    },
-                    {
-                        "ID": 24,
-                        "Brightness change": 0.10000000149011612,
+                        "IDs": [
+                            0,
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12,
+                            13,
+                            14,
+                            15,
+                            16,
+                            17,
+                            18,
+                            19,
+                            20,
+                            21,
+                            22,
+                            23,
+                            24,
+                            25,
+                            26,
+                            27,
+                            28,
+                            29,
+                            30,
+                            31,
+                            32,
+                            33,
+                            34,
+                            35,
+                            36,
+                            37,
+                            38,
+                            39,
+                            40,
+                            41,
+                            42,
+                            43,
+                            44,
+                            45,
+                            46,
+                            47,
+                            48,
+                            49,
+                            50,
+                            51,
+                            52,
+                            53,
+                            54
+                        ],
+                        "Brightness change": -0.6880000233650208,
                         "Opacity": 1.0
-                    },
-                    {
-                        "ID": 26,
-                        "Brightness change": 0.6669999957084656,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 25,
-                        "Brightness change": 0.6669999957084656,
-                        "Opacity": 0.800000011920929
-                    },
-                    {
-                        "ID": 13,
-                        "Brightness change": 0.10000000149011612,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 54,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.3499999940395355
-                    },
-                    {
-                        "ID": 53,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.20000000298023225
-                    },
-                    {
-                        "ID": 52,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.699999988079071
-                    },
-                    {
-                        "ID": 4,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.9399999976158142
-                    },
-                    {
-                        "ID": 30,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.20000000298023225
-                    },
-                    {
-                        "ID": 32,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.949999988079071
-                    },
-                    {
-                        "ID": 31,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.6700000166893005
-                    },
-                    {
-                        "ID": 14,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.5299999713897705
-                    },
-                    {
-                        "ID": 15,
-                        "Brightness change": 1.0,
-                        "Opacity": 0.5
-                    },
-                    {
-                        "ID": 17,
-                        "Brightness change": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 16,
-                        "Brightness change": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 27,
-                        "Brightness change": 0.10000000149011612,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 29,
-                        "Brightness change": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 28,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.7799999713897705
-                    },
-                    {
-                        "ID": 19,
-                        "Brightness change": 0.6769999861717224,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 20,
-                        "Brightness change": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 33,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.8619999885559082
-                    },
-                    {
-                        "ID": 36,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.9724000096321106
-                    },
-                    {
-                        "ID": 37,
-                        "Brightness change": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 46,
-                        "Brightness change": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 45,
-                        "Brightness change": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 44,
-                        "Brightness change": 0.2809999883174896,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 47,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.0
-                    },
-                    {
-                        "ID": 48,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.05999999865889549
-                    },
-                    {
-                        "ID": 49,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.3499999940395355
-                    },
-                    {
-                        "ID": 10,
-                        "Brightness change": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 11,
-                        "Brightness change": 0.49000000953674319,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 12,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.5099999904632568
-                    },
-                    {
-                        "ID": 2,
-                        "Brightness change": -0.20800000429153443,
-                        "Opacity": 0.9399999976158142
                     }
                 ]
             },
             {
                 "Name": "Accent Color",
                 "Color": {
-                    "value0": 0.49754902720451357,
-                    "value1": 0.5707181096076965,
-                    "value2": 0.8529411554336548
+                    "value0": 1.0,
+                    "value1": 0.5392156839370728,
+                    "value2": 0.5392156839370728
                 },
-                "Elements": [
-                    {
-                        "ID": 5,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.5
-                    },
-                    {
-                        "ID": 21,
-                        "Brightness change": 0.0,
-                        "Opacity": 0.4000000059604645
-                    },
-                    {
-                        "ID": 23,
-                        "Brightness change": 0.5099999904632568,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 22,
-                        "Brightness change": 0.2290000021457672,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 18,
-                        "Brightness change": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 39,
-                        "Brightness change": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 38,
-                        "Brightness change": 0.5099999904632568,
-                        "Opacity": 0.699999988079071
-                    },
-                    {
-                        "ID": 50,
-                        "Brightness change": -0.4059999883174896,
-                        "Opacity": 0.8999999761581421
-                    },
-                    {
-                        "ID": 51,
-                        "Brightness change": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 42,
-                        "Brightness change": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 43,
-                        "Brightness change": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 40,
-                        "Brightness change": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 41,
-                        "Brightness change": 0.375,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 35,
-                        "Brightness change": -0.5099999904632568,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 34,
-                        "Brightness change": -0.5,
-                        "Opacity": 0.800000011920929
-                    }
-                ]
+                "Brightness groups": []
             },
             {
                 "Name": "Text",
                 "Color": {
-                    "value0": 0.16176468133926392,
-                    "value1": 0.16176468133926392,
-                    "value2": 0.16176468133926392
+                    "value0": 1.0,
+                    "value1": 1.0,
+                    "value2": 1.0
                 },
-                "Elements": [
-                    {
-                        "ID": 0,
-                        "Brightness change": 1.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "ID": 1,
-                        "Brightness change": -0.3230000138282776,
-                        "Opacity": 1.0
-                    }
-                ]
+                "Brightness groups": []
             }
         ],
         "Is Dark Mode": true

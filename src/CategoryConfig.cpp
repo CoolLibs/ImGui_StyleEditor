@@ -19,7 +19,7 @@ void CategoryConfig::widget()
     if (b)
     {
         update_colors();
-        apply_to(ImGui::GetStyle());
+        // apply_to(ImGui::GetStyle());
     }
 }
 
@@ -35,7 +35,7 @@ void CategoryConfig::category_creation_widget()
     }
 
     categories_table();
-    apply_to(ImGui::GetStyle());
+    // apply_to(ImGui::GetStyle());
     save_to_disk();
 }
 
@@ -76,10 +76,10 @@ void CategoryConfig::categories_table()
             ImGui::InputText("", &category.name());
             ImGui::PopID();
             ImGui::BeginGroup();
-            for (auto& element : category.elements())
+            for (auto& group : category.brightness_groups())
             {
-                if (element_widget(element))
-                    element.update_color(category.color(), _is_dark_mode);
+                if (group.widget())
+                    group.update_color(category.color(), _is_dark_mode);
             }
             ImGui::BeginDisabled();
             ImGui::Button("Drag elements here");
@@ -87,13 +87,13 @@ void CategoryConfig::categories_table()
             ImGui::EndGroup();
             if (ImGui::BeginDragDropTarget())
             {
-                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_DEMO_CELL"))
-                {
-                    IM_ASSERT(payload->DataSize == sizeof(ColorElement));
-                    ColorElement payload_element = *(const ColorElement*)payload->Data;
-                    remove_element_from_all_categories(payload_element);
-                    category.add_element(payload_element, _is_dark_mode);
-                }
+                // if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_DEMO_CELL"))
+                // {
+                //     IM_ASSERT(payload->DataSize == sizeof(ImGuiCol));
+                //     ImGuiCol payload_element = *(const ImGuiCol*)payload->Data;
+                //     remove_element_from_all_categories(payload_element);
+                //     category.add_element(payload_element, _is_dark_mode);
+                // }
                 ImGui::EndDragDropTarget();
             }
         }
@@ -101,29 +101,11 @@ void CategoryConfig::categories_table()
     }
 }
 
-void CategoryConfig::remove_element_from_all_categories(ColorElement const& element)
-{
-    for (auto& category : _categories)
-        category.remove_element(element.id());
-}
-
-auto CategoryConfig::element_widget(ColorElement& element) -> bool
-{
-    bool const b = element.widget();
-    if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
-    {
-        // Set payload to carry the index of our item (could be anything)
-        ImGui::SetDragDropPayload("DND_DEMO_CELL", &element, sizeof(ColorElement));
-
-        // Display preview (could be anything, e.g. when dragging an image we could decide to display
-        // the filename and a small preview of the image, etc.)
-
-        ImGui::Text("Move %s to another category", element.name());
-
-        ImGui::EndDragDropSource();
-    }
-    return b;
-}
+// void CategoryConfig::remove_element_from_all_categories(ColorElement const& element)
+// {
+//     for (auto& category : _categories)
+//         category.remove_element(element.id());
+// }
 
 static auto path() -> std::filesystem::path const&
 {

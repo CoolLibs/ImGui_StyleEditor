@@ -5,167 +5,112 @@
  * -----------------------------------------------------------------------------
  */
 
-ColorElement{
-    ImGuiCol_Text},
+ImGuiCol_Text,
 
-    ColorElement{
-        ImGuiCol_TextDisabled},
+    ImGuiCol_TextDisabled,
 
-    ColorElement{
-        ImGuiCol_WindowBg},
+    ImGuiCol_WindowBg,
 
-    ColorElement{
-        ImGuiCol_ChildBg},
+    ImGuiCol_ChildBg,
 
-    ColorElement{
-        ImGuiCol_PopupBg},
+    ImGuiCol_PopupBg,
 
-    ColorElement{
-        ImGuiCol_Border},
+    ImGuiCol_Border,
 
-    ColorElement{
-        ImGuiCol_BorderShadow},
+    ImGuiCol_BorderShadow,
 
-    ColorElement{
-        ImGuiCol_FrameBg},
+    ImGuiCol_FrameBg,
 
-    ColorElement{
-        ImGuiCol_FrameBgHovered},
+    ImGuiCol_FrameBgHovered,
 
-    ColorElement{
-        ImGuiCol_FrameBgActive},
+    ImGuiCol_FrameBgActive,
 
-    ColorElement{
-        ImGuiCol_TitleBg},
+    ImGuiCol_TitleBg,
 
-    ColorElement{
-        ImGuiCol_TitleBgActive},
+    ImGuiCol_TitleBgActive,
 
-    ColorElement{
-        ImGuiCol_TitleBgCollapsed},
+    ImGuiCol_TitleBgCollapsed,
 
-    ColorElement{
-        ImGuiCol_MenuBarBg},
+    ImGuiCol_MenuBarBg,
 
-    ColorElement{
-        ImGuiCol_ScrollbarBg},
+    ImGuiCol_ScrollbarBg,
 
-    ColorElement{
-        ImGuiCol_ScrollbarGrab},
+    ImGuiCol_ScrollbarGrab,
 
-    ColorElement{
-        ImGuiCol_ScrollbarGrabHovered},
+    ImGuiCol_ScrollbarGrabHovered,
 
-    ColorElement{
-        ImGuiCol_ScrollbarGrabActive},
+    ImGuiCol_ScrollbarGrabActive,
 
-    ColorElement{
-        ImGuiCol_CheckMark},
+    ImGuiCol_CheckMark,
 
-    ColorElement{
-        ImGuiCol_SliderGrab},
+    ImGuiCol_SliderGrab,
 
-    ColorElement{
-        ImGuiCol_SliderGrabActive},
+    ImGuiCol_SliderGrabActive,
 
-    ColorElement{
-        ImGuiCol_Button},
+    ImGuiCol_Button,
 
-    ColorElement{
-        ImGuiCol_ButtonHovered},
+    ImGuiCol_ButtonHovered,
 
-    ColorElement{
-        ImGuiCol_ButtonActive},
+    ImGuiCol_ButtonActive,
 
-    ColorElement{
-        ImGuiCol_Header},
+    ImGuiCol_Header,
 
-    ColorElement{
-        ImGuiCol_HeaderHovered},
+    ImGuiCol_HeaderHovered,
 
-    ColorElement{
-        ImGuiCol_HeaderActive},
+    ImGuiCol_HeaderActive,
 
-    ColorElement{
-        ImGuiCol_Separator},
+    ImGuiCol_Separator,
 
-    ColorElement{
-        ImGuiCol_SeparatorHovered},
+    ImGuiCol_SeparatorHovered,
 
-    ColorElement{
-        ImGuiCol_SeparatorActive},
+    ImGuiCol_SeparatorActive,
 
-    ColorElement{
-        ImGuiCol_ResizeGrip},
+    ImGuiCol_ResizeGrip,
 
-    ColorElement{
-        ImGuiCol_ResizeGripHovered},
+    ImGuiCol_ResizeGripHovered,
 
-    ColorElement{
-        ImGuiCol_ResizeGripActive},
+    ImGuiCol_ResizeGripActive,
 
-    ColorElement{
-        ImGuiCol_Tab},
+    ImGuiCol_Tab,
 
-    ColorElement{
-        ImGuiCol_TabHovered},
+    ImGuiCol_TabHovered,
 
-    ColorElement{
-        ImGuiCol_TabActive},
+    ImGuiCol_TabActive,
 
-    ColorElement{
-        ImGuiCol_TabUnfocused},
+    ImGuiCol_TabUnfocused,
 
-    ColorElement{
-        ImGuiCol_TabUnfocusedActive},
+    ImGuiCol_TabUnfocusedActive,
 
-    ColorElement{
-        ImGuiCol_DockingPreview},
+    ImGuiCol_DockingPreview,
 
-    ColorElement{
-        ImGuiCol_DockingEmptyBg},
+    ImGuiCol_DockingEmptyBg,
 
-    ColorElement{
-        ImGuiCol_PlotLines},
+    ImGuiCol_PlotLines,
 
-    ColorElement{
-        ImGuiCol_PlotLinesHovered},
+    ImGuiCol_PlotLinesHovered,
 
-    ColorElement{
-        ImGuiCol_PlotHistogram},
+    ImGuiCol_PlotHistogram,
 
-    ColorElement{
-        ImGuiCol_PlotHistogramHovered},
+    ImGuiCol_PlotHistogramHovered,
 
-    ColorElement{
-        ImGuiCol_TableHeaderBg},
+    ImGuiCol_TableHeaderBg,
 
-    ColorElement{
-        ImGuiCol_TableBorderStrong},
+    ImGuiCol_TableBorderStrong,
 
-    ColorElement{
-        ImGuiCol_TableBorderLight},
+    ImGuiCol_TableBorderLight,
 
-    ColorElement{
-        ImGuiCol_TableRowBg},
+    ImGuiCol_TableRowBg,
 
-    ColorElement{
-        ImGuiCol_TableRowBgAlt},
+    ImGuiCol_TableRowBgAlt,
 
-    ColorElement{
-        ImGuiCol_TextSelectedBg},
+    ImGuiCol_TextSelectedBg,
 
-    ColorElement{
-        ImGuiCol_DragDropTarget},
+    ImGuiCol_DragDropTarget,
 
-    ColorElement{
-        ImGuiCol_NavHighlight},
+    ImGuiCol_NavHighlight,
 
-    ColorElement{
-        ImGuiCol_NavWindowingHighlight},
+    ImGuiCol_NavWindowingHighlight,
 
-    ColorElement{
-        ImGuiCol_NavWindowingDimBg},
+    ImGuiCol_NavWindowingDimBg,
 
-    ColorElement{
-        ImGuiCol_ModalWindowDimBg},
+    ImGuiCol_ModalWindowDimBg,

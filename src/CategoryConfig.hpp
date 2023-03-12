@@ -22,8 +22,7 @@ public:
 
 private:
     void categories_table();
-    auto element_widget(ColorElement&) -> bool;
-    void remove_element_from_all_categories(ColorElement const&);
+    void remove_element_from_all_categories(ImGuiCol);
     void save_to_disk();
     void load_from_disk();
     void update_colors();

@@ -1,0 +1,102 @@
+#include "BrightnessGroup.hpp"
+#include <algorithm>
+#include "color_conversions.hpp"
+#include "imgui/imgui.h"
+
+namespace ImStyleEd {
+
+void BrightnessGroup::add_element(ImGuiCol id, std::array<float, 3> const& color, bool is_dark_mode)
+{
+    _ids.push_back(id);
+    sort();
+    update_color(color, is_dark_mode);
+    apply_to(ImGui::GetStyle());
+}
+
+void BrightnessGroup::remove_element(ImGuiCol id)
+{
+    _ids.erase(std::remove(_ids.begin(), _ids.end(), id), _ids.end());
+    sort();
+}
+
+void BrightnessGroup::sort()
+{
+    std::sort(_ids.begin(), _ids.end(), [](ImGuiCol const& a, ImGuiCol const& b) {
+        return std::string{color_id_to_string(a)} < std::string{color_id_to_string(b)};
+    });
+}
+
+void BrightnessGroup::apply_to(ImGuiStyle& style) const
+{
+    for (auto const& id : _ids)
+        style.Colors[id] = _color;
+}
+
+static auto lerp(float a, float b, float t) -> float
+{
+    return a + t * (b - a);
+}
+
+void BrightnessGroup::update_color(std::array<float, 3> const& color, bool is_dark_mode)
+{
+    auto cielab = CIELAB_from_sRGB({color[0], color[1], color[2]});
+    if (_brightness_level > 0.f)
+        cielab.x = lerp(cielab.x, is_dark_mode ? 1.f : 0.f, _brightness_level);
+    else
+        cielab.x = lerp(cielab.x, is_dark_mode ? 0.f : 1.f, -_brightness_level);
+
+    auto srgb = sRGB_from_CIELAB(cielab);
+
+    _color.x = srgb.x;
+    _color.y = srgb.y;
+    _color.z = srgb.z;
+}
+
+void BrightnessGroup::set_from_style(ImGuiStyle const& style)
+{
+    // _color = style.Colors[_id];
+}
+
+auto BrightnessGroup::name() const -> std::string
+{
+    return std::string{"Brightness level: "}
+           + (_brightness_level < 0.f ? "-" : "+")
+           + std::to_string(static_cast<int>(std::round(std::abs(_brightness_level) * 100.f)))
+           + "%";
+}
+
+auto BrightnessGroup::widget() -> bool
+{
+    ImGui::ColorEdit4(
+        name().c_str(), (float*)&_color,
+        ImGuiColorEditFlags_None
+            // |ImGuiColorEditFlags_InputHSV
+            | ImGuiColorEditFlags_NoInputs
+            // | ImGuiColorEditFlags_NoPicker
+            | ImGuiColorEditFlags_AlphaPreview
+    );
+    bool b = false;
+    if (ImGui::BeginPopupContextItem("dsfdsf"))
+    {
+        b |= ImGui::SliderFloat("Opacity", &_color.w, 0.f, 1.f);
+        b |= ImGui::SliderFloat("Brightness Level", &_brightness_level, -1.f, 1.f);
+
+        ImGui::EndPopup();
+    }
+
+    // if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+    // {
+    //     // Set payload to carry the index of our item (could be anything)
+    //     ImGui::SetDragDropPayload("DND_DEMO_CELL", &id, sizeof(ImGuiCol));
+
+    //     // Display preview (could be anything, e.g. when dragging an image we could decide to display
+    //     // the filename and a small preview of the image, etc.)
+
+    //     ImGui::Text("Move %s to another category", element.name());
+
+    //     ImGui::EndDragDropSource();
+    // }
+    return b;
+}
+
+} // namespace ImStyleEd

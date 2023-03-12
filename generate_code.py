@@ -66,9 +66,7 @@ def list_all_color_elements():
     res = ""
     for elem in elems:
         res += f'''
-ColorElement{{
-    {elem.id}
-}},
+    {elem.id},
 '''
     return res
 

@@ -2,4 +2,4 @@
 
 #include "../../src/CategoryConfig.hpp"
 #include "../../src/ColorCategory.hpp"
-#include "../../src/ColorElement.hpp"
+#include "../../src/BrightnessGroup.hpp"
