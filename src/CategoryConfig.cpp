@@ -79,6 +79,11 @@ void CategoryConfig::categories_table()
             {
                 ImGui::BeginGroup();
                 ImGui::SeparatorText(("Group " + std::to_string(i++)).c_str());
+                if (ImGui::BeginPopupContextItem("fsdf"))
+                {
+                    ImGui::Text("dsf");
+                    ImGui::EndPopup();
+                }
                 if (group.widget())
                     group.update_color(category.color(), _is_dark_mode);
                 ImGui::EndGroup();
