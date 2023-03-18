@@ -1,7 +1,6 @@
 ---
 Checks: '
   *,
-  -cppcoreguidelines-pro-bounds-constant-array-index,
   -misc-non-private-member-variables-in-classes,
   -*braces-around-statements
   -readability-implicit-bool-conversion

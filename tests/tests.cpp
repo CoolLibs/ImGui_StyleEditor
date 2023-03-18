@@ -19,12 +19,12 @@ static auto create_category_config() -> ImStyleEd::CategoryConfig
 
 auto main(int argc, char* argv[]) -> int
 {
-    const int exit_code = doctest::Context{}.run(); // Run all unit tests
+    const int  exit_code              = doctest::Context{}.run(); // Run all unit tests
     const bool should_run_imgui_tests = argc < 2 || strcmp(argv[1], "-nogpu") != 0;
     if (
         should_run_imgui_tests
         && exit_code == 0 // Only open the window if the tests passed; this makes it easier to notice when some tests fail
-    )       
+    )
     {
         quick_imgui::loop("ImStyleEd", [&]() { // Open a window and run all the ImGui-related code
             static auto category_config = create_category_config();
