@@ -82,20 +82,43 @@ auto CategoryConfig::categories_table() -> bool
             ImGui::PushID(&category);
             ImGui::InputText("", &category.name());
             int i = 0;
+            BrightnessGroup const* group_to_remove = nullptr;
             for (auto& group : category.brightness_groups())
             {
                 ImGui::BeginGroup();
+                ImGui::PushID(&group);
                 ImGui::SeparatorText(("Group " + std::to_string(i++)).c_str());
-                if (ImGui::BeginPopupContextItem("fsdf"))
+                if (ImGui::Button("Move Up"))
                 {
-                    ImGui::Text("dsf");
-                    ImGui::EndPopup();
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Move Down"))
+                {
                 }
                 if (group.widget())
                 {
                     group.update_color(category.color(), _is_dark_mode);
                     b = true;
                 }
+                { // "Remove Group" button
+                    const bool cant_remove_group = !group.is_empty();
+
+                    ImGui::BeginGroup();
+                    ImGui::BeginDisabled(cant_remove_group);
+                    if (ImGui::Button("Remove group"))
+                    {
+                        group_to_remove = &group;
+                    }
+                    ImGui::EndDisabled();
+                    ImGui::EndGroup();
+                    if (cant_remove_group && ImGui::IsItemHovered())
+                    {
+                        ImGui::BeginTooltip();
+                        ImGui::TextUnformatted("Can't remove a group that is not empty. Please first move all the elements to other groups.");
+                        ImGui::EndTooltip();
+                    }
+                }
+                ImGui::PopID();
                 ImGui::EndGroup();
 
                 if (ImGui::BeginDragDropTarget())
@@ -111,7 +134,14 @@ auto CategoryConfig::categories_table() -> bool
                     ImGui::EndDragDropTarget();
                 }
             }
-            if (ImGui::Button("Add brightness group"))
+            if (group_to_remove)
+            {
+                category.brightness_groups().erase(std::remove_if(category.brightness_groups().begin(), category.brightness_groups().end(), [&](BrightnessGroup const& group) {
+                                                       return &group == group_to_remove;
+                                                   }),
+                                                   category.brightness_groups().end());
+            }
+            if (ImGui::Button("Add group"))
             {
                 category.add_brightness_group();
             }

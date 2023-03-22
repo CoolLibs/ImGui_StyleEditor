@@ -32,6 +32,8 @@ public:
 
     auto name() const -> std::string;
 
+    auto is_empty() const -> bool { return _ids.empty(); }
+
 private:
     std::vector<ImGuiCol> _ids{};
     ImVec4                _color{};               // TODO(JF) Color should be computed based on the category, the _brightness_level and the _opacity.
