@@ -68,22 +68,9 @@ auto BrightnessGroup::name() const -> std::string
 auto BrightnessGroup::widget() -> bool
 {
     ImGui::PushID(this);
-    ImGui::ColorEdit4(
-        name().c_str(), (float*)&_color,
-        ImGuiColorEditFlags_None
-            // |ImGuiColorEditFlags_InputHSV
-            | ImGuiColorEditFlags_NoInputs
-            // | ImGuiColorEditFlags_NoPicker
-            | ImGuiColorEditFlags_AlphaPreview
-    );
     bool b = false;
-    if (ImGui::BeginPopupContextItem("hello"))
-    {
-        b |= ImGui::SliderFloat("Brightness", &_brightness_level, -1.f, 1.f);
-        b |= ImGui::SliderFloat("Opacity", &_color.w, 0.f, 1.f);
-
-        ImGui::EndPopup();
-    }
+    b |= ImGui::SliderFloat("Brightness", &_brightness_level, -1.f, 1.f);
+    b |= ImGui::SliderFloat("Opacity", &_color.w, 0.f, 1.f);
 
     // if (ImGui::BeginChild(std::to_string((int)this).c_str(), {}, true))
     // {
@@ -97,6 +84,7 @@ auto BrightnessGroup::widget() -> bool
                 // | ImGuiColorEditFlags_NoPicker
                 | ImGuiColorEditFlags_AlphaPreview
         );
+        b |= ImGui::IsItemActive();
 
         if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
         {

@@ -21,7 +21,7 @@ public:
     void apply_to(ImGuiStyle&);
 
 private:
-    void categories_table();
+    auto categories_table() -> bool;
     void remove_element_from_all_groups(ImGuiCol);
     void save_to_disk();
     void load_from_disk();

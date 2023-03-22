@@ -27,15 +27,21 @@ void CategoryConfig::category_creation_widget()
 {
     if (ImGui::Button("Add Category"))
         _categories.emplace_back();
-    ImGui::SameLine();
-    if (ImGui::Button("Apply All"))
-    {
-        update_colors();
-        apply_to(ImGui::GetStyle());
-    }
 
-    categories_table();
-    apply_to(ImGui::GetStyle());
+    static int apply_style_next_frame = -1;
+    if (apply_style_next_frame == 0)
+    {
+        apply_to(ImGui::GetStyle());
+        apply_style_next_frame = -1;
+    }
+    if (categories_table())
+    {
+        apply_style_next_frame = 2;
+    }
+    if (apply_style_next_frame >= 0)
+    {
+        apply_style_next_frame--;
+    }
     save_to_disk();
 }
 
@@ -51,8 +57,9 @@ void CategoryConfig::set_from_style(ImGuiStyle const& style)
         category.set_from_style(style);
 }
 
-void CategoryConfig::categories_table()
+auto CategoryConfig::categories_table() -> bool
 {
+    bool                             b     = false;
     static constexpr ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchSame
                                              | ImGuiTableFlags_Resizable
                                              | ImGuiTableFlags_BordersOuter
@@ -85,7 +92,10 @@ void CategoryConfig::categories_table()
                     ImGui::EndPopup();
                 }
                 if (group.widget())
+                {
                     group.update_color(category.color(), _is_dark_mode);
+                    b = true;
+                }
                 ImGui::EndGroup();
 
                 if (ImGui::BeginDragDropTarget())
@@ -96,6 +106,7 @@ void CategoryConfig::categories_table()
                         ImGuiCol payload_element = *(const ImGuiCol*)payload->Data;
                         remove_element_from_all_groups(payload_element);
                         group.add_element(payload_element, category.color(), _is_dark_mode);
+                        b = true;
                     }
                     ImGui::EndDragDropTarget();
                 }
@@ -108,6 +119,8 @@ void CategoryConfig::categories_table()
         }
         ImGui::EndTable();
     }
+
+    return b;
 }
 
 void CategoryConfig::remove_element_from_all_groups(ImGuiCol element)
