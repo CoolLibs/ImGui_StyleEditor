@@ -83,17 +83,21 @@ auto CategoryConfig::categories_table() -> bool
             ImGui::InputText("", &category.name());
             int i = 0;
             BrightnessGroup const* group_to_remove = nullptr;
+            BrightnessGroup const* group_to_move_up   = nullptr;
+            BrightnessGroup const* group_to_move_down = nullptr;
             for (auto& group : category.brightness_groups())
             {
                 ImGui::BeginGroup();
                 ImGui::PushID(&group);
                 ImGui::SeparatorText(("Group " + std::to_string(i++)).c_str());
-                if (ImGui::Button("Move Up"))
-                {
-                }
-                ImGui::SameLine();
                 if (ImGui::Button("Move Down"))
                 {
+                    group_to_move_down = &group;
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Move Up"))
+                {
+                    group_to_move_up = &group;
                 }
                 if (group.widget())
                 {
@@ -140,6 +144,30 @@ auto CategoryConfig::categories_table() -> bool
                                                        return &group == group_to_remove;
                                                    }),
                                                    category.brightness_groups().end());
+            }
+            if (group_to_move_down)
+            {
+                auto const it = std::find_if(category.brightness_groups().begin(), category.brightness_groups().end(), [&](BrightnessGroup const& group) {
+                    return &group == group_to_move_down;
+                });
+                if (it != category.brightness_groups().end())
+                {
+                    auto const next = std::next(it);
+                    if (next != category.brightness_groups().end())
+                    {
+                        std::swap(*it, *next);
+                    }
+                }
+            }
+            if (group_to_move_up)
+            {
+                auto const it = std::find_if(category.brightness_groups().begin(), category.brightness_groups().end(), [&](BrightnessGroup const& group) {
+                    return &group == group_to_move_up;
+                });
+                if (it != category.brightness_groups().end() && it != category.brightness_groups().begin())
+                {
+                    std::swap(*it, *std::prev(it));
+                }
             }
             if (ImGui::Button("Add group"))
             {
