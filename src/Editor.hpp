@@ -15,6 +15,9 @@ public:
     void widget_color_config();
 
 private:
+    void save_current_theme();
+
+private:
     CategoryConfig     _config{};
     ColorThemesManager _themes{};
     std::string        _next_theme_name{};

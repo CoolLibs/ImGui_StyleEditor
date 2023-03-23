@@ -17,6 +17,14 @@ void Editor::widget_color_config()
     _config.category_creation_widget();
 }
 
+void Editor::save_current_theme()
+{
+    auto const theme = _config.get_theme_as(_next_theme_name);
+    _themes.add_theme(theme);
+    _themes.set_current_theme(theme);
+    _next_theme_name = "";
+}
+
 auto Editor::widget_theme_picker() -> bool
 {
     bool b = false;
@@ -33,15 +41,15 @@ auto Editor::widget_theme_picker() -> bool
     }
     if (ImGui::Button("Save Theme"))
     {
-        auto const theme = _config.get_theme_as(_next_theme_name);
-        _themes.add_theme(theme);
-        _themes.set_current_theme(theme);
-        _next_theme_name = "";
+        save_current_theme();
     }
     ImGui::SameLine();
     ImGui::TextUnformatted("as");
     ImGui::SameLine();
-    ImGui::InputText("##_next_theme_name", &_next_theme_name);
+    if (ImGui::InputText("##_next_theme_name", &_next_theme_name, ImGuiInputTextFlags_EnterReturnsTrue))
+    {
+        save_current_theme();
+    }
 
     return b;
 }
