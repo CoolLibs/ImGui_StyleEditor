@@ -4,6 +4,7 @@
 #include <string>
 #include "color_id_to_string.hpp"
 #include "imgui/imgui.h"
+#include "sRGBColor.hpp"
 
 namespace ImStyleEd {
 
@@ -16,9 +17,9 @@ public:
     {}
 
     void apply_to(ImGuiStyle&) const;
-    void update_color(std::array<float, 3> const& color, bool is_dark_mode);
+    void update_color(sRGBColor const& color, bool is_dark_mode);
 
-    void add_element(ImGuiCol id, std::array<float, 3> const& color, bool is_dark_mode);
+    void add_element(ImGuiCol id, sRGBColor const& color, bool is_dark_mode);
     void remove_element(ImGuiCol id);
     void sort();
 

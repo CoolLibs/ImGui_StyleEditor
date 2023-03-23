@@ -1,6 +1,7 @@
 #pragma once
 #include <cereal/types/vector.hpp>
 #include "ColorCategory.hpp"
+#include "ColorTheme.hpp"
 #include "imgui/imgui.h"
 
 namespace ImStyleEd {
@@ -19,6 +20,9 @@ public:
     void add_category(ColorCategory const& category) { _categories.push_back(category); }
     void set_from_style(ImGuiStyle const&);
     void apply_to(ImGuiStyle&);
+
+    void set_theme(ColorTheme const&);
+    auto get_theme() -> ColorTheme;
 
 private:
     auto categories_table() -> bool;

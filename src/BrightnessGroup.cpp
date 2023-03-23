@@ -5,7 +5,7 @@
 
 namespace ImStyleEd {
 
-void BrightnessGroup::add_element(ImGuiCol id, std::array<float, 3> const& color, bool is_dark_mode)
+void BrightnessGroup::add_element(ImGuiCol id, sRGBColor const& color, bool is_dark_mode)
 {
     _ids.push_back(id);
     sort();
@@ -37,7 +37,7 @@ static auto lerp(float a, float b, float t) -> float
     return a + t * (b - a);
 }
 
-void BrightnessGroup::update_color(std::array<float, 3> const& color, bool is_dark_mode)
+void BrightnessGroup::update_color(sRGBColor const& color, bool is_dark_mode)
 {
     auto cielab = CIELAB_from_sRGB({color[0], color[1], color[2]});
     if (_brightness_level > 0.f)

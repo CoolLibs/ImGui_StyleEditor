@@ -28,6 +28,7 @@ auto main(int argc, char* argv[]) -> int
     {
         quick_imgui::loop("ImStyleEd", [&]() { // Open a window and run all the ImGui-related code
             static auto category_config = create_category_config();
+            static auto themes_manager  = ImStyleEd::ColorThemesManager{};
             ImGui::Begin("Categories Config");
             {
                 category_config.category_creation_widget();
@@ -35,7 +36,16 @@ auto main(int argc, char* argv[]) -> int
             ImGui::End();
             ImGui::Begin("Final Theme Picker UI");
             {
+                if (themes_manager.widget_theme_picker())
+                {
+                    category_config.set_theme(themes_manager.current_theme());
+                    category_config.apply_to(ImGui::GetStyle());
+                }
                 category_config.widget();
+                if (ImGui::Button("Save Theme"))
+                {
+                    themes_manager.add_theme(category_config.get_theme());
+                }
             }
             ImGui::End();
             ImGui::ShowDemoWindow();

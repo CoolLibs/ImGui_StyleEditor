@@ -282,4 +282,30 @@ void CategoryConfig::update_colors()
         category.update_colors(_is_dark_mode);
 }
 
+void CategoryConfig::set_theme(ColorTheme const& theme)
+{
+    _is_dark_mode = theme.is_dark_mode;
+    for (auto& category : _categories)
+    {
+        auto const it = theme.colors.find(category.name());
+        if (it == theme.colors.end())
+            continue;
+        category.color() = it->second;
+        category.update_colors(theme.is_dark_mode);
+    }
+}
+
+auto CategoryConfig::get_theme() -> ColorTheme
+{
+    auto res = ColorTheme{};
+
+    res.is_dark_mode = _is_dark_mode;
+    for (auto const& category : _categories)
+    {
+        res.colors[category.name()] = category.color();
+    }
+
+    return res;
+}
+
 } // namespace ImStyleEd
