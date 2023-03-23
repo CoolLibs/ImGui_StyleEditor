@@ -6,17 +6,6 @@
 
 // Learn how to use Dear ImGui: https://coollibs.github.io/contribute/Programming/dear-imgui
 
-static auto create_category_config() -> ImStyleEd::CategoryConfig
-{
-    auto category_config = ImStyleEd::CategoryConfig{{
-        ImStyleEd::category_with_all_color_elements(),
-        ImStyleEd::ColorCategory{},
-    }};
-    // ImGui::StyleColorsDark();
-    // category_config.set_from_style(ImGui::GetStyle());
-    return category_config;
-}
-
 auto main(int argc, char* argv[]) -> int
 {
     const int  exit_code              = doctest::Context{}.run(); // Run all unit tests
@@ -27,25 +16,15 @@ auto main(int argc, char* argv[]) -> int
     )
     {
         quick_imgui::loop("ImStyleEd", [&]() { // Open a window and run all the ImGui-related code
-            static auto category_config = create_category_config();
-            static auto themes_manager  = ImStyleEd::ColorThemesManager{};
+            static auto editor = ImStyleEd::Editor{};
             ImGui::Begin("Categories Config");
             {
-                category_config.category_creation_widget();
+                editor.widget_color_config();
             }
             ImGui::End();
             ImGui::Begin("Final Theme Picker UI");
             {
-                if (themes_manager.widget_theme_picker())
-                {
-                    category_config.set_theme(themes_manager.current_theme());
-                    category_config.apply_to(ImGui::GetStyle());
-                }
-                category_config.widget();
-                if (ImGui::Button("Save Theme"))
-                {
-                    themes_manager.add_theme(category_config.get_theme());
-                }
+                editor.widget_theme_picker();
             }
             ImGui::End();
             ImGui::ShowDemoWindow();

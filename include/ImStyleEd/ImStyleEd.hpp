@@ -5,3 +5,4 @@
 #include "../../src/ColorCategory.hpp"
 #include "../../src/ColorTheme.hpp"
 #include "../../src/ColorThemesManager.hpp"
+#include "../../src/Editor.hpp"
