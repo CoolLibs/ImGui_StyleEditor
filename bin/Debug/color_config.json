@@ -11,6 +11,14 @@
                 "Brightness groups": [
                     {
                         "IDs": [
+                            7,
+                            14
+                        ],
+                        "Brightness change": -0.6959999799728394,
+                        "Opacity": 1.0
+                    },
+                    {
+                        "IDs": [
                             6,
                             3,
                             39,
@@ -24,6 +32,16 @@
                             2
                         ],
                         "Brightness change": 0.0,
+                        "Opacity": 1.0
+                    },
+                    {
+                        "IDs": [
+                            4,
+                            33,
+                            36,
+                            10
+                        ],
+                        "Brightness change": 0.31200000643730166,
                         "Opacity": 1.0
                     },
                     {
@@ -65,24 +83,6 @@
                             35
                         ],
                         "Brightness change": 0.4390000104904175,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "IDs": [
-                            4,
-                            33,
-                            36,
-                            10
-                        ],
-                        "Brightness change": 0.31200000643730166,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "IDs": [
-                            7,
-                            14
-                        ],
-                        "Brightness change": -0.6959999799728394,
                         "Opacity": 1.0
                     }
                 ]
