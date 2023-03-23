@@ -243,7 +243,7 @@ void CategoryConfig::remove_element_from_all_groups(ImGuiCol element)
 
 static auto path() -> std::filesystem::path const&
 {
-    static auto const p = exe_path::dir() / "color_config.json";
+    static auto const p = exe_path::dir() / "imstyleed_config.json";
     return p;
 }
 
