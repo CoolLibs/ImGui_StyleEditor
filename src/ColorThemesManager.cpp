@@ -41,6 +41,7 @@ auto ColorThemesManager::widget_theme_picker() -> bool
             {
                 _current_theme = theme;
                 b              = true;
+                save_to_disk();
             }
             if (ImGui::BeginPopupContextItem("##ctx"))
             {
