@@ -101,7 +101,7 @@ auto CategoryConfig::categories_table() -> bool
             {
                 ImGui::BeginGroup();
                 ImGui::PushID(&group);
-                ImGui::SeparatorText(("Group " + std::to_string(i++)).c_str());
+                ImGui::SeparatorText(("Group " + std::to_string(++i)).c_str());
                 if (ImGui::Button("Move Down"))
                 {
                     group_to_move_down = &group;
