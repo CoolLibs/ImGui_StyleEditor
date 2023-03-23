@@ -17,12 +17,12 @@ auto main(int argc, char* argv[]) -> int
     {
         quick_imgui::loop("ImStyleEd", [&]() { // Open a window and run all the ImGui-related code
             static auto editor = ImStyleEd::Editor{};
-            ImGui::Begin("Categories Config");
+            ImGui::Begin("Advanced Configuration");
             {
                 editor.widget_color_config();
             }
             ImGui::End();
-            ImGui::Begin("Final Theme Picker UI");
+            ImGui::Begin("Simple UI for everybody");
             {
                 editor.widget_theme_picker();
             }
