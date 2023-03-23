@@ -99,16 +99,16 @@
                         "IDs": [
                             38,
                             50,
-                            51
+                            51,
+                            42,
+                            40
                         ],
                         "Brightness change": 0.0,
                         "Opacity": 1.0
                     },
                     {
                         "IDs": [
-                            42,
                             43,
-                            40,
                             41
                         ],
                         "Brightness change": -0.5099999904632568,

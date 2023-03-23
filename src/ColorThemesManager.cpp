@@ -1,16 +1,26 @@
 #include "ColorThemesManager.hpp"
+#include <exe_path/exe_path.h>
 #include <imgui/imgui.h>
+#include <cereal/archives/json.hpp>
+#include <fstream>
 
 namespace ImStyleEd {
+
+ColorThemesManager::ColorThemesManager()
+{
+    load_from_disk();
+}
 
 void ColorThemesManager::add_theme(ColorTheme const& theme)
 {
     _themes.push_back(theme);
+    save_to_disk();
 }
 
 void ColorThemesManager::set_current_theme(ColorTheme const& theme)
 {
     _current_theme = theme;
+    save_to_disk();
 }
 
 auto ColorThemesManager::current_theme() -> ColorTheme const&
@@ -47,10 +57,41 @@ auto ColorThemesManager::widget_theme_picker() -> bool
                 _current_theme.name = "";
             }
             _themes.erase(std::remove_if(_themes.begin(), _themes.end(), [&](ColorTheme const& theme) { return &theme == theme_to_delete; }), _themes.end());
+            save_to_disk();
         }
         ImGui::EndCombo();
     }
     return b;
+}
+
+static auto path() -> std::filesystem::path const&
+{
+    static auto const p = exe_path::dir() / "imstyleed_themes.json";
+    return p;
+}
+
+void ColorThemesManager::save_to_disk()
+{
+    std::ofstream os{path()};
+    {
+        cereal::JSONOutputArchive archive{os};
+        archive(cereal::make_nvp("Themes Manager", *this));
+    }
+}
+
+void ColorThemesManager::load_from_disk()
+{
+    std::ifstream is{path()};
+    if (!is.is_open())
+        return;
+    try
+    {
+        cereal::JSONInputArchive archive{is};
+        archive(*this);
+    }
+    catch (...)
+    {
+    }
 }
 
 } // namespace ImStyleEd

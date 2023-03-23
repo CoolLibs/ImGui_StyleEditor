@@ -8,7 +8,7 @@
 namespace ImStyleEd {
 
 struct ColorTheme {
-    std::string                                name{"Unnamed theme"};
+    std::string                                name{};
     std::unordered_map<std::string, sRGBColor> colors{};
     bool                                       is_dark_mode{};
 
@@ -19,6 +19,7 @@ private:
     void serialize(Archive& archive)
     {
         archive(
+            cereal::make_nvp("Name", name),
             cereal::make_nvp("Colors", colors),
             cereal::make_nvp("Is Dark Mode", is_dark_mode)
         );
