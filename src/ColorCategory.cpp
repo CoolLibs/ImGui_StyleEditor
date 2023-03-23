@@ -10,12 +10,6 @@ void ColorCategory::apply_to(ImGuiStyle& style) const
         group.apply_to(style);
 }
 
-void ColorCategory::set_from_style(ImGuiStyle const& style)
-{
-    for (auto& group : _brightness_groups)
-        group.set_from_style(style);
-}
-
 void ColorCategory::update_colors(bool is_dark_mode)
 {
     for (auto& group : _brightness_groups)

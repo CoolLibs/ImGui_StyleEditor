@@ -18,7 +18,6 @@ public:
     {}
 
     void apply_to(ImGuiStyle&) const;
-    void set_from_style(ImGuiStyle const&);
 
     void update_colors(bool is_dark_mode);
 

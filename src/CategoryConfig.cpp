@@ -51,12 +51,6 @@ void CategoryConfig::apply_to(ImGuiStyle& style)
         category.apply_to(style);
 }
 
-void CategoryConfig::set_from_style(ImGuiStyle const& style)
-{
-    for (auto& category : _categories)
-        category.set_from_style(style);
-}
-
 auto CategoryConfig::categories_table() -> bool
 {
     bool                             b     = false;

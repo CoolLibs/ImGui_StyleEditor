@@ -52,11 +52,6 @@ void BrightnessGroup::update_color(sRGBColor const& color, bool is_dark_mode)
     _color.z = srgb.z;
 }
 
-void BrightnessGroup::set_from_style(ImGuiStyle const& style)
-{
-    // _color = style.Colors[_id];
-}
-
 auto BrightnessGroup::name() const -> std::string
 {
     return std::string{"Brightness: "}

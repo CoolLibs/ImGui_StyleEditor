@@ -26,7 +26,6 @@ public:
     auto brightness_level() const -> float { return _brightness_level; }
 
     auto widget() -> bool;
-    void set_from_style(ImGuiStyle const&);
 
     auto color() -> auto& { return _color; }
     auto color() const -> auto const& { return _color; }
