@@ -8,6 +8,11 @@ void ColorThemesManager::add_theme(ColorTheme const& theme)
     _themes.push_back(theme);
 }
 
+void ColorThemesManager::set_current_theme(ColorTheme const& theme)
+{
+    _current_theme = theme;
+}
+
 auto ColorThemesManager::current_theme() -> ColorTheme const&
 {
     return _current_theme;

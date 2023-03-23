@@ -1,4 +1,6 @@
 #include "Editor.hpp"
+#include "imgui/imgui.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace ImStyleEd {
 
@@ -25,11 +27,21 @@ auto Editor::widget_theme_picker() -> bool
         _config.apply_to(ImGui::GetStyle());
         b = true;
     }
-    _config.widget();
+    if (_config.widget())
+    {
+        _themes.set_current_theme(_config.get_theme_as(""));
+    }
     if (ImGui::Button("Save Theme"))
     {
-        _themes.add_theme(_config.get_theme());
+        auto const theme = _config.get_theme_as(_next_theme_name);
+        _themes.add_theme(theme);
+        _themes.set_current_theme(theme);
+        _next_theme_name = "";
     }
+    ImGui::SameLine();
+    ImGui::TextUnformatted("as");
+    ImGui::SameLine();
+    ImGui::InputText("##_next_theme_name", &_next_theme_name);
 
     return b;
 }

@@ -17,6 +17,7 @@ public:
 private:
     CategoryConfig     _config{};
     ColorThemesManager _themes{};
+    std::string        _next_theme_name{};
 };
 
 } // namespace ImStyleEd

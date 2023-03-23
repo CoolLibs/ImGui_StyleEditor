@@ -8,7 +8,7 @@
 
 namespace ImStyleEd {
 
-void CategoryConfig::widget()
+auto CategoryConfig::widget() -> bool
 {
     bool b = false;
     b |= ImGui::Checkbox("Is Dark Mode", &_is_dark_mode);
@@ -21,6 +21,7 @@ void CategoryConfig::widget()
         update_colors();
         apply_to(ImGui::GetStyle());
     }
+    return b;
 }
 
 void CategoryConfig::category_creation_widget()
@@ -289,11 +290,12 @@ void CategoryConfig::set_theme(ColorTheme const& theme)
     }
 }
 
-auto CategoryConfig::get_theme() -> ColorTheme
+auto CategoryConfig::get_theme_as(std::string const& name) -> ColorTheme
 {
     auto res = ColorTheme{};
 
     res.is_dark_mode = _is_dark_mode;
+    res.name         = name;
     for (auto const& category : _categories)
     {
         res.colors[category.name()] = category.color();

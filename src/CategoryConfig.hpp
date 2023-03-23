@@ -15,13 +15,13 @@ public:
         update_colors();
         apply_to(ImGui::GetStyle());
     }
-    void widget();
+    auto widget() -> bool;
     void category_creation_widget();
     void add_category(ColorCategory const& category) { _categories.push_back(category); }
     void apply_to(ImGuiStyle&);
 
     void set_theme(ColorTheme const&);
-    auto get_theme() -> ColorTheme;
+    auto get_theme_as(std::string const& name) -> ColorTheme;
 
 private:
     auto categories_table() -> bool;

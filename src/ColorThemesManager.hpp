@@ -6,7 +6,8 @@ namespace ImStyleEd {
 
 class ColorThemesManager {
 public:
-    void add_theme(ColorTheme const& theme);
+    void add_theme(ColorTheme const&);
+    void set_current_theme(ColorTheme const&);
     auto current_theme() -> ColorTheme const&;
     auto widget_theme_picker() -> bool;
 
