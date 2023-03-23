@@ -3,7 +3,7 @@ project(ImStyleEd-tests)
 
 # ---Create executable---
 add_executable(${PROJECT_NAME} tests.cpp)
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_11)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
 # ---Set warning level---
 if(MSVC)
