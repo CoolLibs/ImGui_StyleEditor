@@ -33,6 +33,8 @@ public:
     auto color() -> auto& { return _color; }
     auto color() const -> auto const& { return _color; }
 
+    auto is_empty() const -> bool { return _brightness_groups.empty(); }
+
 private:
     void sort();
 

@@ -75,6 +75,9 @@ auto CategoryConfig::categories_table() -> bool
         }
         ImGui::TableHeadersRow();
         ImGui::TableNextRow();
+        ColorCategory const* category_to_remove     = nullptr;
+        ColorCategory const* category_to_move_left  = nullptr;
+        ColorCategory const* category_to_move_right = nullptr;
         for (size_t column = 0; column < nb_columns; column++)
         {
             ImGui::TableSetColumnIndex(static_cast<int>(column));
@@ -173,9 +176,31 @@ auto CategoryConfig::categories_table() -> bool
             {
                 category.add_brightness_group();
             }
+            const bool cant_remove_category = !category.is_empty();
+            ImGui::BeginGroup();
+            ImGui::BeginDisabled(cant_remove_category);
+            if (ImGui::Button("Remove Category"))
+            {
+                category_to_remove = &category;
+            }
+            ImGui::EndDisabled();
+            ImGui::EndGroup();
+            if (cant_remove_category && ImGui::IsItemHovered())
+            {
+                ImGui::BeginTooltip();
+                ImGui::TextUnformatted("Can't remove a category that is not empty. Please first move all the elements to other categories.");
+                ImGui::EndTooltip();
+            }
             ImGui::PopID();
         }
         ImGui::EndTable();
+        if (category_to_remove)
+        {
+            _categories.erase(std::remove_if(_categories.begin(), _categories.end(), [&](ColorCategory const& category) {
+                                  return &category == category_to_remove;
+                              }),
+                              _categories.end());
+        }
     }
 
     return b;
