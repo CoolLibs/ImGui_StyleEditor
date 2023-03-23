@@ -88,6 +88,15 @@ auto CategoryConfig::categories_table() -> bool
             BrightnessGroup const* group_to_remove = nullptr;
             BrightnessGroup const* group_to_move_up   = nullptr;
             BrightnessGroup const* group_to_move_down = nullptr;
+            if (ImGui::Button("Move Left"))
+            {
+                category_to_move_left = &category;
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Move Right"))
+            {
+                category_to_move_right = &category;
+            }
             for (auto& group : category.brightness_groups())
             {
                 ImGui::BeginGroup();
@@ -200,6 +209,30 @@ auto CategoryConfig::categories_table() -> bool
                                   return &category == category_to_remove;
                               }),
                               _categories.end());
+        }
+        if (category_to_move_right)
+        {
+            auto const it = std::find_if(_categories.begin(), _categories.end(), [&](ColorCategory const& category) {
+                return &category == category_to_move_right;
+            });
+            if (it != _categories.end())
+            {
+                auto const next = std::next(it);
+                if (next != _categories.end())
+                {
+                    std::swap(*it, *next);
+                }
+            }
+        }
+        if (category_to_move_left)
+        {
+            auto const it = std::find_if(_categories.begin(), _categories.end(), [&](ColorCategory const& category) {
+                return &category == category_to_move_left;
+            });
+            if (it != _categories.end() && it != _categories.begin())
+            {
+                std::swap(*it, *std::prev(it));
+            }
         }
     }
 
