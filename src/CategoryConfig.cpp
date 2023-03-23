@@ -1,5 +1,4 @@
 #include "CategoryConfig.hpp"
-#include <exe_path/exe_path.h>
 #include <cereal/archives/json.hpp>
 #include <filesystem>
 #include <fstream>
@@ -241,15 +240,9 @@ void CategoryConfig::remove_element_from_all_groups(ImGuiCol element)
             group.remove_element(element);
 }
 
-static auto path() -> std::filesystem::path const&
-{
-    static auto const p = exe_path::dir() / "imstyleed_config.json";
-    return p;
-}
-
 void CategoryConfig::save_to_disk()
 {
-    std::ofstream os{path()};
+    std::ofstream os{_serialization_file_path};
     {
         cereal::JSONOutputArchive archive{os};
         archive(cereal::make_nvp("Config", *this));
@@ -258,7 +251,7 @@ void CategoryConfig::save_to_disk()
 
 void CategoryConfig::load_from_disk()
 {
-    std::ifstream is{path()};
+    std::ifstream is{_serialization_file_path};
     if (!is.is_open())
         return;
     try

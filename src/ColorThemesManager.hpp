@@ -1,5 +1,6 @@
 #pragma once
 #include <cereal/types/vector.hpp>
+#include <filesystem>
 #include <vector>
 #include "ColorTheme.hpp"
 
@@ -7,7 +8,7 @@ namespace ImStyleEd {
 
 class ColorThemesManager {
 public:
-    ColorThemesManager();
+    explicit ColorThemesManager(std::filesystem::path serialization_file_path);
 
     void add_theme(ColorTheme const&);
     void set_current_theme(ColorTheme const&);
@@ -20,6 +21,8 @@ public:
 private:
     std::vector<ColorTheme> _themes{};
     ColorTheme              _current_theme{};
+
+    std::filesystem::path _serialization_file_path{};
 
 private:
     // Serialization

@@ -4,10 +4,15 @@
 
 namespace ImStyleEd {
 
+struct SerializationPaths {
+    std::filesystem::path themes_path;
+    std::filesystem::path config_path;
+};
+
 /// Main class that groups everything together.
 class Editor {
 public:
-    Editor();
+    explicit Editor(SerializationPaths const&);
 
     // Simple UI to select your theme or customize it.
     auto widget_theme_picker() -> bool;
@@ -18,8 +23,8 @@ private:
     void save_current_theme();
 
 private:
-    CategoryConfig     _config{};
-    ColorThemesManager _themes{};
+    CategoryConfig     _config;
+    ColorThemesManager _themes;
     std::string        _next_theme_name{};
 };
 

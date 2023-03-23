@@ -4,11 +4,9 @@
 
 namespace ImStyleEd {
 
-Editor::Editor()
-    : _config{CategoryConfig{{
-        ImStyleEd::category_with_all_color_elements(),
-        ImStyleEd::ColorCategory{},
-    }}}
+Editor::Editor(SerializationPaths const& paths)
+    : _config{paths.config_path, {ImStyleEd::category_with_all_color_elements()}}
+    , _themes{paths.themes_path}
 {
 }
 

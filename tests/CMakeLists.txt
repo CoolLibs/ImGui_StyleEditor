@@ -3,7 +3,7 @@ project(ImStyleEd-tests)
 
 # ---Create executable---
 add_executable(${PROJECT_NAME} tests.cpp)
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
 # ---Set warning level---
 if(MSVC)
@@ -30,6 +30,16 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 # ---Include our library---
 add_subdirectory(.. ${CMAKE_CURRENT_SOURCE_DIR}/build/ImStyleEd)
 target_link_libraries(${PROJECT_NAME} PRIVATE ImStyleEd::ImStyleEd)
+
+# ---Add exe_path---
+include(FetchContent)
+FetchContent_Declare(
+    exe_path
+    GIT_REPOSITORY https://github.com/coolLibs/exe_path
+    GIT_TAG bcf81c8e1d48c056081e232fe297c73743e72420
+)
+FetchContent_MakeAvailable(exe_path)
+target_link_libraries(${PROJECT_NAME} PRIVATE exe_path::exe_path)
 
 # ---Add doctest---
 include(FetchContent)

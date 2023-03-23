@@ -1,5 +1,6 @@
 #pragma once
 #include <cereal/types/vector.hpp>
+#include <filesystem>
 #include "ColorCategory.hpp"
 #include "ColorTheme.hpp"
 #include "imgui/imgui.h"
@@ -8,8 +9,9 @@ namespace ImStyleEd {
 
 class CategoryConfig {
 public:
-    explicit CategoryConfig(std::vector<ColorCategory> categories = {})
-        : _categories{std::move(categories)}
+    explicit CategoryConfig(std::filesystem::path serialization_file_path, std::vector<ColorCategory> categories = {})
+        : _serialization_file_path{std::move(serialization_file_path)}
+        , _categories{std::move(categories)}
     {
         load_from_disk();
         update_colors();
@@ -33,6 +35,8 @@ private:
 private:
     std::vector<ColorCategory> _categories;
     bool                       _is_dark_mode{true};
+
+    std::filesystem::path _serialization_file_path{};
 
 private:
     // Serialization

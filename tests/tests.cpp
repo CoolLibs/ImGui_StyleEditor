@@ -1,6 +1,7 @@
 #include "imgui.h"
 #define DOCTEST_CONFIG_IMPLEMENT
 #include <doctest/doctest.h>
+#include <exe_path/exe_path.h>
 #include <ImStyleEd/ImStyleEd.hpp>
 #include <quick_imgui/quick_imgui.hpp>
 
@@ -16,7 +17,10 @@ auto main(int argc, char* argv[]) -> int
     )
     {
         quick_imgui::loop("ImStyleEd", [&]() { // Open a window and run all the ImGui-related code
-            static auto editor = ImStyleEd::Editor{};
+            static auto editor = ImStyleEd::Editor{{
+                .themes_path = exe_path::dir() / "imstyleed_themes.json",
+                .config_path = exe_path::dir() / "imstyleed_config.json",
+            }};
             ImGui::Begin("Advanced Configuration");
             {
                 editor.widget_color_config();

@@ -1,12 +1,12 @@
 #include "ColorThemesManager.hpp"
-#include <exe_path/exe_path.h>
 #include <imgui/imgui.h>
 #include <cereal/archives/json.hpp>
 #include <fstream>
 
 namespace ImStyleEd {
 
-ColorThemesManager::ColorThemesManager()
+ColorThemesManager::ColorThemesManager(std::filesystem::path serialization_file_path)
+    : _serialization_file_path{std::move(serialization_file_path)}
 {
     load_from_disk();
 }
@@ -64,15 +64,9 @@ auto ColorThemesManager::widget_theme_picker() -> bool
     return b;
 }
 
-static auto path() -> std::filesystem::path const&
-{
-    static auto const p = exe_path::dir() / "imstyleed_themes.json";
-    return p;
-}
-
 void ColorThemesManager::save_to_disk()
 {
-    std::ofstream os{path()};
+    std::ofstream os{_serialization_file_path};
     {
         cereal::JSONOutputArchive archive{os};
         archive(cereal::make_nvp("Themes Manager", *this));
@@ -81,7 +75,7 @@ void ColorThemesManager::save_to_disk()
 
 void ColorThemesManager::load_from_disk()
 {
-    std::ifstream is{path()};
+    std::ifstream is{_serialization_file_path};
     if (!is.is_open())
         return;
     try

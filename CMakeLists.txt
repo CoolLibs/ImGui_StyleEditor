@@ -41,17 +41,7 @@ FetchContent_Declare(
 FetchContent_Populate(cereal)
 target_include_directories(ImStyleEd PUBLIC ${cereal_SOURCE_DIR}/include)
 
-# ---exe_path library---
-include(FetchContent)
-FetchContent_Declare(
-    exe_path
-    GIT_REPOSITORY https://github.com/coolLibs/exe_path
-    GIT_TAG bcf81c8e1d48c056081e232fe297c73743e72420
-)
-FetchContent_MakeAvailable(exe_path)
-target_link_libraries(ImStyleEd PRIVATE exe_path::exe_path)
-
-# ---exe_path library---
+# ---glm library---
 include(FetchContent)
 FetchContent_Declare(
     glm
