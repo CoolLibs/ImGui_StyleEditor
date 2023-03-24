@@ -5,7 +5,7 @@
 To add this library to your project, simply add these three lines to your *CMakeLists.txt* and replace `folder/containing/imgui` with the path to the parent folder containing *imgui*:
 ```cmake
 add_subdirectory(path/to/ImStyleEd)
-target_include_directories(ImStyleEd PRIVATE folder/containing/imgui)
+target_include_directories(ImStyleEd SYSTEM PRIVATE folder/containing/imgui)
 target_link_libraries(${PROJECT_NAME} PRIVATE ImStyleEd::ImStyleEd)
 ```
 
