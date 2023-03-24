@@ -10,8 +10,8 @@ namespace ImStyleEd {
 class CategoryConfig {
 public:
     explicit CategoryConfig(std::filesystem::path serialization_file_path, std::vector<ColorCategory> categories = {})
-        : _serialization_file_path{std::move(serialization_file_path)}
-        , _categories{std::move(categories)}
+        : _categories{std::move(categories)}
+        , _serialization_file_path{std::move(serialization_file_path)}
     {
         load_from_disk();
         update_colors();
