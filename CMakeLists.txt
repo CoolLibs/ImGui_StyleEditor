@@ -39,7 +39,7 @@ FetchContent_Declare(
     GIT_TAG ddd467244713ea4fe63733628992efcdd6a9187d
 )
 FetchContent_Populate(cereal)
-target_include_directories(ImStyleEd PUBLIC ${cereal_SOURCE_DIR}/include)
+target_include_directories(ImStyleEd SYSTEM PUBLIC ${cereal_SOURCE_DIR}/include)
 
 # ---glm library---
 include(FetchContent)
@@ -49,4 +49,4 @@ FetchContent_Declare(
     GIT_TAG 41628991f848835d36042173eb45874c1859e1c2
 )
 FetchContent_Populate(glm)
-target_include_directories(ImStyleEd PRIVATE ${glm_SOURCE_DIR})
+target_include_directories(ImStyleEd SYSTEM PRIVATE ${glm_SOURCE_DIR})
