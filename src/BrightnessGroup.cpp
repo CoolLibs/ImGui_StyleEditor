@@ -78,10 +78,11 @@ auto BrightnessGroup::widget() -> bool
                 | ImGuiColorEditFlags_NoInputs
                 // | ImGuiColorEditFlags_NoPicker
                 | ImGuiColorEditFlags_AlphaPreview
+                | ImGuiColorEditFlags_NoDragDrop
         );
         b |= ImGui::IsItemActive();
 
-        if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+        if (!ImGui::IsItemActive() && ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
         {
             // Set payload to carry the index of our item (could be anything)
             ImGui::SetDragDropPayload("DND_DEMO_CELL", &id, sizeof(ImGuiCol));
