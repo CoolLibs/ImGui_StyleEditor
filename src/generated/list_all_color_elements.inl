@@ -114,3 +114,5 @@ ImGuiCol_Text,
     ImGuiCol_NavWindowingDimBg,
 
     ImGuiCol_ModalWindowDimBg,
+
+    ImGuiCol_SliderGrabHovered,

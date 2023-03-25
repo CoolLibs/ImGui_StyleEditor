@@ -169,3 +169,6 @@ return "NavWindowingDimBg";
 
 case ImGuiCol_ModalWindowDimBg:
 return "ModalWindowDimBg";
+
+case ImGuiCol_SliderGrabHovered:
+return "SliderGrabHovered";
