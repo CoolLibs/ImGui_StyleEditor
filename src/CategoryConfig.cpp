@@ -7,7 +7,7 @@
 
 namespace ImStyleEd {
 
-auto CategoryConfig::widget() -> bool
+auto CategoryConfig::theme_editor_widget() -> bool
 {
     bool b = false;
     b |= ImGui::Checkbox("Is Dark Mode", &_is_dark_mode);

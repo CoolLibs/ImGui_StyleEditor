@@ -33,7 +33,13 @@ auto Editor::widget_theme_picker() -> bool
         _config.apply_to(ImGui::GetStyle());
         b = true;
     }
-    if (_config.widget())
+
+    return b;
+}
+
+void Editor::widget_theme_editor()
+{
+    if (_config.theme_editor_widget())
     {
         _themes.set_current_theme(_config.get_theme_as(""));
     }
@@ -48,8 +54,6 @@ auto Editor::widget_theme_picker() -> bool
     {
         save_current_theme();
     }
-
-    return b;
 }
 
 void Editor::apply_if_any(std::string_view theme_name)

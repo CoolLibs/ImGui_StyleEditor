@@ -14,8 +14,10 @@ class Editor {
 public:
     explicit Editor(SerializationPaths const&);
 
-    // Simple UI to select your theme or customize it.
+    // Dropdown to select a color theme.
     auto widget_theme_picker() -> bool;
+    // Simple UI to create your own themes.
+    void widget_theme_editor();
     // Advanced UI to control the nitty–gritty details of how a theme is applied to each and every ImGui element.
     void widget_color_config();
 

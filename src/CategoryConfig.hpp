@@ -17,7 +17,7 @@ public:
         update_colors();
         apply_to(ImGui::GetStyle());
     }
-    auto widget() -> bool;
+    auto theme_editor_widget() -> bool;
     void category_creation_widget();
     void add_category(ColorCategory const& category) { _categories.push_back(category); }
     void apply_to(ImGuiStyle&);
