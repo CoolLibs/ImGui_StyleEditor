@@ -1,6 +1,5 @@
 #include "ColorThemesManager.hpp"
 #include <imgui/imgui.h>
-#include <ImGui_StyleEditor/src/ColorTheme.hpp>
 #include <algorithm>
 #include <cereal/archives/json.hpp>
 #include <fstream>
