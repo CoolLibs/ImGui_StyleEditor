@@ -1,5 +1,7 @@
 #include "ColorThemesManager.hpp"
 #include <imgui/imgui.h>
+#include <ImGui_StyleEditor/src/ColorTheme.hpp>
+#include <algorithm>
 #include <cereal/archives/json.hpp>
 #include <fstream>
 
@@ -87,6 +89,16 @@ void ColorThemesManager::load_from_disk()
     catch (...)
     {
     }
+}
+
+auto ColorThemesManager::find(std::string_view theme_name) -> ColorTheme const*
+{
+    auto const it = std::find_if(_themes.begin(), _themes.end(), [&](ColorTheme const& theme) {
+        return theme.name == theme_name;
+    });
+    if (it == _themes.end())
+        return nullptr;
+    return &*it;
 }
 
 } // namespace ImStyleEd

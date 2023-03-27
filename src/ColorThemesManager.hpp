@@ -18,6 +18,8 @@ public:
     void save_to_disk();
     void load_from_disk();
 
+    auto find(std::string_view theme_name) -> ColorTheme const*;
+
 private:
     std::vector<ColorTheme> _themes{};
     ColorTheme              _current_theme{};

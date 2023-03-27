@@ -52,4 +52,15 @@ auto Editor::widget_theme_picker() -> bool
     return b;
 }
 
+void Editor::apply_if_any(std::string_view theme_name)
+{
+    auto const theme = _themes.find(theme_name);
+    if (!theme)
+        return;
+
+    _themes.set_current_theme(*theme);
+    _config.set_theme(*theme);
+    _config.apply_to(ImGui::GetStyle());
+}
+
 } // namespace ImStyleEd

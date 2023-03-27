@@ -19,6 +19,9 @@ public:
     // Advanced UI to control the nitty–gritty details of how a theme is applied to each and every ImGui element.
     void widget_color_config();
 
+    // Applies the theme with the given name if it exists.
+    void apply_if_any(std::string_view theme_name);
+
 private:
     void save_current_theme();
 
