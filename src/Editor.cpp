@@ -5,9 +5,11 @@
 namespace ImStyleEd {
 
 Editor::Editor(SerializationPaths const& paths)
-    : _config{paths.config_path, {ImStyleEd::category_with_all_color_elements()}}
-    , _themes{paths.themes_path}
+    : _themes{paths.themes_path}
+    , _config{paths.config_path, {ImStyleEd::category_with_all_color_elements()}}
 {
+    _config.set_theme(_themes.current_theme());
+    _config.apply_to(ImGui::GetStyle());
 }
 
 void Editor::widget_color_config()

@@ -28,8 +28,8 @@ private:
     void save_current_theme();
 
 private:
-    CategoryConfig     _config;
     ColorThemesManager _themes;
+    CategoryConfig     _config;
     std::string        _next_theme_name{};
 };
 
