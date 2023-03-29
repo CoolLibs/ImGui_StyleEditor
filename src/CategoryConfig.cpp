@@ -91,7 +91,7 @@ auto CategoryConfig::categories_table() -> bool
             {
                 category_to_move_right = &category;
             }
-            if (ImGui::Checkbox("Invert brightness for groups light mode", &category.behaves_differently_in_light_mode()))
+            if (ImGui::Checkbox("Invert brightness for groups in light mode", &category.behaves_differently_in_light_mode()))
             {
                 category.update_colors(_is_dark_mode);
                 b = true;
