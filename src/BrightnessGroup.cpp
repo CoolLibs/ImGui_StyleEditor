@@ -5,11 +5,11 @@
 
 namespace ImStyleEd {
 
-void BrightnessGroup::add_element(ImGuiCol id, sRGBColor const& color, bool is_dark_mode)
+void BrightnessGroup::add_element(ImGuiCol id, sRGBColor const& color, bool is_dark_mode, bool behaves_diff_in_light)
 {
     _ids.push_back(id);
     sort();
-    update_color(color, is_dark_mode);
+    update_color(color, is_dark_mode, behaves_diff_in_light);
     apply_to(ImGui::GetStyle());
 }
 
@@ -37,13 +37,13 @@ static auto lerp(float a, float b, float t) -> float
     return a + t * (b - a);
 }
 
-void BrightnessGroup::update_color(sRGBColor const& color, bool is_dark_mode)
+void BrightnessGroup::update_color(sRGBColor const& color, bool is_dark_mode, bool behaves_diff_in_light)
 {
     auto cielab = CIELAB_from_sRGB({color[0], color[1], color[2]});
     if (_brightness_level > 0.f)
-        cielab.x = lerp(cielab.x, is_dark_mode ? 1.f : 0.f, _brightness_level);
+        cielab.x = lerp(cielab.x, is_dark_mode || !behaves_diff_in_light ? 1.f : 0.f, _brightness_level);
     else
-        cielab.x = lerp(cielab.x, is_dark_mode ? 0.f : 1.f, -_brightness_level);
+        cielab.x = lerp(cielab.x, is_dark_mode || !behaves_diff_in_light ? 0.f : 1.f, -_brightness_level);
 
     auto srgb = sRGB_from_CIELAB(cielab);
 

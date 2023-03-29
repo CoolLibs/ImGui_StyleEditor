@@ -13,7 +13,7 @@ void ColorCategory::apply_to(ImGuiStyle& style) const
 void ColorCategory::update_colors(bool is_dark_mode)
 {
     for (auto& group : _brightness_groups)
-        group.update_color(_color, is_dark_mode);
+        group.update_color(_color, is_dark_mode, _behaves_differently_in_light_mode);
 }
 
 void ColorCategory::sort()
@@ -36,7 +36,7 @@ auto ColorCategory::widget(bool is_dark_mode) -> bool
     if (b)
     {
         for (auto& group : _brightness_groups)
-            group.update_color(_color, is_dark_mode);
+            group.update_color(_color, is_dark_mode, _behaves_differently_in_light_mode);
     }
     return b;
 }

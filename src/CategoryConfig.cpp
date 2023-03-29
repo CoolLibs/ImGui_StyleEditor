@@ -91,6 +91,11 @@ auto CategoryConfig::categories_table() -> bool
             {
                 category_to_move_right = &category;
             }
+            if (ImGui::Checkbox("Invert brightness for groups light mode", &category.behaves_differently_in_light_mode()))
+            {
+                category.update_colors(_is_dark_mode);
+                b = true;
+            }
             for (auto& group : category.brightness_groups())
             {
                 ImGui::BeginGroup();
@@ -107,7 +112,7 @@ auto CategoryConfig::categories_table() -> bool
                 }
                 if (group.widget())
                 {
-                    group.update_color(category.color(), _is_dark_mode);
+                    group.update_color(category.color(), _is_dark_mode, category.behaves_differently_in_light_mode());
                     b = true;
                 }
                 { // "Remove Group" button
@@ -138,7 +143,7 @@ auto CategoryConfig::categories_table() -> bool
                         IM_ASSERT(payload->DataSize == sizeof(ImGuiCol));
                         ImGuiCol payload_element = *(const ImGuiCol*)payload->Data;
                         remove_element_from_all_groups(payload_element);
-                        group.add_element(payload_element, category.color(), _is_dark_mode);
+                        group.add_element(payload_element, category.color(), _is_dark_mode, category.behaves_differently_in_light_mode());
                         b = true;
                     }
                     ImGui::EndDragDropTarget();

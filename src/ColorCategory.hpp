@@ -31,6 +31,7 @@ public:
     auto brightness_groups() const -> auto const& { return _brightness_groups; }
     auto color() -> auto& { return _color; }
     auto color() const -> auto const& { return _color; }
+    auto behaves_differently_in_light_mode() -> auto& { return _behaves_differently_in_light_mode; }
 
     auto is_empty() const -> bool { return _brightness_groups.empty(); }
 
@@ -41,6 +42,7 @@ private:
     std::string                  _name{"Unnamed"};
     sRGBColor                    _color{0.f, 0.f, 0.f}; // Not a vec4, the opacity is handled by each element separately
     std::vector<BrightnessGroup> _brightness_groups;
+    bool                         _behaves_differently_in_light_mode{true};
 
 private:
     // Serialization
@@ -51,7 +53,8 @@ private:
         archive(
             cereal::make_nvp("Name", _name),
             cereal::make_nvp("Color", _color),
-            cereal::make_nvp("Brightness groups", _brightness_groups)
+            cereal::make_nvp("Brightness groups", _brightness_groups),
+            cereal::make_nvp("Behaves differently in light mode", _behaves_differently_in_light_mode)
         );
     }
 };
