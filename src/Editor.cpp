@@ -1,4 +1,6 @@
 #include "Editor.hpp"
+#include <cereal/archives/json.hpp>
+#include <fstream>
 
 namespace ImStyleEd {
 
@@ -8,6 +10,11 @@ void Editor::apply()
 
 void Editor::save_config()
 {
+    auto os = std::ofstream{_paths.config_path};
+    {
+        auto archive = cereal::JSONOutputArchive{os};
+        archive(cereal::make_nvp("Config", _config));
+    }
 }
 
 void Editor::save_themes()

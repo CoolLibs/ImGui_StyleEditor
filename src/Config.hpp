@@ -1,4 +1,7 @@
 #pragma once
+#include <cereal/cereal.hpp>
+#include <cereal/types/utility.hpp>
+#include <cereal/types/vector.hpp>
 #include <string>
 #include <utility>
 #include <vector>
@@ -27,6 +30,18 @@ private:
 private:
     std::vector<Category>       _categories{};
     std::vector<GroupedElement> _element_to_group_id{};
+
+private:
+    // Serialization
+    friend class cereal::access;
+    template<class Archive>
+    void serialize(Archive& archive)
+    {
+        archive(
+            cereal::make_nvp("Categories", _categories),
+            cereal::make_nvp("Elements", _element_to_group_id)
+        );
+    }
 };
 
 } // namespace ImStyleEd

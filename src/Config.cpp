@@ -26,12 +26,14 @@ auto Config::imgui() -> bool
     return b;
 }
 
-static void imgui_add_group_button(Category& category)
+static auto imgui_add_group_button(Category& category) -> bool
 {
     if (ImGui::Button("Add group"))
     {
         category.groups.emplace_back();
+        return true;
     }
+    return false;
 }
 
 static void imgui_color_element(GroupedElement& element)
@@ -135,7 +137,7 @@ auto Config::imgui_categories_table() -> bool
                     b |= imgui_color_group(group, elements[elements_index], category.name);
                     elements_index++;
                 }
-                imgui_add_group_button(category);
+                b |= imgui_add_group_button(category);
             }
             ImGui::PopID();
         }

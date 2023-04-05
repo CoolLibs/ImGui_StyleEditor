@@ -16,7 +16,8 @@ public:
     /// Loads the themes, applies the current theme.
     /// RegisterColorElements must be a functor that takes an `ImStyleEd::Config&` and registers all the desired color elements into it.
     template<typename RegisterColorElements>
-    Editor(SerializationPaths const& paths, RegisterColorElements const& register_color_elements)
+    Editor(SerializationPaths paths, RegisterColorElements const& register_color_elements)
+        : _paths{std::move(paths)}
     {
         register_color_elements(_config);
         // _config.try_load_from(paths.config_path); // Must be done after registering the elements. Only the registered elements will be loaded from the JSON.
@@ -36,9 +37,10 @@ private:
     void save_themes();
 
 private:
-    std::vector<Theme> _themes;
-    Theme              _current_theme;
-    Config             _config;
+    std::vector<Theme> _themes{};
+    Theme              _current_theme{};
+    Config             _config{};
+    SerializationPaths _paths{};
 };
 
 } // namespace ImStyleEd
