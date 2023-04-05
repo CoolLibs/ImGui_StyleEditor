@@ -7,6 +7,9 @@
 
 config.register_element({
     "Text",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_Text];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_Text] = color;
     },
@@ -15,6 +18,9 @@ config.register_element({
 
 config.register_element({
     "TextDisabled",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_TextDisabled];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_TextDisabled] = color;
     },
@@ -23,6 +29,9 @@ config.register_element({
 
 config.register_element({
     "WindowBg",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_WindowBg] = color;
     },
@@ -31,6 +40,9 @@ config.register_element({
 
 config.register_element({
     "ChildBg",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_ChildBg];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_ChildBg] = color;
     },
@@ -39,6 +51,9 @@ config.register_element({
 
 config.register_element({
     "PopupBg",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_PopupBg];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_PopupBg] = color;
     },
@@ -47,6 +62,9 @@ config.register_element({
 
 config.register_element({
     "Border",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_Border];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_Border] = color;
     },
@@ -55,6 +73,9 @@ config.register_element({
 
 config.register_element({
     "BorderShadow",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_BorderShadow];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_BorderShadow] = color;
     },
@@ -63,6 +84,9 @@ config.register_element({
 
 config.register_element({
     "FrameBg",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_FrameBg];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_FrameBg] = color;
     },
@@ -71,6 +95,9 @@ config.register_element({
 
 config.register_element({
     "FrameBgHovered",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_FrameBgHovered];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_FrameBgHovered] = color;
     },
@@ -79,6 +106,9 @@ config.register_element({
 
 config.register_element({
     "FrameBgActive",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_FrameBgActive];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_FrameBgActive] = color;
     },
@@ -87,6 +117,9 @@ config.register_element({
 
 config.register_element({
     "TitleBg",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_TitleBg];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_TitleBg] = color;
     },
@@ -95,6 +128,9 @@ config.register_element({
 
 config.register_element({
     "TitleBgActive",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_TitleBgActive];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_TitleBgActive] = color;
     },
@@ -103,6 +139,9 @@ config.register_element({
 
 config.register_element({
     "TitleBgCollapsed",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_TitleBgCollapsed];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_TitleBgCollapsed] = color;
     },
@@ -111,6 +150,9 @@ config.register_element({
 
 config.register_element({
     "MenuBarBg",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_MenuBarBg];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_MenuBarBg] = color;
     },
@@ -119,6 +161,9 @@ config.register_element({
 
 config.register_element({
     "ScrollbarBg",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_ScrollbarBg];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_ScrollbarBg] = color;
     },
@@ -127,6 +172,9 @@ config.register_element({
 
 config.register_element({
     "ScrollbarGrab",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_ScrollbarGrab];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_ScrollbarGrab] = color;
     },
@@ -135,6 +183,9 @@ config.register_element({
 
 config.register_element({
     "ScrollbarGrabHovered",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_ScrollbarGrabHovered];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_ScrollbarGrabHovered] = color;
     },
@@ -143,6 +194,9 @@ config.register_element({
 
 config.register_element({
     "ScrollbarGrabActive",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_ScrollbarGrabActive];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_ScrollbarGrabActive] = color;
     },
@@ -151,6 +205,9 @@ config.register_element({
 
 config.register_element({
     "CheckMark",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_CheckMark];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_CheckMark] = color;
     },
@@ -159,6 +216,9 @@ config.register_element({
 
 config.register_element({
     "SliderGrab",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_SliderGrab];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_SliderGrab] = color;
     },
@@ -167,6 +227,9 @@ config.register_element({
 
 config.register_element({
     "SliderGrabActive",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_SliderGrabActive];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_SliderGrabActive] = color;
     },
@@ -175,6 +238,9 @@ config.register_element({
 
 config.register_element({
     "Button",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_Button];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_Button] = color;
     },
@@ -183,6 +249,9 @@ config.register_element({
 
 config.register_element({
     "ButtonHovered",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_ButtonHovered] = color;
     },
@@ -191,6 +260,9 @@ config.register_element({
 
 config.register_element({
     "ButtonActive",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_ButtonActive];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_ButtonActive] = color;
     },
@@ -199,6 +271,9 @@ config.register_element({
 
 config.register_element({
     "Header",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_Header];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_Header] = color;
     },
@@ -207,6 +282,9 @@ config.register_element({
 
 config.register_element({
     "HeaderHovered",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_HeaderHovered];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_HeaderHovered] = color;
     },
@@ -215,6 +293,9 @@ config.register_element({
 
 config.register_element({
     "HeaderActive",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_HeaderActive];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_HeaderActive] = color;
     },
@@ -223,6 +304,9 @@ config.register_element({
 
 config.register_element({
     "Separator",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_Separator];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_Separator] = color;
     },
@@ -231,6 +315,9 @@ config.register_element({
 
 config.register_element({
     "SeparatorHovered",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_SeparatorHovered];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_SeparatorHovered] = color;
     },
@@ -239,6 +326,9 @@ config.register_element({
 
 config.register_element({
     "SeparatorActive",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_SeparatorActive];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_SeparatorActive] = color;
     },
@@ -247,6 +337,9 @@ config.register_element({
 
 config.register_element({
     "ResizeGrip",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_ResizeGrip];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_ResizeGrip] = color;
     },
@@ -255,6 +348,9 @@ config.register_element({
 
 config.register_element({
     "ResizeGripHovered",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_ResizeGripHovered];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_ResizeGripHovered] = color;
     },
@@ -263,6 +359,9 @@ config.register_element({
 
 config.register_element({
     "ResizeGripActive",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_ResizeGripActive];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_ResizeGripActive] = color;
     },
@@ -271,6 +370,9 @@ config.register_element({
 
 config.register_element({
     "Tab",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_Tab];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_Tab] = color;
     },
@@ -279,6 +381,9 @@ config.register_element({
 
 config.register_element({
     "TabHovered",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_TabHovered];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_TabHovered] = color;
     },
@@ -287,6 +392,9 @@ config.register_element({
 
 config.register_element({
     "TabActive",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_TabActive];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_TabActive] = color;
     },
@@ -295,6 +403,9 @@ config.register_element({
 
 config.register_element({
     "TabUnfocused",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_TabUnfocused];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_TabUnfocused] = color;
     },
@@ -303,6 +414,9 @@ config.register_element({
 
 config.register_element({
     "TabUnfocusedActive",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_TabUnfocusedActive];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_TabUnfocusedActive] = color;
     },
@@ -311,6 +425,9 @@ config.register_element({
 
 config.register_element({
     "DockingPreview",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_DockingPreview];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_DockingPreview] = color;
     },
@@ -319,6 +436,9 @@ config.register_element({
 
 config.register_element({
     "DockingEmptyBg",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_DockingEmptyBg];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_DockingEmptyBg] = color;
     },
@@ -327,6 +447,9 @@ config.register_element({
 
 config.register_element({
     "PlotLines",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_PlotLines];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_PlotLines] = color;
     },
@@ -335,6 +458,9 @@ config.register_element({
 
 config.register_element({
     "PlotLinesHovered",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_PlotLinesHovered];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_PlotLinesHovered] = color;
     },
@@ -343,6 +469,9 @@ config.register_element({
 
 config.register_element({
     "PlotHistogram",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_PlotHistogram];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_PlotHistogram] = color;
     },
@@ -351,6 +480,9 @@ config.register_element({
 
 config.register_element({
     "PlotHistogramHovered",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_PlotHistogramHovered];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_PlotHistogramHovered] = color;
     },
@@ -359,6 +491,9 @@ config.register_element({
 
 config.register_element({
     "TableHeaderBg",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_TableHeaderBg];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_TableHeaderBg] = color;
     },
@@ -367,6 +502,9 @@ config.register_element({
 
 config.register_element({
     "TableBorderStrong",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_TableBorderStrong];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_TableBorderStrong] = color;
     },
@@ -375,6 +513,9 @@ config.register_element({
 
 config.register_element({
     "TableBorderLight",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_TableBorderLight];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_TableBorderLight] = color;
     },
@@ -383,6 +524,9 @@ config.register_element({
 
 config.register_element({
     "TableRowBg",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_TableRowBg];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_TableRowBg] = color;
     },
@@ -391,6 +535,9 @@ config.register_element({
 
 config.register_element({
     "TableRowBgAlt",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_TableRowBgAlt];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_TableRowBgAlt] = color;
     },
@@ -399,6 +546,9 @@ config.register_element({
 
 config.register_element({
     "TextSelectedBg",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_TextSelectedBg];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_TextSelectedBg] = color;
     },
@@ -407,6 +557,9 @@ config.register_element({
 
 config.register_element({
     "DragDropTarget",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_DragDropTarget];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_DragDropTarget] = color;
     },
@@ -415,6 +568,9 @@ config.register_element({
 
 config.register_element({
     "NavHighlight",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_NavHighlight];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_NavHighlight] = color;
     },
@@ -423,6 +579,9 @@ config.register_element({
 
 config.register_element({
     "NavWindowingHighlight",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_NavWindowingHighlight];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_NavWindowingHighlight] = color;
     },
@@ -431,6 +590,9 @@ config.register_element({
 
 config.register_element({
     "NavWindowingDimBg",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_NavWindowingDimBg];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_NavWindowingDimBg] = color;
     },
@@ -439,6 +601,9 @@ config.register_element({
 
 config.register_element({
     "ModalWindowDimBg",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_ModalWindowDimBg];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_ModalWindowDimBg] = color;
     },
@@ -447,6 +612,9 @@ config.register_element({
 
 config.register_element({
     "SliderGrabHovered",
+    []() {
+        return ImGui::GetStyle().Colors[ImGuiCol_SliderGrabHovered];
+    },
     [](ImVec4 const& color) {
         ImGui::GetStyle().Colors[ImGuiCol_SliderGrabHovered] = color;
     },

@@ -54,6 +54,10 @@ def register_all_imgui_color_elements():
         res += f'''
 config.register_element({{
     "{elem.id.removeprefix("ImGuiCol_")}",
+    []()
+    {{
+        return ImGui::GetStyle().Colors[{elem.id}];
+    }},
     [](ImVec4 const& color)
     {{
         ImGui::GetStyle().Colors[{elem.id}] = color;

@@ -1,4 +1,5 @@
 #include "Config.hpp"
+#include <algorithm>
 #include <utility>
 #include "imgui/imgui.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
@@ -33,6 +34,44 @@ static void imgui_add_group_button(Category& category)
     }
 }
 
+static void imgui_color_element(GroupedElement& element)
+{
+    auto color = ImVec4{element.first.get_color()};
+    if (ImGui::ColorEdit4(
+            element.first.name.c_str(),
+            reinterpret_cast<float*>(&color),
+            ImGuiColorEditFlags_None
+                | ImGuiColorEditFlags_NoInputs
+                | ImGuiColorEditFlags_AlphaPreview
+                | ImGuiColorEditFlags_NoDragDrop
+        ))
+    {
+        element.first.set_color(color);
+    }
+}
+
+static auto imgui_color_group(Group& group, std::vector<GroupedElement*> const& elements) -> bool
+{
+    bool b = false;
+
+    ImGui::BeginGroup();
+    ImGui::PushID(&group);
+    {
+        ImGui::SeparatorText(group.name.c_str());
+        b |= ImGui::SliderFloat("Brightness", &group.brightness_delta, -1.f, 1.f);
+        b |= ImGui::SliderFloat("Opacity", &group.opacity, 0.f, 1.f);
+        for (auto* element : elements)
+        {
+            imgui_color_element(*element);
+            // b |= ImGui::IsItemActive(); // TODO(JF) Shouldn't this be ItemDeactivatedAfterEdit if we want to re-apply the theme color as soon as we stop playing with this color.
+        }
+    }
+    ImGui::PopID();
+    ImGui::EndGroup();
+
+    return b;
+}
+
 auto Config::imgui_categories_table() -> bool
 {
     bool b = false;
@@ -43,20 +82,23 @@ auto Config::imgui_categories_table() -> bool
                                              | ImGuiTableFlags_BordersV
                                              | ImGuiTableFlags_BordersH;
 
-    auto const nb_columns = static_cast<int>(_categories.size());
-    if (nb_columns <= 0)
-        return b;
+    auto const nb_categories = static_cast<int>(_categories.size());
 
-    if (ImGui::BeginTable("color_theme_categories", nb_columns, flags))
+    if (ImGui::BeginTable("color_theme_categories", nb_categories + 1, flags))
     {
         for (auto& category : _categories)
         {
             ImGui::TableSetupColumn(category.name.c_str());
         }
+        ImGui::TableSetupColumn("Unassigned");
+
         ImGui::TableHeadersRow();
         ImGui::TableNextRow();
 
-        for (int column = 0; column < nb_columns; column++)
+        auto const elements       = elements_per_group();
+        auto       elements_index = 0;
+
+        for (int column = 0; column < nb_categories; column++)
         {
             ImGui::TableSetColumnIndex(column);
             auto& category = _categories[column];
@@ -64,10 +106,22 @@ auto Config::imgui_categories_table() -> bool
             {
                 ImGui::InputText("", &category.name);
                 for (auto& group : category.groups)
-                    b |= imgui_color_group(group);
+                {
+                    b |= imgui_color_group(group, elements[elements_index]);
+                    elements_index++;
+                }
                 imgui_add_group_button(category);
             }
             ImGui::PopID();
+        }
+        { // Last column of unassigned elements
+            ImGui::TableSetColumnIndex(nb_categories);
+            {
+                for (auto* element : elements[elements_index])
+                {
+                    imgui_color_element(*element);
+                }
+            }
         }
 
         ImGui::EndTable();
@@ -76,7 +130,7 @@ auto Config::imgui_categories_table() -> bool
     //     ColorCategory const* category_to_remove     = nullptr;
     //     ColorCategory const* category_to_move_left  = nullptr;
     //     ColorCategory const* category_to_move_right = nullptr;
-    //     for (size_t column = 0; column < nb_columns; column++)
+    //     for (size_t column = 0; column < nb_categories; column++)
     //     {
     //         ImGui::TableSetColumnIndex(static_cast<int>(column));
     //         auto& category = _categories[column];
@@ -241,19 +295,58 @@ auto Config::imgui_categories_table() -> bool
     return b;
 }
 
-auto Config::imgui_color_group(Group& group) -> bool
+auto Config::elements_per_group() -> std::vector<std::vector<GroupedElement*>>
 {
-    bool b = false;
+    std::vector<std::vector<GroupedElement*>> res;
 
-    ImGui::BeginGroup();
-    ImGui::PushID(&group);
+    // Traverse each group and find the elements that correspond to it.
+    for (auto const& category : _categories)
     {
-        ImGui::SeparatorText(group.name.c_str());
+        for (auto const& group : category.groups)
+        {
+            res.emplace_back();
+            for (auto& grouped_element : _element_to_group_id)
+            {
+                if (grouped_element.second.group_name == group.name
+                    && grouped_element.second.category_name == category.name)
+                {
+                    res.back().emplace_back(&grouped_element);
+                }
+            }
+        }
     }
-    ImGui::PopID();
-    ImGui::EndGroup();
 
-    return b;
+    // Traverse each element to see if it is in no group at all.
+    res.emplace_back();
+    for (auto& grouped_element : _element_to_group_id)
+    {
+        bool found = false;
+        for (auto const& category : _categories)
+        {
+            if (category.name != grouped_element.second.category_name)
+                continue;
+            for (auto const& group : category.groups)
+            {
+                if (group.name == grouped_element.second.group_name)
+                {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (!found)
+            res.back().emplace_back(&grouped_element);
+    }
+
+    // Sort elements by name
+    for (auto& vector : res)
+    {
+        std::sort(vector.begin(), vector.end(), [](GroupedElement const* a, GroupedElement const* b) {
+            return a->first.name < b->first.name;
+        });
+    }
+
+    return res;
 }
 
 } // namespace ImStyleEd
