@@ -20,9 +20,7 @@ public:
         : _paths{std::move(paths)}
     {
         register_color_elements(_config);
-        // _config.try_load_from(paths.config_path); // Must be done after registering the elements. Only the registered elements will be loaded from the JSON.
-        //                                           // DEV: The saving will happen automatically in the same file when the config gets destroyed
-        //                                           // DEV: this deserializes a map and then for each registerd element assigns a ColorGroupID to it if it is in the deserialized map
+        load_config(); // Must be done after registering the elements. Only the registered elements will be loaded from the JSON.
         apply();
     }
 
@@ -34,6 +32,7 @@ public:
 
 private:
     void save_config();
+    void load_config();
     void save_themes();
 
 private:

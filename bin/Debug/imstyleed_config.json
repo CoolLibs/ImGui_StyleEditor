@@ -10,6 +10,21 @@
                         "Opacity": 1.0
                     }
                 ]
+            },
+            {
+                "Name": "Unnamed Category2",
+                "Groups": [
+                    {
+                        "Name": "Unnamed group",
+                        "Brightness delta": 0.0,
+                        "Opacity": 1.0
+                    },
+                    {
+                        "Name": "Unnamed group",
+                        "Brightness delta": 0.4309999942779541,
+                        "Opacity": 1.0
+                    }
+                ]
             }
         ],
         "Elements": [
@@ -90,8 +105,8 @@
                     "Name": "FrameBgHovered"
                 },
                 "second": {
-                    "Category name": "",
-                    "Group name": ""
+                    "Category name": "Unnamed Category",
+                    "Group name": "Unnamed group"
                 }
             },
             {
@@ -369,8 +384,8 @@
                     "Name": "DockingEmptyBg"
                 },
                 "second": {
-                    "Category name": "",
-                    "Group name": ""
+                    "Category name": "Unnamed Category2",
+                    "Group name": "Unnamed group"
                 }
             },
             {
@@ -468,8 +483,8 @@
                     "Name": "DragDropTarget"
                 },
                 "second": {
-                    "Category name": "",
-                    "Group name": ""
+                    "Category name": "Unnamed Category",
+                    "Group name": "Unnamed group"
                 }
             },
             {

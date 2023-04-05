@@ -17,6 +17,21 @@ void Editor::save_config()
     }
 }
 
+void Editor::load_config()
+{
+    auto is = std::ifstream{_paths.config_path};
+    if (!is.is_open())
+        return;
+    try
+    {
+        auto archive = cereal::JSONInputArchive{is};
+        archive(_config);
+    }
+    catch (...)
+    {
+    }
+}
+
 void Editor::save_themes()
 {
 }
