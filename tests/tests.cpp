@@ -17,7 +17,7 @@ auto main(int argc, char* argv[]) -> int
     )
     {
         quick_imgui::loop("ImStyleEd", [&]() { // Open a window and run all the ImGui-related code
-            auto editor = ImStyleEd::Editor{
+            static auto editor = ImStyleEd::Editor{
                 {
                     .themes_path = exe_path::dir() / "imstyleed_themes.json",
                     .config_path = exe_path::dir() / "imstyleed_config.json",
