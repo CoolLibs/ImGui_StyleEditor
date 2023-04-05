@@ -1,5 +1,6 @@
 #include "Config.hpp"
 #include <algorithm>
+#include <optional>
 #include <utility>
 #include "imgui/imgui.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
@@ -64,7 +65,12 @@ static void imgui_color_element(GroupedElement& element)
     }
 }
 
-static auto imgui_color_group(Group& group, std::vector<GroupedElement*> const& elements, std::string const& category_name) -> bool
+static auto imgui_color_group(
+    Group&                              group,
+    std::vector<GroupedElement*> const& elements,
+    std::string const&                  category_name,
+    std::optional<std::string> const&   new_category_name
+) -> bool
 {
     bool b = false;
 
@@ -72,13 +78,24 @@ static auto imgui_color_group(Group& group, std::vector<GroupedElement*> const& 
     ImGui::PushID(&group);
     {
         ImGui::SeparatorText(group.name.c_str());
-        ImGui::InputText("", &group.name);
+        if (ImGui::InputText("", &group.name))
+        {
+            // Update GroupIDs to the new group name
+            for (auto* element : elements)
+            {
+                element->second.group_name = group.name;
+            }
+        }
         b |= ImGui::SliderFloat("Brightness", &group.brightness_delta, -1.f, 1.f);
         b |= ImGui::SliderFloat("Opacity", &group.opacity, 0.f, 1.f);
         for (auto* element : elements)
         {
             imgui_color_element(*element);
             // b |= ImGui::IsItemActive(); // TODO(JF) Shouldn't this be ItemDeactivatedAfterEdit if we want to re-apply the theme color as soon as we stop playing with this color.
+
+            // Update GroupIDs to the new category name
+            if (new_category_name)
+                element->second.category_name = *new_category_name;
         }
     }
     ImGui::PopID();
@@ -132,10 +149,12 @@ auto Config::imgui_categories_table() -> bool
             auto& category = _categories[column];
             ImGui::PushID(&category);
             {
-                ImGui::InputText("", &category.name);
+                auto new_category_name = std::optional<std::string>{};
+                if (ImGui::InputText("", &category.name))
+                    new_category_name = category.name;
                 for (auto& group : category.groups)
                 {
-                    b |= imgui_color_group(group, elements[elements_index], category.name);
+                    b |= imgui_color_group(group, elements[elements_index], category.name, new_category_name);
                     elements_index++;
                 }
                 b |= imgui_add_group_button(category);

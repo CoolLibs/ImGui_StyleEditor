@@ -20,7 +20,7 @@
                         "Opacity": 1.0
                     },
                     {
-                        "Name": "Unnamed group",
+                        "Name": "Unnamed group2sfdh",
                         "Brightness delta": 0.4309999942779541,
                         "Opacity": 1.0
                     }
@@ -96,8 +96,8 @@
                     "Name": "FrameBg"
                 },
                 "second": {
-                    "Category name": "",
-                    "Group name": ""
+                    "Category name": "Unnamed Category2",
+                    "Group name": "Unnamed group"
                 }
             },
             {
@@ -240,8 +240,8 @@
                     "Name": "ButtonActive"
                 },
                 "second": {
-                    "Category name": "",
-                    "Group name": ""
+                    "Category name": "Unnamed Category2",
+                    "Group name": "Unnamed group"
                 }
             },
             {
@@ -385,7 +385,7 @@
                 },
                 "second": {
                     "Category name": "Unnamed Category2",
-                    "Group name": "Unnamed group"
+                    "Group name": "Unnamed group2sfdh"
                 }
             },
             {
