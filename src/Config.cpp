@@ -72,6 +72,7 @@ static auto imgui_color_group(Group& group, std::vector<GroupedElement*> const& 
     ImGui::PushID(&group);
     {
         ImGui::SeparatorText(group.name.c_str());
+        ImGui::InputText("", &group.name);
         b |= ImGui::SliderFloat("Brightness", &group.brightness_delta, -1.f, 1.f);
         b |= ImGui::SliderFloat("Opacity", &group.opacity, 0.f, 1.f);
         for (auto* element : elements)
