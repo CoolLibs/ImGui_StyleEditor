@@ -80,6 +80,7 @@ static auto imgui_color_group(
         ImGui::SeparatorText(group.name.c_str());
         if (ImGui::InputText("", &group.name))
         {
+            group.name = make_unique_group_name(group.name); // If two groups end up with the same name, their elements will get merged and it is not possible to undo that merge because elements only know the name of their group, and so if two groups end up with the same name we can't distinguish them anymore :(
             // Update GroupIDs to the new group name
             for (auto* element : elements)
             {
@@ -151,7 +152,10 @@ auto Config::imgui_categories_table() -> bool
             {
                 auto new_category_name = std::optional<std::string>{};
                 if (ImGui::InputText("", &category.name))
+                {
+                    category.name     = make_unique_category_name(category.name); // If two categories end up with the same name, their elements will get merged and it is not possible to undo that merge because elements only know the name of their category, and so if two categories end up with the same name we can't distinguish them anymore :(
                     new_category_name = category.name;
+                }
                 for (auto& group : category.groups)
                 {
                     b |= imgui_color_group(group, elements[elements_index], category.name, new_category_name);
