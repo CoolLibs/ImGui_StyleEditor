@@ -7,7 +7,7 @@ namespace ImStyleEd {
 
 struct Category {
     std::string        name{"Unnamed Category"};
-    std::vector<Group> groups{};
+    std::vector<Group> groups{{Group{}}};
 };
 
 } // namespace ImStyleEd

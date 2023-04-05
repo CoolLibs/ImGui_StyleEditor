@@ -39,7 +39,7 @@ static void imgui_color_element(GroupedElement& element)
     auto color = ImVec4{element.first.get_color()};
     if (ImGui::ColorEdit4(
             element.first.name.c_str(),
-            reinterpret_cast<float*>(&color),
+            reinterpret_cast<float*>(&color), // NOLINT(*reinterpret-cast)
             ImGuiColorEditFlags_None
                 | ImGuiColorEditFlags_NoInputs
                 | ImGuiColorEditFlags_AlphaPreview
@@ -48,9 +48,21 @@ static void imgui_color_element(GroupedElement& element)
     {
         element.first.set_color(color);
     }
+    if (!ImGui::IsItemActive() && ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+    {
+        {                                   // Set payload to carry the index of our item (could be anything)
+            GroupedElement* ptr = &element; // /!\ Assumes this is safe to store this pointer as it should never change (`_element_to_group_id` doesn't change unless we call `register_element()`, which should only happen once at the creation of the Editor / Config.)
+            ImGui::SetDragDropPayload("color_theme_drag_drop", &ptr, sizeof(GroupedElement*));
+        }
+
+        // Display preview
+        ImGui::TextUnformatted(element.first.name.c_str());
+
+        ImGui::EndDragDropSource();
+    }
 }
 
-static auto imgui_color_group(Group& group, std::vector<GroupedElement*> const& elements) -> bool
+static auto imgui_color_group(Group& group, std::vector<GroupedElement*> const& elements, std::string const& category_name) -> bool
 {
     bool b = false;
 
@@ -68,6 +80,19 @@ static auto imgui_color_group(Group& group, std::vector<GroupedElement*> const& 
     }
     ImGui::PopID();
     ImGui::EndGroup();
+
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (ImGuiPayload const* payload = ImGui::AcceptDragDropPayload("color_theme_drag_drop"))
+        {
+            IM_ASSERT(payload->DataSize == sizeof(GroupedElement*));
+            GroupedElement* element       = *reinterpret_cast<GroupedElement* const*>(payload->Data); // NOLINT(*reinterpret-cast)
+            element->second.group_name    = group.name;
+            element->second.category_name = category_name;
+            b                             = true;
+        }
+        ImGui::EndDragDropTarget();
+    }
 
     return b;
 }
@@ -107,7 +132,7 @@ auto Config::imgui_categories_table() -> bool
                 ImGui::InputText("", &category.name);
                 for (auto& group : category.groups)
                 {
-                    b |= imgui_color_group(group, elements[elements_index]);
+                    b |= imgui_color_group(group, elements[elements_index], category.name);
                     elements_index++;
                 }
                 imgui_add_group_button(category);
