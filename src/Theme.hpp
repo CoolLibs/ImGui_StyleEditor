@@ -5,7 +5,7 @@
 
 namespace ImStyleEd {
 
-class ColorTheme {
+class Theme {
 public:
 private:
     std::unordered_map<std::string, glm::vec3> categories_colors{}; // Maps a category name to a color

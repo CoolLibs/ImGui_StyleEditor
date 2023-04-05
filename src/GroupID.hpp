@@ -3,7 +3,7 @@
 
 namespace ImStyleEd {
 
-struct ColorGroupID {
+struct GroupID {
     std::string category_name{};
     std::string group_name{};
 };
