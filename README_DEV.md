@@ -10,6 +10,8 @@ Finally, a `ColorTheme` gives colors to each of the `ColorCategory`s.
 
 ```mermaid
 classDiagram
+    ColorEditor --|> ColorConfig: Has a
+    ColorEditor --|> ColorTheme: Has several
     ColorCategories --|> ColorCategory : Has several
     ColorCategory --|> ColorGroup : Has several
     ColorConfig --> ColorElement : Gives a color group to each
@@ -18,7 +20,7 @@ classDiagram
     ColorGroupID --> ColorCategory : Identifies one
     ColorGroupID --> ColorGroup : Identifies one
     class ColorConfig{
-        element_to_color_id: map&ltelement_name->ColorGroupID&gt
+        element_to_color_id: map&ltelement->ColorGroupID&gt
         register_element(): To call at the beginning of the app
     }
     class ColorTheme{

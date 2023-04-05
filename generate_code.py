@@ -9,7 +9,6 @@ def imgui_col_enum() -> str:
     path = os.path.join(os.path.dirname(os.path.abspath(
         __file__)), "build/_deps/quick_imgui-src/lib/imgui/imgui.h")
 
-    res = ""
     with open(path, 'r') as file:
         content = file.read()
     begin = """enum ImGuiCol_
@@ -44,29 +43,23 @@ def parse_color_elements() -> List[ColorElement]:
         | map(parse_one_line)
         | where(lambda x: x.id != "ImGuiCol_COUNT")
     )
-    for item in res:
-        print(item)
 
     return res
 
 
-def color_id_to_string():
+def register_all_imgui_color_elements():
     elems = parse_color_elements()
     res = ""
     for elem in elems:
         res += f'''
-case {elem.id}:
-return "{elem.id.removeprefix('ImGuiCol_')}";
-'''
-    return res
-
-
-def list_all_color_elements():
-    elems = parse_color_elements()
-    res = ""
-    for elem in elems:
-        res += f'''
-    {elem.id},
+config.register_element({{
+    "{elem.id.removeprefix("ImGuiCol_")}",
+    [](ImVec4 const& color)
+    {{
+        ImGui::GetStyle().Colors[{elem.id}] = color;
+    }},
+    "{elem.comment or ""}",
+}});
 '''
     return res
 
@@ -74,8 +67,7 @@ def list_all_color_elements():
 def main():
     from tooling.generate_files import generate
     generate(folder="src/generated", files=[
-        color_id_to_string,
-        list_all_color_elements,
+        register_all_imgui_color_elements,
     ])
 
 
