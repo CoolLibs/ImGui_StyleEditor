@@ -1,8 +1,7 @@
 #pragma once
-#include "ColorConfig.hpp"
+#include "Config.hpp"
 
 namespace ImStyleEd {
 
-void register_all_imgui_color_elements(ColorConfig&);
-
+void register_all_imgui_color_elements(Config&);
 }

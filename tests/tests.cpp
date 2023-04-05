@@ -17,24 +17,22 @@ auto main(int argc, char* argv[]) -> int
     )
     {
         quick_imgui::loop("ImStyleEd", [&]() { // Open a window and run all the ImGui-related code
-            auto config = ImStyleEd::Config{};
-            register_all_imgui_1_91_4_color_elements(config);
-            config.try_load_from(exe_path::dir() / "imstyleed_config.json"); // Must be done after registering the elements. Only the registered elements will be loaded from the JSON.
-                                                                             // The saving will happen automatically in the same file when the config gets destroyed
-                                                                             // DEV: this deserializes a map and then for each registerd element assigns a ColorGroupID to it if it is in the deserialized map
-
-            static auto editor = ImStyleEd::Editor{{
-                .themes_path = exe_path::dir() / "imstyleed_themes.json",
-                .config_path = exe_path::dir() / "imstyleed_config.json",
-            }};
+            auto editor = ImStyleEd::Editor{
+                {
+                    .themes_path = exe_path::dir() / "imstyleed_themes.json",
+                    .config_path = exe_path::dir() / "imstyleed_config.json",
+                },
+                [](ImStyleEd::Config& config) {
+                    ImStyleEd::register_all_imgui_color_elements(config);
+                }};
             ImGui::Begin("Advanced Configuration");
             {
-                editor.widget_color_config();
+                editor.imgui_config_editor();
             }
             ImGui::End();
             ImGui::Begin("Simple UI for everybody");
             {
-                editor.widget_theme_picker();
+                editor.imgui_themes_editor();
             }
             ImGui::End();
             ImGui::ShowDemoWindow();
