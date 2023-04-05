@@ -16,6 +16,7 @@ public:
 
 private:
     auto imgui_categories_table() -> bool;
+    auto imgui_color_group(Group&) -> bool;
 
 private:
     std::vector<Category>                    _categories{};

@@ -1,6 +1,7 @@
 #include "Config.hpp"
 #include <utility>
 #include "imgui/imgui.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace ImStyleEd {
 
@@ -24,6 +25,14 @@ auto Config::imgui() -> bool
     return b;
 }
 
+static void imgui_add_group_button(Category& category)
+{
+    if (ImGui::Button("Add group"))
+    {
+        category.groups.emplace_back();
+    }
+}
+
 auto Config::imgui_categories_table() -> bool
 {
     bool b = false;
@@ -34,11 +43,11 @@ auto Config::imgui_categories_table() -> bool
                                              | ImGuiTableFlags_BordersV
                                              | ImGuiTableFlags_BordersH;
 
-    auto const nb_columns = _categories.size();
+    auto const nb_columns = static_cast<int>(_categories.size());
     if (nb_columns <= 0)
         return b;
 
-    if (ImGui::BeginTable("color_theme_categories", static_cast<int>(nb_columns), flags))
+    if (ImGui::BeginTable("color_theme_categories", nb_columns, flags))
     {
         for (auto& category : _categories)
         {
@@ -46,6 +55,20 @@ auto Config::imgui_categories_table() -> bool
         }
         ImGui::TableHeadersRow();
         ImGui::TableNextRow();
+
+        for (int column = 0; column < nb_columns; column++)
+        {
+            ImGui::TableSetColumnIndex(column);
+            auto& category = _categories[column];
+            ImGui::PushID(&category);
+            {
+                ImGui::InputText("", &category.name);
+                for (auto& group : category.groups)
+                    b |= imgui_color_group(group);
+                imgui_add_group_button(category);
+            }
+            ImGui::PopID();
+        }
 
         ImGui::EndTable();
     }
@@ -214,6 +237,21 @@ auto Config::imgui_categories_table() -> bool
     //             std::swap(*it, *std::prev(it));
     //         }
     //     }
+
+    return b;
+}
+
+auto Config::imgui_color_group(Group& group) -> bool
+{
+    bool b = false;
+
+    ImGui::BeginGroup();
+    ImGui::PushID(&group);
+    {
+        ImGui::SeparatorText(group.name.c_str());
+    }
+    ImGui::PopID();
+    ImGui::EndGroup();
 
     return b;
 }
