@@ -139,7 +139,7 @@ static auto imgui_color_group(
         for (auto* element : elements)
         {
             imgui_color_element(*element);
-            // b |= ImGui::IsItemActive(); // TODO(JF) Shouldn't this be ItemDeactivatedAfterEdit if we want to re-apply the theme color as soon as we stop playing with this color.
+            b |= ImGui::IsItemDeactivatedAfterEdit(); // Re-apply the color theme as soon as we stop playing with this color.
 
             // Update GroupIDs to the new category name
             if (new_category_name)
