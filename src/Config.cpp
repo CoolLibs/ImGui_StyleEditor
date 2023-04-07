@@ -209,7 +209,7 @@ auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_r
                         b = true;
                     }
                 }
-                b |= ImGui::Checkbox("Behaves differently in light mode", &category.behaves_differently_in_light_mode);
+                b |= ImGui::Checkbox("Invert brightness of groups when using a Light theme", &category.behaves_differently_in_light_mode);
                 for (auto& group : category.groups)
                 {
                     b |= imgui_color_group(category, group, elements[elements_index], category.name, new_category_name);
