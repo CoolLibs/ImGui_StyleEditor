@@ -122,13 +122,16 @@ static auto imgui_color_group(
     ImGui::PushID(&group);
     {
         ImGui::SeparatorText(group.name.c_str());
-        if (ImGui::InputText("", &group.name))
         {
-            group.name = make_unique_group_name(category, group.name); // If two groups end up with the same name, their elements will get merged and it is not possible to undo that merge because elements only know the name of their group, and so if two groups end up with the same name we can't distinguish them anymore :(
-            // Update GroupIDs to the new group name
-            for (auto* element : elements)
+            auto name = group.name; // Don't do the ImGui widget on group.name directly otherwise make_unique_group_name() will see the new modified name and think it is not unique.
+            if (ImGui::InputText("", &name))
             {
-                element->second.group_name = group.name;
+                group.name = make_unique_group_name(category, name); // If two groups end up with the same name, their elements will get merged and it is not possible to undo that merge because elements only know the name of their group, and so if two groups end up with the same name we can't distinguish them anymore :(
+                // Update GroupIDs to the new group name
+                for (auto* element : elements)
+                {
+                    element->second.group_name = group.name;
+                }
             }
         }
         b |= ImGui::SliderFloat("Brightness", &group.brightness_delta, -1.f, 1.f);
@@ -195,10 +198,13 @@ auto Config::imgui_categories_table() -> bool
             ImGui::PushID(&category);
             {
                 auto new_category_name = std::optional<std::string>{};
-                if (ImGui::InputText("", &category.name))
                 {
-                    category.name     = make_unique_category_name(category.name); // If two categories end up with the same name, their elements will get merged and it is not possible to undo that merge because elements only know the name of their category, and so if two categories end up with the same name we can't distinguish them anymore :(
-                    new_category_name = category.name;
+                    auto name = category.name; // Don't do the ImGui widget on category.name directly otherwise make_unique_category_name() will see the new modified name and think it is not unique.
+                    if (ImGui::InputText("", &name))
+                    {
+                        category.name     = make_unique_category_name(name); // If two categories end up with the same name, their elements will get merged and it is not possible to undo that merge because elements only know the name of their category, and so if two categories end up with the same name we can't distinguish them anymore :(
+                        new_category_name = category.name;
+                    }
                 }
                 for (auto& group : category.groups)
                 {
