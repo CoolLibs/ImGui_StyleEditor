@@ -26,8 +26,9 @@ public:
     [[nodiscard]] auto elements() -> auto& { return _element_to_group_id; }
 
     /// Returns a vector for each Group of each Category, containing the GroupedElements that belong to this group.
-    /// + one last vector containing the elements that don't belong to any group.
     auto elements_per_group() -> std::vector<std::vector<GroupedElement*>>; // Stores non-null pointer. Storing references is annoying because of language details.
+    /// Returns a vector containing the elements that don't belong to any group.
+    auto unassigned_elements() -> std::vector<GroupedElement*>; // Stores non-null pointer. Storing references is annoying because of language details.
 
 private:
     auto imgui_categories_table() -> bool;

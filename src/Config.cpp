@@ -218,11 +218,10 @@ auto Config::imgui_categories_table() -> bool
         }
         { // Last column of unassigned elements
             ImGui::TableSetColumnIndex(nb_categories);
+            auto const unassigned = unassigned_elements();
+            for (auto* element : unassigned)
             {
-                for (auto* element : elements[elements_index])
-                {
-                    imgui_color_element(*element);
-                }
+                imgui_color_element(*element);
             }
         }
 
@@ -253,8 +252,22 @@ auto Config::elements_per_group() -> std::vector<std::vector<GroupedElement*>>
         }
     }
 
+    // Sort elements by name
+    for (auto& vector : res)
+    {
+        std::sort(vector.begin(), vector.end(), [](GroupedElement const* a, GroupedElement const* b) {
+            return a->first.name < b->first.name;
+        });
+    }
+
+    return res;
+}
+
+auto Config::unassigned_elements() -> std::vector<GroupedElement*>
+{
+    std::vector<GroupedElement*> res;
+
     // Traverse each element to see if it is in no group at all.
-    res.emplace_back();
     for (auto& grouped_element : _element_to_group_id)
     {
         bool found = false;
@@ -272,16 +285,13 @@ auto Config::elements_per_group() -> std::vector<std::vector<GroupedElement*>>
             }
         }
         if (!found)
-            res.back().emplace_back(&grouped_element);
+            res.emplace_back(&grouped_element);
     }
 
     // Sort elements by name
-    for (auto& vector : res)
-    {
-        std::sort(vector.begin(), vector.end(), [](GroupedElement const* a, GroupedElement const* b) {
-            return a->first.name < b->first.name;
-        });
-    }
+    std::sort(res.begin(), res.end(), [](GroupedElement const* a, GroupedElement const* b) {
+        return a->first.name < b->first.name;
+    });
 
     return res;
 }
