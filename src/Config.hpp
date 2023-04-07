@@ -27,6 +27,12 @@ private:
     /// + one last vector containing the elements that don't belong to any group.
     auto elements_per_group() -> std::vector<std::vector<GroupedElement*>>; // Stores non-null pointer. Storing references is annoying because of language details.
 
+    [[nodiscard]] auto make_unique_category_name(std::string const& category_name) const -> std::string;
+    [[nodiscard]] auto make_unique_group_name(std::string const& group_name) const -> std::string;
+
+    [[nodiscard]] auto is_unique_category_name(std::string const& category_name) const -> bool;
+    [[nodiscard]] auto is_unique_group_name(std::string const& group_name) const -> bool;
+
 private:
     std::vector<Category>       _categories{};
     std::vector<GroupedElement> _element_to_group_id{};

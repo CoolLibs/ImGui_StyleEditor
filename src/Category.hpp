@@ -8,7 +8,10 @@
 namespace ImStyleEd {
 
 struct Category {
-    std::string        name{"Unnamed Category"};
+    explicit Category(std::string name = "")
+        : name{std::move(name)}
+    {}
+    std::string        name{};
     std::vector<Group> groups{{Group{}}};
 
 private:
