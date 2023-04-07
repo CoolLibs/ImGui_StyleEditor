@@ -21,6 +21,7 @@ public:
     {
         register_color_elements(_config);
         load_config(); // Must be done after registering the elements. Only the registered elements will be loaded from the JSON.
+        load_themes();
         apply();
     }
 
@@ -32,12 +33,13 @@ public:
 
 private:
     void save_config();
-    void load_config();
     void save_themes();
+    void load_config();
+    void load_themes();
 
 private:
-    std::vector<Theme> _themes{};
     Theme              _current_theme{};
+    std::vector<Theme> _themes{};
     Config             _config{};
     SerializationPaths _paths{};
 };

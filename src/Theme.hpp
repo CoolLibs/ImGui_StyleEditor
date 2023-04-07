@@ -1,4 +1,6 @@
 #pragma once
+#include <cereal/cereal.hpp>
+#include <cereal/types/unordered_map.hpp>
 #include <functional>
 #include <string>
 #include <unordered_map>
@@ -21,6 +23,18 @@ public:
 private:
     std::unordered_map<std::string, Color> _categories_colors{}; // Maps a category name to a color
     bool                                   _is_dark_mode{true};
+
+private:
+    // Serialization
+    friend class cereal::access;
+    template<class Archive>
+    void serialize(Archive& archive)
+    {
+        archive(
+            cereal::make_nvp("Categories colors", _categories_colors),
+            cereal::make_nvp("Is dark mode", _is_dark_mode)
+        );
+    }
 };
 
 } // namespace ImStyleEd

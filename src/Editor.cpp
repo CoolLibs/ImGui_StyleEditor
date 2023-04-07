@@ -70,14 +70,40 @@ void Editor::load_config()
 
 void Editor::save_themes()
 {
+    auto os = std::ofstream{_paths.themes_path};
+    {
+        auto archive = cereal::JSONOutputArchive{os};
+        archive(
+            cereal::make_nvp("Current theme", _current_theme),
+            cereal::make_nvp("Themes", _themes)
+        );
+    }
+}
+
+void Editor::load_themes()
+{
+    auto is = std::ifstream{_paths.themes_path};
+    if (!is.is_open())
+        return;
+    try
+    {
+        auto archive = cereal::JSONInputArchive{is};
+        archive(
+            _current_theme,
+            _themes
+        );
+    }
+    catch (...)
+    {
+    }
 }
 
 auto Editor::imgui_config_editor() -> bool
 {
     if (_config.imgui())
     {
-        save_config();
         apply();
+        save_config();
         return true;
     }
     return false;
@@ -94,6 +120,7 @@ auto Editor::imgui_themes_editor() -> bool
     if (b)
     {
         apply();
+        save_themes();
     }
 
     return b;
