@@ -20,12 +20,17 @@ public:
     void register_element(Element const&);
     auto imgui() -> bool;
 
-private:
-    auto imgui_categories_table() -> bool;
+    [[nodiscard]] auto categories() const -> auto const& { return _categories; }
+    [[nodiscard]] auto categories() -> auto& { return _categories; }
+    [[nodiscard]] auto elements() const -> auto const& { return _element_to_group_id; }
+    [[nodiscard]] auto elements() -> auto& { return _element_to_group_id; }
 
     /// Returns a vector for each Group of each Category, containing the GroupedElements that belong to this group.
     /// + one last vector containing the elements that don't belong to any group.
     auto elements_per_group() -> std::vector<std::vector<GroupedElement*>>; // Stores non-null pointer. Storing references is annoying because of language details.
+
+private:
+    auto imgui_categories_table() -> bool;
 
     [[nodiscard]] auto make_unique_category_name(std::string const& category_name) const -> std::string;
     [[nodiscard]] auto is_unique_category_name(std::string const& category_name) const -> bool;
