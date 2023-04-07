@@ -70,6 +70,7 @@ void Editor::load_config()
 
 void Editor::save_themes()
 {
+    remove_unknown_categories_from_themes();
     auto os = std::ofstream{_paths.themes_path};
     {
         auto archive = cereal::JSONOutputArchive{os};
@@ -96,6 +97,23 @@ void Editor::load_themes()
     catch (...)
     {
     }
+}
+
+void Editor::remove_unknown_categories_from_theme(Theme& theme)
+{
+    auto keep = std::unordered_map<std::string, Color>{};
+    for (auto const& category : _config.categories())
+    {
+        keep[category.name] = theme.color_for_category(category.name);
+    }
+    theme.set_colors_for_categories(keep);
+}
+
+void Editor::remove_unknown_categories_from_themes()
+{
+    remove_unknown_categories_from_theme(_current_theme);
+    for (auto& theme : _themes)
+        remove_unknown_categories_from_theme(theme);
 }
 
 auto Editor::imgui_config_editor() -> bool

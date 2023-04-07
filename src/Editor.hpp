@@ -37,6 +37,9 @@ private:
     void load_config();
     void load_themes();
 
+    void remove_unknown_categories_from_theme(Theme& theme);
+    void remove_unknown_categories_from_themes();
+
 private:
     Theme              _current_theme{};
     std::vector<Theme> _themes{};
