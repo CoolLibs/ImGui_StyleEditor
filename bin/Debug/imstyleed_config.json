@@ -5,23 +5,43 @@
                 "Name": "Unnamed Category",
                 "Groups": [
                     {
-                        "Name": "Unnamed group",
+                        "Name": "Unnamed Group",
+                        "Brightness delta": 0.0,
+                        "Opacity": 1.0
+                    },
+                    {
+                        "Name": "Unnamed Group(1)",
+                        "Brightness delta": 0.0,
+                        "Opacity": 1.0
+                    },
+                    {
+                        "Name": "Unnamed Group(2)",
+                        "Brightness delta": 0.0,
+                        "Opacity": 1.0
+                    },
+                    {
+                        "Name": "Unnamed Group(3)",
                         "Brightness delta": 0.0,
                         "Opacity": 1.0
                     }
                 ]
             },
             {
-                "Name": "Unnamed Category2",
+                "Name": "Unnamed Category(1)",
                 "Groups": [
                     {
-                        "Name": "Unnamed group",
+                        "Name": "Unnamed Group",
                         "Brightness delta": 0.0,
                         "Opacity": 1.0
                     },
                     {
-                        "Name": "Unnamed group2sfdh",
-                        "Brightness delta": 0.4309999942779541,
+                        "Name": "Unnamed Group(1)",
+                        "Brightness delta": 0.0,
+                        "Opacity": 1.0
+                    },
+                    {
+                        "Name": "Unnamed Group(2)",
+                        "Brightness delta": 0.0,
                         "Opacity": 1.0
                     }
                 ]
@@ -96,8 +116,8 @@
                     "Name": "FrameBg"
                 },
                 "second": {
-                    "Category name": "Unnamed Category2",
-                    "Group name": "Unnamed group"
+                    "Category name": "",
+                    "Group name": ""
                 }
             },
             {
@@ -105,8 +125,8 @@
                     "Name": "FrameBgHovered"
                 },
                 "second": {
-                    "Category name": "Unnamed Category",
-                    "Group name": "Unnamed group"
+                    "Category name": "Unnamed Category(1)",
+                    "Group name": "Unnamed Group"
                 }
             },
             {
@@ -150,8 +170,8 @@
                     "Name": "MenuBarBg"
                 },
                 "second": {
-                    "Category name": "",
-                    "Group name": ""
+                    "Category name": "Unnamed Category",
+                    "Group name": "Unnamed Group(2)"
                 }
             },
             {
@@ -240,8 +260,8 @@
                     "Name": "ButtonActive"
                 },
                 "second": {
-                    "Category name": "Unnamed Category2",
-                    "Group name": "Unnamed group"
+                    "Category name": "",
+                    "Group name": ""
                 }
             },
             {
@@ -258,8 +278,8 @@
                     "Name": "HeaderHovered"
                 },
                 "second": {
-                    "Category name": "",
-                    "Group name": ""
+                    "Category name": "Unnamed Category",
+                    "Group name": "Unnamed Group(1)"
                 }
             },
             {
@@ -384,8 +404,8 @@
                     "Name": "DockingEmptyBg"
                 },
                 "second": {
-                    "Category name": "Unnamed Category2",
-                    "Group name": "Unnamed group2sfdh"
+                    "Category name": "",
+                    "Group name": ""
                 }
             },
             {
@@ -393,8 +413,8 @@
                     "Name": "PlotLines"
                 },
                 "second": {
-                    "Category name": "",
-                    "Group name": ""
+                    "Category name": "Unnamed Category",
+                    "Group name": "Unnamed Group"
                 }
             },
             {
@@ -411,8 +431,8 @@
                     "Name": "PlotHistogram"
                 },
                 "second": {
-                    "Category name": "",
-                    "Group name": ""
+                    "Category name": "Unnamed Category",
+                    "Group name": "Unnamed Group(3)"
                 }
             },
             {
@@ -420,8 +440,8 @@
                     "Name": "PlotHistogramHovered"
                 },
                 "second": {
-                    "Category name": "",
-                    "Group name": ""
+                    "Category name": "Unnamed Category(1)",
+                    "Group name": "Unnamed Group(2)"
                 }
             },
             {
@@ -483,8 +503,8 @@
                     "Name": "DragDropTarget"
                 },
                 "second": {
-                    "Category name": "Unnamed Category",
-                    "Group name": "Unnamed group"
+                    "Category name": "Unnamed Category(1)",
+                    "Group name": "Unnamed Group(1)"
                 }
             },
             {

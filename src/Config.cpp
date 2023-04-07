@@ -13,6 +13,48 @@ void Config::register_element(Element const& element)
     _element_to_group_id.emplace_back(element, GroupID{});
 }
 
+[[nodiscard]] auto Config::is_unique_category_name(std::string const& category_name) const -> bool
+{
+    return std::none_of(_categories.begin(), _categories.end(), [&](Category const& category) {
+        return category.name == category_name;
+    });
+}
+
+[[nodiscard]] static auto is_unique_group_name(Category const& category, std::string const& group_name) -> bool
+{
+    return std::none_of(category.groups.begin(), category.groups.end(), [&](Group const& group) {
+        return group.name == group_name;
+    });
+}
+
+[[nodiscard]] auto Config::make_unique_category_name(std::string const& category_name) const -> std::string
+{
+    auto name      = category_name;
+    bool is_unique = is_unique_category_name(name);
+    int  i         = 1;
+    while (!is_unique)
+    {
+        name = category_name + "(" + std::to_string(i) + ")";
+        i++;
+        is_unique = is_unique_category_name(name);
+    }
+    return name;
+}
+
+[[nodiscard]] static auto make_unique_group_name(Category const& category, std::string const& group_name) -> std::string
+{
+    auto name      = group_name;
+    bool is_unique = is_unique_group_name(category, name);
+    int  i         = 1;
+    while (!is_unique)
+    {
+        name = group_name + "(" + std::to_string(i) + ")";
+        i++;
+        is_unique = is_unique_group_name(category, name);
+    }
+    return name;
+}
+
 auto Config::imgui() -> bool
 {
     bool b = false;
@@ -28,11 +70,11 @@ auto Config::imgui() -> bool
     return b;
 }
 
-static auto imgui_add_group_button(Category& category, std::function<std::string(std::string const&)> const& make_unique_group_name) -> bool
+static auto imgui_add_group_button(Category& category) -> bool
 {
     if (ImGui::Button("Add group"))
     {
-        category.groups.emplace_back(make_unique_group_name("Unnamed Group"));
+        category.groups.emplace_back(make_unique_group_name(category, "Unnamed Group"));
         return true;
     }
     return false;
@@ -67,11 +109,11 @@ static void imgui_color_element(GroupedElement& element)
 }
 
 static auto imgui_color_group(
-    Group&                                                group,
-    std::vector<GroupedElement*> const&                   elements,
-    std::string const&                                    category_name,
-    std::optional<std::string> const&                     new_category_name,
-    std::function<std::string(std::string const&)> const& make_unique_group_name
+    Category const&                     category,
+    Group&                              group,
+    std::vector<GroupedElement*> const& elements,
+    std::string const&                  category_name,
+    std::optional<std::string> const&   new_category_name
 ) -> bool
 {
     bool b = false;
@@ -82,7 +124,7 @@ static auto imgui_color_group(
         ImGui::SeparatorText(group.name.c_str());
         if (ImGui::InputText("", &group.name))
         {
-            group.name = make_unique_group_name(group.name); // If two groups end up with the same name, their elements will get merged and it is not possible to undo that merge because elements only know the name of their group, and so if two groups end up with the same name we can't distinguish them anymore :(
+            group.name = make_unique_group_name(category, group.name); // If two groups end up with the same name, their elements will get merged and it is not possible to undo that merge because elements only know the name of their group, and so if two groups end up with the same name we can't distinguish them anymore :(
             // Update GroupIDs to the new group name
             for (auto* element : elements)
             {
@@ -158,15 +200,12 @@ auto Config::imgui_categories_table() -> bool
                     category.name     = make_unique_category_name(category.name); // If two categories end up with the same name, their elements will get merged and it is not possible to undo that merge because elements only know the name of their category, and so if two categories end up with the same name we can't distinguish them anymore :(
                     new_category_name = category.name;
                 }
-                auto const make_unique_group_name_func = [&](std::string str) {
-                    return make_unique_group_name(str);
-                };
                 for (auto& group : category.groups)
                 {
-                    b |= imgui_color_group(group, elements[elements_index], category.name, new_category_name, make_unique_group_name_func);
+                    b |= imgui_color_group(category, group, elements[elements_index], category.name, new_category_name);
                     elements_index++;
                 }
-                b |= imgui_add_group_button(category, make_unique_group_name_func);
+                b |= imgui_add_group_button(category);
             }
             ImGui::PopID();
         }
@@ -349,37 +388,6 @@ auto Config::imgui_categories_table() -> bool
     //     }
 
     return b;
-}
-
-[[nodiscard]] auto Config::is_unique_category_name(std::string const& category_name) const -> bool
-{
-    return std::none_of(_categories.begin(), _categories.end(), [&](Category const& category) {
-        return category.name == category_name;
-    });
-}
-
-[[nodiscard]] auto Config::is_unique_group_name(std::string const& group_name) const -> bool
-{
-    return true;
-}
-
-[[nodiscard]] auto Config::make_unique_category_name(std::string const& category_name) const -> std::string
-{
-    auto name      = category_name;
-    bool is_unique = is_unique_category_name(name);
-    int  i         = 1;
-    while (!is_unique)
-    {
-        name = category_name + "(" + std::to_string(i) + ")";
-        i++;
-        is_unique = is_unique_category_name(name);
-    }
-    return name;
-}
-
-[[nodiscard]] auto Config::make_unique_group_name(std::string const& group_name) const -> std::string
-{
-    return group_name;
 }
 
 auto Config::elements_per_group() -> std::vector<std::vector<GroupedElement*>>

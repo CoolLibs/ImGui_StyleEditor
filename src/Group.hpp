@@ -6,7 +6,7 @@
 namespace ImStyleEd {
 
 struct Group {
-    explicit Group(std::string name = "")
+    explicit Group(std::string name = "Unnamed Group")
         : name{std::move(name)}
     {}
     std::string name{};
