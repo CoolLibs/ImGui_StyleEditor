@@ -12,6 +12,7 @@ struct Category {
         : name{std::move(name)}
     {}
     std::string        name{};
+    bool               behaves_differently_in_light_mode{true};
     std::vector<Group> groups{{Group{}}};
 
 private:
@@ -22,6 +23,7 @@ private:
     {
         archive(
             cereal::make_nvp("Name", name),
+            cereal::make_nvp("Behaves differently in light mode", behaves_differently_in_light_mode),
             cereal::make_nvp("Groups", groups)
         );
     }

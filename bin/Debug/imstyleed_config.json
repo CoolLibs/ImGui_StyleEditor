@@ -3,44 +3,21 @@
         "Categories": [
             {
                 "Name": "Unnamed Category",
+                "Behaves differently in light mode": false,
                 "Groups": [
                     {
                         "Name": "Unnamed Group",
-                        "Brightness delta": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "Name": "Unnamed Group(1)",
-                        "Brightness delta": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "Name": "Medium",
-                        "Brightness delta": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "Name": "Unnamed Group(3)",
-                        "Brightness delta": 0.0,
+                        "Brightness delta": 0.4620000123977661,
                         "Opacity": 1.0
                     }
                 ]
             },
             {
-                "Name": "Unnamed Category(1)",
+                "Name": "dfs",
+                "Behaves differently in light mode": false,
                 "Groups": [
                     {
                         "Name": "Unnamed Group",
-                        "Brightness delta": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "Name": "Unnamed Group(1)",
-                        "Brightness delta": 0.0,
-                        "Opacity": 1.0
-                    },
-                    {
-                        "Name": "Unnamed Group(2)",
                         "Brightness delta": 0.0,
                         "Opacity": 1.0
                     }
@@ -125,8 +102,8 @@
                     "Name": "FrameBgHovered"
                 },
                 "second": {
-                    "Category name": "Unnamed Category(1)",
-                    "Group name": "Unnamed Group"
+                    "Category name": "",
+                    "Group name": ""
                 }
             },
             {
@@ -170,8 +147,8 @@
                     "Name": "MenuBarBg"
                 },
                 "second": {
-                    "Category name": "Unnamed Category",
-                    "Group name": "Medium"
+                    "Category name": "",
+                    "Group name": ""
                 }
             },
             {
@@ -242,8 +219,8 @@
                     "Name": "Button"
                 },
                 "second": {
-                    "Category name": "",
-                    "Group name": ""
+                    "Category name": "Unnamed Category",
+                    "Group name": "Unnamed Group"
                 }
             },
             {
@@ -278,8 +255,8 @@
                     "Name": "HeaderHovered"
                 },
                 "second": {
-                    "Category name": "Unnamed Category",
-                    "Group name": "Unnamed Group(1)"
+                    "Category name": "",
+                    "Group name": ""
                 }
             },
             {
@@ -413,8 +390,8 @@
                     "Name": "PlotLines"
                 },
                 "second": {
-                    "Category name": "Unnamed Category",
-                    "Group name": "Unnamed Group"
+                    "Category name": "",
+                    "Group name": ""
                 }
             },
             {
@@ -431,8 +408,8 @@
                     "Name": "PlotHistogram"
                 },
                 "second": {
-                    "Category name": "Unnamed Category",
-                    "Group name": "Unnamed Group(3)"
+                    "Category name": "",
+                    "Group name": ""
                 }
             },
             {
@@ -440,8 +417,8 @@
                     "Name": "PlotHistogramHovered"
                 },
                 "second": {
-                    "Category name": "Unnamed Category(1)",
-                    "Group name": "Unnamed Group(2)"
+                    "Category name": "",
+                    "Group name": ""
                 }
             },
             {
@@ -503,8 +480,8 @@
                     "Name": "DragDropTarget"
                 },
                 "second": {
-                    "Category name": "Unnamed Category(1)",
-                    "Group name": "Unnamed Group(1)"
+                    "Category name": "",
+                    "Group name": ""
                 }
             },
             {

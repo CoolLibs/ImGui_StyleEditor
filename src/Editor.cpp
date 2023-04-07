@@ -34,7 +34,7 @@ void Editor::apply()
         auto const category_color = _current_theme.color_for_category(category.name);
         for (auto const& group : category.groups)
         {
-            auto const group_color = compute_color(group, category_color, _current_theme.is_dark_mode(), true);
+            auto const group_color = compute_color(group, category_color, _current_theme.is_dark_mode(), category.behaves_differently_in_light_mode);
             for (auto const& element : elements_per_group[idx])
             {
                 element->first.set_color(group_color);

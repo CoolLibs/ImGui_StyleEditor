@@ -15,6 +15,7 @@ auto Theme::color_for_category(std::string const& category_name) -> Color
 auto Theme::imgui(ForEachCategoryName const& for_each_category_name) -> bool
 {
     bool b = false;
+    b |= ImGui::Checkbox("Is Dark Mode", &_is_dark_mode);
     for_each_category_name([&](std::string const& category_name) {
         auto& color = _categories_colors[category_name]; // Will create a default color if the category was not known yet.
         b |= ImGui::ColorEdit3(category_name.c_str(), &color.r);
