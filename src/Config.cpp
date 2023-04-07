@@ -204,6 +204,7 @@ auto Config::imgui_categories_table() -> bool
                     {
                         category.name     = make_unique_category_name(name); // If two categories end up with the same name, their elements will get merged and it is not possible to undo that merge because elements only know the name of their category, and so if two categories end up with the same name we can't distinguish them anymore :(
                         new_category_name = category.name;
+                        b                 = true;
                     }
                 }
                 b |= ImGui::Checkbox("Behaves differently in light mode", &category.behaves_differently_in_light_mode);
