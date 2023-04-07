@@ -2,6 +2,7 @@
 #include <cereal/cereal.hpp>
 #include <cereal/types/utility.hpp>
 #include <cereal/types/vector.hpp>
+#include <functional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -15,10 +16,14 @@ namespace ImStyleEd {
 /// An element assigned to a group
 using GroupedElement = std::pair<Element, GroupID>;
 
+/// First arg: old name
+/// Second arg: new name
+using AfterCategoryRenamed = std::function<void(std::string const&, std::string const&)>;
+
 class Config {
 public:
     void register_element(Element const&);
-    auto imgui() -> bool;
+    auto imgui(AfterCategoryRenamed const&) -> bool;
 
     [[nodiscard]] auto categories() const -> auto const& { return _categories; }
     [[nodiscard]] auto categories() -> auto& { return _categories; }
@@ -31,7 +36,7 @@ public:
     auto unassigned_elements() -> std::vector<GroupedElement*>; // Stores non-null pointer. Storing references is annoying because of language details.
 
 private:
-    auto imgui_categories_table() -> bool;
+    auto imgui_categories_table(AfterCategoryRenamed const&) -> bool;
 
     [[nodiscard]] auto make_unique_category_name(std::string const& category_name) const -> std::string;
     [[nodiscard]] auto is_unique_category_name(std::string const& category_name) const -> bool;

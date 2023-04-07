@@ -99,7 +99,7 @@ void Editor::load_themes()
     }
 }
 
-void Editor::remove_unknown_categories_from_theme(Theme& theme)
+void Editor::remove_unknown_categories_from_theme(Theme& theme) const
 {
     auto keep = std::unordered_map<std::string, Color>{};
     for (auto const& category : _config.categories())
@@ -116,9 +116,20 @@ void Editor::remove_unknown_categories_from_themes()
         remove_unknown_categories_from_theme(theme);
 }
 
+void Editor::rename_category_in_themes(std::string const& old_category_name, std::string const& new_category_name)
+{
+    _current_theme.rename_category(old_category_name, new_category_name);
+    for (auto& theme : _themes)
+        theme.rename_category(old_category_name, new_category_name);
+}
+
 auto Editor::imgui_config_editor() -> bool
 {
-    if (_config.imgui())
+    auto const after_category_renamed = [&](std::string const& old_category_name, std::string const& new_category_name) {
+        rename_category_in_themes(old_category_name, new_category_name);
+        save_themes(); // It is important that this is done after category has been renamed, otherwise it will get removed when we try to remove the unknown categories.
+    };
+    if (_config.imgui(after_category_renamed))
     {
         apply();
         save_config();

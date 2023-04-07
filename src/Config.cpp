@@ -55,7 +55,7 @@ void Config::register_element(Element const& element)
     return name;
 }
 
-auto Config::imgui() -> bool
+auto Config::imgui(AfterCategoryRenamed const& after_category_renamed) -> bool
 {
     bool b = false;
 
@@ -65,7 +65,7 @@ auto Config::imgui() -> bool
         b = true;
     }
 
-    b |= imgui_categories_table();
+    b |= imgui_categories_table(after_category_renamed);
 
     return b;
 }
@@ -165,7 +165,7 @@ static auto imgui_color_group(
     return b;
 }
 
-auto Config::imgui_categories_table() -> bool
+auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_renamed) -> bool
 {
     bool b = false;
 
@@ -202,9 +202,11 @@ auto Config::imgui_categories_table() -> bool
                     auto name = category.name; // Don't do the ImGui widget on category.name directly otherwise make_unique_category_name() will see the new modified name and think it is not unique.
                     if (ImGui::InputText("", &name))
                     {
-                        category.name     = make_unique_category_name(name); // If two categories end up with the same name, their elements will get merged and it is not possible to undo that merge because elements only know the name of their category, and so if two categories end up with the same name we can't distinguish them anymore :(
-                        new_category_name = category.name;
-                        b                 = true;
+                        auto const old_name = category.name;
+                        category.name       = make_unique_category_name(name); // If two categories end up with the same name, their elements will get merged and it is not possible to undo that merge because elements only know the name of their category, and so if two categories end up with the same name we can't distinguish them anymore :(
+                        new_category_name   = category.name;
+                        after_category_renamed(old_name, category.name);
+                        b = true;
                     }
                 }
                 b |= ImGui::Checkbox("Behaves differently in light mode", &category.behaves_differently_in_light_mode);

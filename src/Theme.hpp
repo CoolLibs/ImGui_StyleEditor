@@ -20,6 +20,7 @@ public:
 
     [[nodiscard]] auto is_dark_mode() const { return _is_dark_mode; }
 
+    void rename_category(std::string const& old_category_name, std::string const& new_category_name);
     void set_colors_for_categories(std::unordered_map<std::string, Color> _new_colors) { _categories_colors = std::move(_new_colors); }
 
 private:

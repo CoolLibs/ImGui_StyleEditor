@@ -23,4 +23,10 @@ auto Theme::imgui(ForEachCategoryName const& for_each_category_name) -> bool
     return b;
 }
 
+void Theme::rename_category(std::string const& old_category_name, std::string const& new_category_name)
+{
+    _categories_colors[new_category_name] = _categories_colors[old_category_name];
+    _categories_colors.erase(old_category_name);
+}
+
 } // namespace ImStyleEd

@@ -37,8 +37,10 @@ private:
     void load_config();
     void load_themes();
 
-    void remove_unknown_categories_from_theme(Theme& theme);
+    void remove_unknown_categories_from_theme(Theme& theme) const;
     void remove_unknown_categories_from_themes();
+
+    void rename_category_in_themes(std::string const& old_category_name, std::string const& new_category_name);
 
 private:
     Theme              _current_theme{};
