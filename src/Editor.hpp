@@ -24,11 +24,11 @@ public:
         load_config(); // Must be done after registering the elements. Only the registered elements will be loaded from the JSON.
         load_themes();
         load_current_theme();
-        apply();
+        apply_current_theme(); // Must be done after the config and current theme have been loaded.
     }
 
     // Applies the current Theme to all the registered Elements.
-    void apply();
+    void apply_current_theme();
 
     auto imgui_config_editor() -> bool;
     auto imgui_themes_editor() -> bool;
@@ -42,6 +42,8 @@ private:
     void load_themes();
     void load_current_theme();
 
+    void add_current_theme_to_the_list_of_recorded_themes();
+
     void remove_unknown_categories_from_theme(Theme& theme) const;
     void remove_unknown_categories_from_themes();
 
@@ -52,6 +54,7 @@ private:
     std::vector<Theme> _themes{};
     Config             _config{};
     SerializationPaths _paths{};
+    std::string        _next_theme_name{};
 };
 
 } // namespace ImStyleEd

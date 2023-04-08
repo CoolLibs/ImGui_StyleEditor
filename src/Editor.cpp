@@ -3,6 +3,7 @@
 #include <fstream>
 #include "color_conversions.hpp"
 #include "imgui/imgui.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace ImStyleEd {
 
@@ -25,7 +26,7 @@ static auto compute_color(Group const& group, Color const& category_color, bool 
     return {srgb.r, srgb.g, srgb.b, group.opacity};
 }
 
-void Editor::apply()
+void Editor::apply_current_theme()
 {
     auto const elements_per_group = _config.elements_per_group();
     int        idx                = 0;
@@ -126,6 +127,14 @@ void Editor::load_current_theme()
     }
 }
 
+void Editor::add_current_theme_to_the_list_of_recorded_themes()
+{
+    _current_theme.set_name(_next_theme_name);
+    _themes.push_back(_current_theme);
+    _next_theme_name = "";
+    save_themes();
+}
+
 void Editor::remove_unknown_categories_from_theme(Theme& theme) const
 {
     auto keep = std::unordered_map<std::string, Color>{};
@@ -158,7 +167,7 @@ auto Editor::imgui_config_editor() -> bool
     };
     if (_config.imgui(after_category_renamed))
     {
-        apply();
+        apply_current_theme();
         save_config();
         return true;
     }
@@ -168,7 +177,11 @@ auto Editor::imgui_config_editor() -> bool
 auto Editor::imgui_themes_editor() -> bool
 {
     bool b = false;
+
+    // Theme selector
     b |= imgui_theme_selector();
+
+    // Edit current theme
     if (_current_theme.imgui([&](std::function<void(std::string const&)> const& callback) {
             for (auto const& category : _config.categories())
             {
@@ -176,9 +189,21 @@ auto Editor::imgui_themes_editor() -> bool
             }
         }))
     {
-        apply();
+        _current_theme.set_name("");
+        apply_current_theme();
         save_current_theme();
         b = true;
+    }
+
+    // Save current theme
+    if (ImGui::Button("Save theme"))
+        add_current_theme_to_the_list_of_recorded_themes();
+    ImGui::SameLine();
+    ImGui::TextUnformatted("as");
+    ImGui::SameLine();
+    if (ImGui::InputText("##_next_theme_name", &_next_theme_name, ImGuiInputTextFlags_EnterReturnsTrue))
+    {
+        add_current_theme_to_the_list_of_recorded_themes();
     }
 
     return b;
@@ -197,7 +222,7 @@ auto Editor::imgui_theme_selector() -> bool
             if (ImGui::Selectable(theme.name().c_str()))
             {
                 _current_theme = theme;
-                apply();
+                apply_current_theme();
                 save_current_theme();
                 b = true;
             }
