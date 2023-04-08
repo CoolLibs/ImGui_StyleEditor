@@ -380,9 +380,25 @@ auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_r
         { // Last column of unassigned elements
             ImGui::TableSetColumnIndex(nb_categories);
             auto const unassigned = unassigned_elements();
+            ImGui::BeginGroup();
             for (auto* element : unassigned)
             {
                 imgui_color_element(*element);
+            }
+            ImGui::Dummy(ImGui::GetContentRegionAvail()); // To still have a drag-drop target even when no elements are unassigned.
+            ImGui::EndGroup();
+
+            if (ImGui::BeginDragDropTarget())
+            {
+                if (ImGuiPayload const* payload = ImGui::AcceptDragDropPayload("color_theme_drag_drop"))
+                {
+                    IM_ASSERT(payload->DataSize == sizeof(GroupedElement*));
+                    GroupedElement* element       = *reinterpret_cast<GroupedElement* const*>(payload->Data); // NOLINT(*reinterpret-cast)
+                    element->second.group_name    = "";
+                    element->second.category_name = "";
+                    b                             = true;
+                }
+                ImGui::EndDragDropTarget();
             }
         }
 
