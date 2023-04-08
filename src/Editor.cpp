@@ -130,9 +130,12 @@ void Editor::load_current_theme()
 void Editor::add_current_theme_to_the_list_of_recorded_themes()
 {
     _current_theme.set_name(_next_theme_name);
+    save_current_theme();
+
     _themes.push_back(_current_theme);
-    _next_theme_name = "";
     save_themes();
+
+    _next_theme_name = "";
 }
 
 void Editor::remove_unknown_categories_from_theme(Theme& theme) const
@@ -215,7 +218,7 @@ auto Editor::imgui_theme_selector() -> bool
 
     if (ImGui::BeginCombo("Theme", _current_theme.name().c_str()))
     {
-        // ColorTheme const* theme_to_delete = nullptr;
+        Theme const* theme_to_delete = nullptr;
         for (auto const& theme : _themes)
         {
             ImGui::PushID(&theme);
@@ -226,23 +229,24 @@ auto Editor::imgui_theme_selector() -> bool
                 save_current_theme();
                 b = true;
             }
-            // if (ImGui::BeginPopupContextItem("##ctx"))
-            // {
-            //     if (ImGui::Button("Delete theme (This can't be undone!)"))
-            //         theme_to_delete = &theme;
-            //     ImGui::EndPopup();
-            // }
+            if (ImGui::BeginPopupContextItem("##ctx"))
+            {
+                if (ImGui::Button("Delete theme (This can't be undone!)"))
+                    theme_to_delete = &theme;
+                ImGui::EndPopup();
+            }
             ImGui::PopID();
         }
-        // if (theme_to_delete)
-        // {
-        //     if (theme_to_delete->name == _current_theme.name)
-        //     {
-        //         _current_theme.name = "";
-        //     }
-        //     _themes.erase(std::remove_if(_themes.begin(), _themes.end(), [&](ColorTheme const& theme) { return &theme == theme_to_delete; }), _themes.end());
-        //     save_to_disk();
-        // }
+        if (theme_to_delete)
+        {
+            if (theme_to_delete->name() == _current_theme.name())
+            {
+                _current_theme.set_name("");
+                save_current_theme();
+            }
+            _themes.erase(std::remove_if(_themes.begin(), _themes.end(), [&](Theme const& theme) { return &theme == theme_to_delete; }), _themes.end());
+            save_themes();
+        }
         ImGui::EndCombo();
     }
 
