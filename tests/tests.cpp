@@ -26,14 +26,19 @@ auto main(int argc, char* argv[]) -> int
                 [](ImStyleEd::Config& config) {
                     ImStyleEd::register_all_imgui_color_elements(config);
                 }};
-            ImGui::Begin("Advanced Configuration");
+            ImGui::Begin("Configuration Editor");
             {
                 editor.imgui_config_editor();
             }
             ImGui::End();
-            ImGui::Begin("Simple UI for everybody");
+            ImGui::Begin("Themes Editor");
             {
                 editor.imgui_themes_editor();
+            }
+            ImGui::End();
+            ImGui::Begin("Theme Selector");
+            {
+                editor.imgui_theme_selector();
             }
             ImGui::End();
             ImGui::ShowDemoWindow();
