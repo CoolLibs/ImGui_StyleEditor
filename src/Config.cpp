@@ -317,6 +317,7 @@ auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_r
                     if (ImGui::Button("Remove Category"))
                     {
                         category_to_remove = &category;
+                        b                  = true;
                     }
                     ImGui::EndDisabled();
                     ImGui::EndGroup();
