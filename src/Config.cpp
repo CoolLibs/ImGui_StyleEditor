@@ -106,6 +106,18 @@ static void imgui_color_element(GroupedElement& element)
 
         ImGui::EndDragDropSource();
     }
+    // Description
+    if (!element.first.description.empty())
+    {
+        ImGui::SameLine();
+        ImGui::TextDisabled("%s", "(?)");
+        if (ImGui::IsItemHovered())
+        {
+            ImGui::BeginTooltip();
+            ImGui::TextUnformatted(element.first.description.c_str());
+            ImGui::EndTooltip();
+        }
+    }
 }
 
 static auto imgui_color_group(
