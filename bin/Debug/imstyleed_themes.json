@@ -1,24 +1,3 @@
 {
-    "Current theme": {
-        "Categories colors": [
-            {
-                "key": "Unnamed Category",
-                "value": {
-                    "R": 0.8627451062202454,
-                    "G": 0.24529027938842774,
-                    "B": 0.24529027938842774
-                }
-            },
-            {
-                "key": "Unnamed Category(1)",
-                "value": {
-                    "R": 0.10149944573640824,
-                    "G": 0.9411764740943909,
-                    "B": 0.10149944573640824
-                }
-            }
-        ],
-        "Is dark mode": true
-    },
     "Themes": []
 }
