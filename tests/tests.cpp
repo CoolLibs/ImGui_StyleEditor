@@ -17,18 +17,28 @@ auto main(int argc, char* argv[]) -> int
     )
     {
         quick_imgui::loop("ImStyleEd", [&]() { // Open a window and run all the ImGui-related code
-            static auto editor = ImStyleEd::Editor{{
-                .themes_path = exe_path::dir() / "imstyleed_themes.json",
-                .config_path = exe_path::dir() / "imstyleed_config.json",
-            }};
-            ImGui::Begin("Advanced Configuration");
+            static auto editor = ImStyleEd::Editor{
+                ImStyleEd::SerializationPaths{
+                    .current_theme = exe_path::dir() / "imstyleed_current_theme.json",
+                    .themes        = exe_path::dir() / "imstyleed_themes.json",
+                    .config        = exe_path::dir() / "imstyleed_config.json",
+                },
+                [](ImStyleEd::Config& config) {
+                    ImStyleEd::register_all_imgui_color_elements(config);
+                }};
+            ImGui::Begin("Configuration Editor");
             {
-                editor.widget_color_config();
+                editor.imgui_config_editor();
             }
             ImGui::End();
-            ImGui::Begin("Simple UI for everybody");
+            ImGui::Begin("Themes Editor");
             {
-                editor.widget_theme_picker();
+                editor.imgui_themes_editor();
+            }
+            ImGui::End();
+            ImGui::Begin("Theme Selector");
+            {
+                editor.imgui_theme_selector();
             }
             ImGui::End();
             ImGui::ShowDemoWindow();
