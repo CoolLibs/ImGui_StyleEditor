@@ -167,16 +167,18 @@ auto Editor::imgui_config_editor() -> bool
 
 auto Editor::imgui_themes_editor() -> bool
 {
-    bool const b = _current_theme.imgui([&](std::function<void(std::string const&)> const& callback) {
-        for (auto const& category : _config.categories())
-        {
-            callback(category.name);
-        }
-    });
-    if (b)
+    bool b = false;
+    b |= imgui_theme_selector();
+    if (_current_theme.imgui([&](std::function<void(std::string const&)> const& callback) {
+            for (auto const& category : _config.categories())
+            {
+                callback(category.name);
+            }
+        }))
     {
         apply();
         save_current_theme();
+        b = true;
     }
 
     return b;
@@ -195,6 +197,7 @@ auto Editor::imgui_theme_selector() -> bool
             if (ImGui::Selectable(theme.name().c_str()))
             {
                 _current_theme = theme;
+                apply();
                 save_current_theme();
                 b = true;
             }
