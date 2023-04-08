@@ -55,49 +55,6 @@ void Config::register_element(Element const& element)
     return name;
 }
 
-void Config::maybe_remove_category(Category const* category_to_remove)
-{
-    if (!category_to_remove)
-        return;
-
-    _categories.erase(std::remove_if(_categories.begin(), _categories.end(), [&](Category const& category) {
-                          return &category == category_to_remove;
-                      }),
-                      _categories.end());
-}
-
-void Config::maybe_move_category_left(Category const* category_to_move_left)
-{
-    if (!category_to_move_left)
-        return;
-
-    auto const it = std::find_if(_categories.begin(), _categories.end(), [&](Category const& category) {
-        return &category == category_to_move_left;
-    });
-    if (it == _categories.end() || it == _categories.begin())
-        return;
-
-    std::swap(*it, *std::prev(it));
-}
-
-void Config::maybe_move_category_right(Category const* category_to_move_right)
-{
-    if (!category_to_move_right)
-        return;
-
-    auto const it = std::find_if(_categories.begin(), _categories.end(), [&](Category const& category) {
-        return &category == category_to_move_right;
-    });
-    if (it == _categories.end())
-        return;
-
-    auto const next = std::next(it);
-    if (next == _categories.end())
-        return;
-
-    std::swap(*it, *next);
-}
-
 auto Config::imgui(AfterCategoryRenamed const& after_category_renamed) -> bool
 {
     bool b = false;
@@ -156,7 +113,8 @@ static auto imgui_color_group(
     Group&                              group,
     std::vector<GroupedElement*> const& elements,
     std::string const&                  category_name,
-    std::optional<std::string> const&   new_category_name
+    std::optional<std::string> const&   new_category_name,
+    std::function<void()> const&        imgui_after_separator_text
 ) -> bool
 {
     bool b = false;
@@ -165,6 +123,7 @@ static auto imgui_color_group(
     ImGui::PushID(&group);
     {
         ImGui::SeparatorText(group.name.c_str());
+        imgui_after_separator_text();
         {
             auto name = group.name; // Don't do the ImGui widget on group.name directly otherwise make_unique_group_name() will see the new modified name and think it is not unique.
             if (ImGui::InputText("", &name))
@@ -208,6 +167,49 @@ static auto imgui_color_group(
     return b;
 }
 
+void Config::maybe_remove_category(Category const* category_to_remove)
+{
+    if (!category_to_remove)
+        return;
+
+    _categories.erase(std::remove_if(_categories.begin(), _categories.end(), [&](Category const& category) {
+                          return &category == category_to_remove;
+                      }),
+                      _categories.end());
+}
+
+void Config::maybe_move_category_left(Category const* category_to_move_left)
+{
+    if (!category_to_move_left)
+        return;
+
+    auto const it = std::find_if(_categories.begin(), _categories.end(), [&](Category const& category) {
+        return &category == category_to_move_left;
+    });
+    if (it == _categories.end() || it == _categories.begin())
+        return;
+
+    std::swap(*it, *std::prev(it));
+}
+
+void Config::maybe_move_category_right(Category const* category_to_move_right)
+{
+    if (!category_to_move_right)
+        return;
+
+    auto const it = std::find_if(_categories.begin(), _categories.end(), [&](Category const& category) {
+        return &category == category_to_move_right;
+    });
+    if (it == _categories.end())
+        return;
+
+    auto const next = std::next(it);
+    if (next == _categories.end())
+        return;
+
+    std::swap(*it, *next);
+}
+
 static void maybe_remove_group(Group const* group_to_remove, Category& category)
 {
     if (!group_to_remove)
@@ -217,6 +219,38 @@ static void maybe_remove_group(Group const* group_to_remove, Category& category)
                               return &group == group_to_remove;
                           }),
                           category.groups.end());
+}
+
+static void maybe_move_group_down(Group const* group_to_move_down, Category& category)
+{
+    if (!group_to_move_down)
+        return;
+
+    auto const it = std::find_if(category.groups.begin(), category.groups.end(), [&](Group const& group) {
+        return &group == group_to_move_down;
+    });
+    if (it == category.groups.end())
+        return;
+
+    auto const next = std::next(it);
+    if (next == category.groups.end())
+        return;
+
+    std::swap(*it, *next);
+}
+
+static void maybe_move_group_up(Group const* group_to_move_up, Category& category)
+{
+    if (!group_to_move_up)
+        return;
+
+    auto const it = std::find_if(category.groups.begin(), category.groups.end(), [&](Group const& group) {
+        return &group == group_to_move_up;
+    });
+    if (it == category.groups.end() || it == category.groups.begin())
+        return;
+
+    std::swap(*it, *std::prev(it));
 }
 
 auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_renamed) -> bool
@@ -285,7 +319,17 @@ auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_r
                 Group const* group_to_move_down = nullptr;
                 for (auto& group : category.groups)
                 {
-                    b |= imgui_color_group(category, group, elements[elements_index], category.name, new_category_name);
+                    b |= imgui_color_group(category, group, elements[elements_index], category.name, new_category_name, [&]() {
+                        if (ImGui::Button("Move Up"))
+                        {
+                            group_to_move_up = &group;
+                        }
+                        ImGui::SameLine();
+                        if (ImGui::Button("Move Down"))
+                        {
+                            group_to_move_down = &group;
+                        }
+                    });
                     // Remove Group
                     {
                         bool const cant_remove_group = !elements[elements_index].empty();
@@ -308,6 +352,8 @@ auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_r
                     elements_index++;
                 }
                 maybe_remove_group(group_to_remove, category);
+                maybe_move_group_down(group_to_move_down, category);
+                maybe_move_group_up(group_to_move_up, category);
                 b |= imgui_add_group_button(category);
                 // Remove category
                 {
