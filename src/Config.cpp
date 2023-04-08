@@ -55,6 +55,49 @@ void Config::register_element(Element const& element)
     return name;
 }
 
+void Config::maybe_remove_category(Category const* category_to_remove)
+{
+    if (!category_to_remove)
+        return;
+
+    _categories.erase(std::remove_if(_categories.begin(), _categories.end(), [&](Category const& category) {
+                          return &category == category_to_remove;
+                      }),
+                      _categories.end());
+}
+
+void Config::maybe_move_category_left(Category const* category_to_move_left)
+{
+    if (!category_to_move_left)
+        return;
+
+    auto const it = std::find_if(_categories.begin(), _categories.end(), [&](Category const& category) {
+        return &category == category_to_move_left;
+    });
+    if (it == _categories.end() || it == _categories.begin())
+        return;
+
+    std::swap(*it, *std::prev(it));
+}
+
+void Config::maybe_move_category_right(Category const* category_to_move_right)
+{
+    if (!category_to_move_right)
+        return;
+
+    auto const it = std::find_if(_categories.begin(), _categories.end(), [&](Category const& category) {
+        return &category == category_to_move_right;
+    });
+    if (it == _categories.end())
+        return;
+
+    auto const next = std::next(it);
+    if (next == _categories.end())
+        return;
+
+    std::swap(*it, *next);
+}
+
 auto Config::imgui(AfterCategoryRenamed const& after_category_renamed) -> bool
 {
     bool b = false;
@@ -191,12 +234,16 @@ auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_r
         auto const elements       = elements_per_group();
         auto       elements_index = 0;
 
+        Category const* category_to_remove     = nullptr;
+        Category const* category_to_move_left  = nullptr;
+        Category const* category_to_move_right = nullptr;
         for (int column = 0; column < nb_categories; column++)
         {
             ImGui::TableSetColumnIndex(column);
             auto& category = _categories[column];
             ImGui::PushID(&category);
             {
+                // Category name
                 auto new_category_name = std::optional<std::string>{};
                 {
                     auto name = category.name; // Don't do the ImGui widget on category.name directly otherwise make_unique_category_name() will see the new modified name and think it is not unique.
@@ -209,13 +256,43 @@ auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_r
                         b = true;
                     }
                 }
+                // Move category
+                if (ImGui::Button("Move Left"))
+                {
+                    category_to_move_left = &category;
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Move Right"))
+                {
+                    category_to_move_right = &category;
+                }
+                // Category Params
                 b |= ImGui::Checkbox("Invert brightness of groups when using a Light theme", &category.behaves_differently_in_light_mode);
+                // Groups
                 for (auto& group : category.groups)
                 {
                     b |= imgui_color_group(category, group, elements[elements_index], category.name, new_category_name);
                     elements_index++;
                 }
                 b |= imgui_add_group_button(category);
+                // Remove category
+                {
+                    bool const cant_remove_category = !category.groups.empty();
+                    ImGui::BeginGroup();
+                    ImGui::BeginDisabled(cant_remove_category);
+                    if (ImGui::Button("Remove Category"))
+                    {
+                        category_to_remove = &category;
+                    }
+                    ImGui::EndDisabled();
+                    ImGui::EndGroup();
+                    if (cant_remove_category && ImGui::IsItemHovered())
+                    {
+                        ImGui::BeginTooltip();
+                        ImGui::TextUnformatted("Can't remove a category that is not empty. Please first move all the elements to other categories and delete all the groups.");
+                        ImGui::EndTooltip();
+                    }
+                }
             }
             ImGui::PopID();
         }
@@ -229,6 +306,10 @@ auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_r
         }
 
         ImGui::EndTable();
+
+        maybe_remove_category(category_to_remove);
+        maybe_move_category_left(category_to_move_left);
+        maybe_move_category_right(category_to_move_right);
     }
 
     return b;

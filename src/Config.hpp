@@ -41,6 +41,10 @@ private:
     [[nodiscard]] auto make_unique_category_name(std::string const& category_name) const -> std::string;
     [[nodiscard]] auto is_unique_category_name(std::string const& category_name) const -> bool;
 
+    void maybe_remove_category(Category const*);
+    void maybe_move_category_left(Category const*);
+    void maybe_move_category_right(Category const*);
+
 private:
     std::vector<Category>       _categories{};
     std::vector<GroupedElement> _element_to_group_id{};
