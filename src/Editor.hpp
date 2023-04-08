@@ -27,8 +27,11 @@ public:
         apply_current_theme(); // Must be done after the config and current theme have been loaded.
     }
 
-    // Applies the current Theme to all the registered Elements.
+    /// Applies the current theme to all the registered elements.
     void apply_current_theme();
+
+    /// Applies the theme with the given name if it exists. Also, sets it as the current theme.
+    void apply_theme_if_any(std::string_view theme_name);
 
     auto imgui_config_editor() -> bool;
     auto imgui_themes_editor() -> bool;

@@ -45,6 +45,17 @@ void Editor::apply_current_theme()
     }
 }
 
+void Editor::apply_theme_if_any(std::string_view theme_name)
+{
+    auto const it = std::find_if(_themes.begin(), _themes.end(), [&](Theme const& theme) {
+        return theme.name() == theme_name;
+    });
+    if (it == _themes.end())
+        return;
+    _current_theme = *it;
+    apply_current_theme();
+}
+
 void Editor::save_config()
 {
     auto os = std::ofstream{_paths.config};
