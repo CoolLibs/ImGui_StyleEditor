@@ -208,6 +208,17 @@ static auto imgui_color_group(
     return b;
 }
 
+static void maybe_remove_group(Group const* group_to_remove, Category& category)
+{
+    if (!group_to_remove)
+        return;
+
+    category.groups.erase(std::remove_if(category.groups.begin(), category.groups.end(), [&](Group const& group) {
+                              return &group == group_to_remove;
+                          }),
+                          category.groups.end());
+}
+
 auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_renamed) -> bool
 {
     bool b = false;
@@ -269,11 +280,34 @@ auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_r
                 // Category Params
                 b |= ImGui::Checkbox("Invert brightness of groups when using a Light theme", &category.behaves_differently_in_light_mode);
                 // Groups
+                Group const* group_to_remove    = nullptr;
+                Group const* group_to_move_up   = nullptr;
+                Group const* group_to_move_down = nullptr;
                 for (auto& group : category.groups)
                 {
                     b |= imgui_color_group(category, group, elements[elements_index], category.name, new_category_name);
+                    // Remove Group
+                    {
+                        bool const cant_remove_group = !elements[elements_index].empty();
+                        ImGui::BeginGroup();
+                        ImGui::BeginDisabled(cant_remove_group);
+                        if (ImGui::Button("Remove group"))
+                        {
+                            group_to_remove = &group;
+                            b               = true;
+                        }
+                        ImGui::EndDisabled();
+                        ImGui::EndGroup();
+                        if (cant_remove_group && ImGui::IsItemHovered())
+                        {
+                            ImGui::BeginTooltip();
+                            ImGui::TextUnformatted("Can't remove a group that is not empty. Please first move all the elements to other groups.");
+                            ImGui::EndTooltip();
+                        }
+                    }
                     elements_index++;
                 }
+                maybe_remove_group(group_to_remove, category);
                 b |= imgui_add_group_button(category);
                 // Remove category
                 {
