@@ -7,8 +7,9 @@
 namespace ImStyleEd {
 
 struct SerializationPaths {
-    std::filesystem::path themes_path;
-    std::filesystem::path config_path;
+    std::filesystem::path current_theme;
+    std::filesystem::path themes;
+    std::filesystem::path config;
 };
 
 class Editor {
@@ -22,6 +23,7 @@ public:
         register_color_elements(_config);
         load_config(); // Must be done after registering the elements. Only the registered elements will be loaded from the JSON.
         load_themes();
+        load_current_theme();
         apply();
     }
 
@@ -30,12 +32,15 @@ public:
 
     auto imgui_config_editor() -> bool;
     auto imgui_themes_editor() -> bool;
+    auto imgui_theme_selector() -> bool;
 
 private:
     void save_config();
     void save_themes();
+    void save_current_theme();
     void load_config();
     void load_themes();
+    void load_current_theme();
 
     void remove_unknown_categories_from_theme(Theme& theme) const;
     void remove_unknown_categories_from_themes();

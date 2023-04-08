@@ -18,9 +18,10 @@ auto main(int argc, char* argv[]) -> int
     {
         quick_imgui::loop("ImStyleEd", [&]() { // Open a window and run all the ImGui-related code
             static auto editor = ImStyleEd::Editor{
-                {
-                    .themes_path = exe_path::dir() / "imstyleed_themes.json",
-                    .config_path = exe_path::dir() / "imstyleed_config.json",
+                ImStyleEd::SerializationPaths{
+                    .current_theme = exe_path::dir() / "imstyleed_current_theme.json",
+                    .themes        = exe_path::dir() / "imstyleed_themes.json",
+                    .config        = exe_path::dir() / "imstyleed_config.json",
                 },
                 [](ImStyleEd::Config& config) {
                     ImStyleEd::register_all_imgui_color_elements(config);
