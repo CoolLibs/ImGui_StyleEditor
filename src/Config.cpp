@@ -82,6 +82,7 @@ static auto imgui_add_group_button(Category& category) -> bool
 
 static void imgui_color_element(GroupedElement& element)
 {
+    ImGui::BeginGroup(); // To make sure that displaying the helper tooltip doesn't prevent us from knowing if the color widget has been deactivated after edit.
     auto color = ImVec4{element.first.get_color()};
     if (ImGui::ColorEdit4(
             element.first.name.c_str(),
@@ -118,6 +119,7 @@ static void imgui_color_element(GroupedElement& element)
             ImGui::EndTooltip();
         }
     }
+    ImGui::EndGroup();
 }
 
 static auto imgui_color_group(
