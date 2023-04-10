@@ -349,11 +349,13 @@ auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_r
                         bool const cant_remove_group = !elements[elements_index].empty();
                         ImGui::BeginGroup();
                         ImGui::BeginDisabled(cant_remove_group);
+                        ImGui::PushID(&group);
                         if (ImGui::Button("Remove group"))
                         {
                             group_to_remove = &group;
                             b               = true;
                         }
+                        ImGui::PopID();
                         ImGui::EndDisabled();
                         ImGui::EndGroup();
                         if (cant_remove_group && ImGui::IsItemHovered())
