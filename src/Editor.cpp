@@ -54,6 +54,7 @@ void Editor::apply_theme_if_any(std::string_view theme_name)
         return;
     _current_theme = *it;
     apply_current_theme();
+    save_current_theme();
 }
 
 void Editor::save_config()
