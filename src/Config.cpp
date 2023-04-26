@@ -142,6 +142,7 @@ static auto imgui_color_group(
             auto name = group.name; // Don't do the ImGui widget on group.name directly otherwise make_unique_group_name() will see the new modified name and think it is not unique.
             if (ImGui::InputText("", &name))
             {
+                b          = true;
                 group.name = make_unique_group_name(category, name); // If two groups end up with the same name, their elements will get merged and it is not possible to undo that merge because elements only know the name of their group, and so if two groups end up with the same name we can't distinguish them anymore :(
                 // Update GroupIDs to the new group name
                 for (auto* element : elements)
@@ -318,11 +319,13 @@ auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_r
                 // Move category
                 if (ImGui::Button("Move Left"))
                 {
+                    b                     = true;
                     category_to_move_left = &category;
                 }
                 ImGui::SameLine();
                 if (ImGui::Button("Move Right"))
                 {
+                    b                      = true;
                     category_to_move_right = &category;
                 }
                 // Category Params
@@ -336,11 +339,13 @@ auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_r
                     b |= imgui_color_group(category, group, elements[elements_index], category.name, new_category_name, [&]() {
                         if (ImGui::Button("Move Up"))
                         {
+                            b                = true;
                             group_to_move_up = &group;
                         }
                         ImGui::SameLine();
                         if (ImGui::Button("Move Down"))
                         {
+                            b                  = true;
                             group_to_move_down = &group;
                         }
                     });
