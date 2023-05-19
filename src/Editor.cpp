@@ -47,14 +47,30 @@ void Editor::apply_current_theme()
 
 void Editor::apply_theme_if_any(std::string_view theme_name)
 {
+    auto const* theme = try_get_theme(theme_name);
+    if (!theme)
+        return;
+    _current_theme = *theme;
+    apply_current_theme();
+    save_current_theme();
+}
+
+auto Editor::try_get_theme(std::string_view theme_name) const -> Theme const*
+{
     auto const it = std::find_if(_themes.begin(), _themes.end(), [&](Theme const& theme) {
         return theme.name() == theme_name;
     });
     if (it == _themes.end())
-        return;
-    _current_theme = *it;
-    apply_current_theme();
-    save_current_theme();
+        return nullptr;
+    return &*it;
+}
+
+auto Editor::get_color_from_theme_if_any(std::string_view theme_name, std::string_view color_category) const -> Color
+{
+    auto const* theme = try_get_theme(theme_name);
+    if (!theme)
+        return Color{1.f, 0.f, 1.f};
+    return theme->color_for_category(std::string{color_category});
 }
 
 void Editor::save_config()

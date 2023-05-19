@@ -3,7 +3,7 @@
 
 namespace ImStyleEd {
 
-auto Theme::color_for_category(std::string const& category_name) -> Color
+auto Theme::color_for_category(std::string const& category_name) const -> Color
 {
     auto const it = _categories_colors.find(category_name);
     if (it == _categories_colors.end())

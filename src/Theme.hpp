@@ -19,7 +19,7 @@ public:
     explicit Theme(std::string name = "")
         : _name{std::move(name)}
     {}
-    auto color_for_category(std::string const& category_name) -> Color;
+    auto color_for_category(std::string const& category_name) const -> Color;
     auto imgui(ForEachCategoryName const&) -> bool;
 
     [[nodiscard]] auto is_dark_mode() const { return _is_dark_mode; }
