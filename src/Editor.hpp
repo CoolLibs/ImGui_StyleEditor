@@ -37,7 +37,7 @@ public:
 
     auto imgui_config_editor() -> bool;
     auto imgui_themes_editor() -> bool;
-    auto imgui_theme_selector() -> bool;
+    auto imgui_theme_selector(bool is_allowed_to_delete_themes = false) -> bool;
 
 private:
     void save_config();

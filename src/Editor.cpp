@@ -210,7 +210,7 @@ auto Editor::imgui_themes_editor() -> bool
     bool b = false;
 
     // Theme selector
-    b |= imgui_theme_selector();
+    b |= imgui_theme_selector(true /*is_allowed_to_delete_themes*/);
 
     // Edit current theme
     if (_current_theme.imgui([&](std::function<void(std::string const&)> const& callback) {
@@ -240,7 +240,7 @@ auto Editor::imgui_themes_editor() -> bool
     return b;
 }
 
-auto Editor::imgui_theme_selector() -> bool
+auto Editor::imgui_theme_selector(bool is_allowed_to_delete_themes) -> bool
 {
     bool b = false;
 
@@ -257,7 +257,7 @@ auto Editor::imgui_theme_selector() -> bool
                 save_current_theme();
                 b = true;
             }
-            if (ImGui::BeginPopupContextItem("##ctx"))
+            if (is_allowed_to_delete_themes && ImGui::BeginPopupContextItem("##ctx"))
             {
                 if (ImGui::Button("Delete theme (This can't be undone!)"))
                     theme_to_delete = &theme;
