@@ -23,8 +23,20 @@ public:
         register_color_elements(_config);
         load_config(); // Must be done after registering the elements. Only the registered elements will be loaded from the JSON.
         load_themes();
-        load_current_theme();
-        apply_current_theme(); // Must be done after the config and current theme have been loaded.
+        if (load_current_theme())
+        {
+            apply_current_theme(); // Must be done after the config and current theme have been loaded.
+        }
+        else
+        {
+            // Try to apply a default theme
+            if (!_themes.empty())
+            {
+                _current_theme = _themes[0];
+                save_current_theme();
+                apply_current_theme();
+            }
+        }
     }
 
     /// Applies the current theme to all the registered elements.
@@ -45,7 +57,8 @@ private:
     void save_current_theme();
     void load_config();
     void load_themes();
-    void load_current_theme();
+    /// Returns true iff the theme has successfully been loaded
+    auto load_current_theme() -> bool;
 
     void add_current_theme_to_the_list_of_recorded_themes();
 

@@ -138,20 +138,22 @@ void Editor::save_current_theme()
     }
 }
 
-void Editor::load_current_theme()
+auto Editor::load_current_theme() -> bool
 {
     auto is = std::ifstream{_paths.current_theme};
     if (!is.is_open())
-        return;
+        return false;
     try
     {
         auto archive = cereal::JSONInputArchive{is};
         archive(
             _current_theme
         );
+        return true;
     }
     catch (...)
     {
+        return false;
     }
 }
 
