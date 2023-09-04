@@ -14,6 +14,7 @@ endif()
 
 # ---Maybe enable warnings as errors---
 set(WARNINGS_AS_ERRORS_FOR_IMSTYLEED OFF CACHE BOOL "ON iff you want to treat warnings as errors")
+
 if(WARNINGS_AS_ERRORS_FOR_IMSTYLEED)
     if(MSVC)
         target_compile_options(${PROJECT_NAME} PRIVATE /WX)
@@ -56,7 +57,7 @@ include(FetchContent)
 FetchContent_Declare(
     quick_imgui
     GIT_REPOSITORY https://github.com/CoolLibs/quick_imgui
-    GIT_TAG 1a2c38b9976d81889799fe1fb3e0c993dd787a70
+    GIT_TAG 288ae3862f888d89520647d5e085d124cecb198a
 )
 FetchContent_MakeAvailable(quick_imgui)
 target_include_directories(ImStyleEd PRIVATE ${quick_imgui_SOURCE_DIR}/lib) # Give our library access to Dear ImGui
@@ -64,12 +65,15 @@ target_link_libraries(${PROJECT_NAME} PRIVATE quick_imgui::quick_imgui)
 
 # ---Ignore .vscode/settings.json in Git---
 find_package(Git QUIET)
+
 if(GIT_FOUND)
     get_filename_component(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
-    if (EXISTS "${PARENT_DIR}/.git")
+
+    if(EXISTS "${PARENT_DIR}/.git")
         execute_process(COMMAND ${GIT_EXECUTABLE} update-index --assume-unchanged .vscode/settings.json
             WORKING_DIRECTORY ${PARENT_DIR}
             RESULT_VARIABLE ERRORS)
+
         if(NOT ERRORS EQUAL "0")
             message("Git assume-unchanged failed: ${ERRORS}")
         endif()
