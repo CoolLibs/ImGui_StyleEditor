@@ -112,12 +112,7 @@ static void imgui_color_element(GroupedElement& element)
     {
         ImGui::SameLine();
         ImGui::TextDisabled("%s", "(?)");
-        if (ImGui::IsItemHovered())
-        {
-            ImGui::BeginTooltip();
-            ImGui::TextUnformatted(element.first.description.c_str());
-            ImGui::EndTooltip();
-        }
+        ImGui::SetItemTooltip("%s", element.first.description.c_str());
     }
     ImGui::EndGroup();
 }
@@ -363,12 +358,8 @@ auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_r
                         ImGui::PopID();
                         ImGui::EndDisabled();
                         ImGui::EndGroup();
-                        if (cant_remove_group && ImGui::IsItemHovered())
-                        {
-                            ImGui::BeginTooltip();
-                            ImGui::TextUnformatted("Can't remove a group that is not empty. Please first move all the elements to other groups.");
-                            ImGui::EndTooltip();
-                        }
+                        if (cant_remove_group)
+                            ImGui::SetItemTooltip("%s", "Can't remove a group that is not empty. Please first move all the elements to other groups.");
                     }
                     elements_index++;
                 }
@@ -388,12 +379,8 @@ auto Config::imgui_categories_table(AfterCategoryRenamed const& after_category_r
                     }
                     ImGui::EndDisabled();
                     ImGui::EndGroup();
-                    if (cant_remove_category && ImGui::IsItemHovered())
-                    {
-                        ImGui::BeginTooltip();
-                        ImGui::TextUnformatted("Can't remove a category that is not empty. Please first move all the elements to other categories and delete all the groups.");
-                        ImGui::EndTooltip();
-                    }
+                    if (cant_remove_category)
+                        ImGui::SetItemTooltip("%s", "Can't remove a category that is not empty. Please first move all the elements to other categories and delete all the groups.");
                 }
             }
             ImGui::PopID();
