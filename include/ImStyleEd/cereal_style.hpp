@@ -70,7 +70,12 @@ void serialize(Archive& archive, ImGuiStyle& style)
         cereal::make_nvp("AntiAliasedLinesUseTex", style.AntiAliasedLinesUseTex),
         cereal::make_nvp("AntiAliasedFill", style.AntiAliasedFill),
         cereal::make_nvp("CurveTessellationTol", style.CurveTessellationTol),
-        cereal::make_nvp("CircleTessellationMaxError", style.CircleTessellationMaxError)
+        cereal::make_nvp("CircleTessellationMaxError", style.CircleTessellationMaxError),
+        cereal::make_nvp("HoverFlagsForTooltipMouse", style.HoverFlagsForTooltipMouse),
+        cereal::make_nvp("HoverFlagsForTooltipNav", style.HoverFlagsForTooltipNav),
+        cereal::make_nvp("HoverDelayShort", style.HoverDelayShort),
+        cereal::make_nvp("HoverDelayNormal", style.HoverDelayNormal),
+        cereal::make_nvp("HoverStationaryDelay", style.HoverStationaryDelay)
     );
 }
 
