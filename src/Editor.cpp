@@ -15,13 +15,13 @@ static auto lerp(float a, float b, float t) -> float
 static auto compute_color(Group const& group, Color const& category_color, bool is_dark_mode, bool behaves_diff_in_light)
     -> ImVec4
 {
-    auto cielab = CIELAB_from_sRGB({category_color.r, category_color.g, category_color.b});
+    auto lab = Oklab_from_sRGB({category_color.r, category_color.g, category_color.b});
     if (group.brightness_delta > 0.f)
-        cielab.x = lerp(cielab.x, is_dark_mode || !behaves_diff_in_light ? 1.f : 0.f, group.brightness_delta);
+        lab.x = lerp(lab.x, is_dark_mode || !behaves_diff_in_light ? 1.f : 0.f, group.brightness_delta);
     else
-        cielab.x = lerp(cielab.x, is_dark_mode || !behaves_diff_in_light ? 0.f : 1.f, -group.brightness_delta);
+        lab.x = lerp(lab.x, is_dark_mode || !behaves_diff_in_light ? 0.f : 1.f, -group.brightness_delta);
 
-    auto srgb = sRGB_from_CIELAB(cielab);
+    auto srgb = sRGB_from_Oklab(lab);
 
     return {srgb.r, srgb.g, srgb.b, group.opacity};
 }

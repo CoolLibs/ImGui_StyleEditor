@@ -52,69 +52,52 @@ static auto sRGB_from_LinearRGB(glm::vec3 rgb) -> glm::vec3
 // End of [Block1]
 
 // Start of [Block2]
-// From http://www.easyrgb.com/en/math.php
+// From https://bottosson.github.io/posts/oklab/
 
-static auto XYZ_from_LinearRGB(glm::vec3 const& c) -> glm::vec3
+static auto Oklab_from_LinearRGB(glm::vec3 c) -> glm::vec3
 {
-    return c * glm::mat3(0.4124f, 0.3576f, 0.1805f, 0.2126f, 0.7152f, 0.0722f, 0.0193f, 0.1192f, 0.9505f);
-}
+    float l = 0.4122214708f * c.r + 0.5363325363f * c.g + 0.0514459929f * c.b;
+    float m = 0.2119034982f * c.r + 0.6806995451f * c.g + 0.1073969566f * c.b;
+    float s = 0.0883024619f * c.r + 0.2817188376f * c.g + 0.6299787005f * c.b;
 
-static auto XYZ_from_sRGB(glm::vec3 const& c) -> glm::vec3
-{
-    return XYZ_from_LinearRGB(LinearRGB_from_sRGB(c));
-}
+    float l_ = cbrtf(l);
+    float m_ = cbrtf(m);
+    float s_ = cbrtf(s);
 
-static auto CIELAB_from_XYZ(glm::vec3 const& c) -> glm::vec3
-{
-    glm::vec3 const n = c / glm::vec3(0.95047f, 1.f, 1.08883f);
-    glm::vec3 const v{
-        (n.x > 0.008856) ? std::pow(n.x, 1.f / 3.f) : (7.787f * n.x) + (16.f / 116.f),
-        (n.y > 0.008856) ? std::pow(n.y, 1.f / 3.f) : (7.787f * n.y) + (16.f / 116.f),
-        (n.z > 0.008856) ? std::pow(n.z, 1.f / 3.f) : (7.787f * n.z) + (16.f / 116.f),
-    };
     return {
-        (1.16f * v.y) - 0.16f,
-        5.f * (v.x - v.y),
-        2.f * (v.y - v.z),
+        0.2104542553f * l_ + 0.7936177850f * m_ - 0.0040720468f * s_,
+        1.9779984951f * l_ - 2.4285922050f * m_ + 0.4505937099f * s_,
+        0.0259040371f * l_ + 0.7827717662f * m_ - 0.8086757660f * s_,
     };
 }
 
-static auto XYZ_from_CIELAB(glm::vec3 const& c) -> glm::vec3
+static auto LinearRGB_from_Oklab(glm::vec3 c) -> glm::vec3
 {
-    float const fy = (c.x + 0.16f) / 1.16f;
-    float const fx = c.y / 5.f + fy;
-    float const fz = fy - c.z / 2.f;
+    float l_ = c.x + 0.3963377774f * c.y + 0.2158037573f * c.z;
+    float m_ = c.x - 0.1055613458f * c.y - 0.0638541728f * c.z;
+    float s_ = c.x - 0.0894841775f * c.y - 1.2914855480f * c.z;
 
-    float const fx3 = fx * fx * fx;
-    float const fy3 = fy * fy * fy;
-    float const fz3 = fz * fz * fz;
+    float l = l_ * l_ * l_;
+    float m = m_ * m_ * m_;
+    float s = s_ * s_ * s_;
+
     return {
-        0.95047f * ((fx3 > 0.008856f) ? fx3 : (fx - 16.f / 116.f) / 7.787f),
-        1.00000f * ((fy3 > 0.008856f) ? fy3 : (fy - 16.f / 116.f) / 7.787f),
-        1.08883f * ((fz3 > 0.008856f) ? fz3 : (fz - 16.f / 116.f) / 7.787f),
+        +4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s,
+        -1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s,
+        -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s,
     };
-}
-
-static auto LinearRGB_from_XYZ(glm::vec3 const& c) -> glm::vec3
-{
-    return c * glm::mat3(3.2406f, -1.5372f, -0.4986f, -0.9689f, 1.8758f, 0.0415f, 0.0557f, -0.2040f, 1.0570f);
-}
-
-static auto sRGB_from_XYZ(glm::vec3 const& c) -> glm::vec3
-{
-    return sRGB_from_LinearRGB(LinearRGB_from_XYZ(c));
-}
-
-auto sRGB_from_CIELAB(glm::vec3 const& c) -> glm::vec3
-{
-    return sRGB_from_XYZ(XYZ_from_CIELAB(c));
-}
-
-auto CIELAB_from_sRGB(glm::vec3 const& c) -> glm::vec3
-{
-    return CIELAB_from_XYZ(XYZ_from_sRGB(c));
 }
 
 // End of [Block2]
+
+auto sRGB_from_Oklab(glm::vec3 const& c) -> glm::vec3
+{
+    return sRGB_from_LinearRGB(LinearRGB_from_Oklab(c));
+}
+
+auto Oklab_from_sRGB(glm::vec3 const& c) -> glm::vec3
+{
+    return Oklab_from_LinearRGB(LinearRGB_from_sRGB(c));
+}
 
 } // namespace ImStyleEd
