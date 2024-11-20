@@ -1,5 +1,6 @@
 #pragma once
 #include <cereal/cereal.hpp>
+#include "imgui/imgui.h"
 
 namespace ImStyleEd {
 
@@ -8,6 +9,8 @@ struct Color {
     float r{};
     float g{};
     float b{};
+
+    auto as_imvec4() const -> ImVec4 { return {r, g, b, 1.f}; }
 
 private:
     // Serialization

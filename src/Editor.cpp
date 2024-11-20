@@ -73,6 +73,11 @@ auto Editor::get_color_from_theme_if_any(std::string_view theme_name, std::strin
     return theme->color_for_category(std::string{color_category});
 }
 
+auto Editor::get_color(std::string_view color_category) const -> Color
+{
+    return _current_theme.color_for_category(std::string{color_category});
+}
+
 void Editor::save_config()
 {
     auto os = std::ofstream{_paths.config};

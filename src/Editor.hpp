@@ -46,6 +46,7 @@ public:
     void apply_theme_if_any(std::string_view theme_name);
     auto try_get_theme(std::string_view theme_name) const -> Theme const*;
     auto get_color_from_theme_if_any(std::string_view theme_name, std::string_view color_category) const -> Color;
+    auto get_color(std::string_view color_category) const -> Color;
 
     auto imgui_config_editor() -> bool;
     auto imgui_themes_editor() -> bool;
