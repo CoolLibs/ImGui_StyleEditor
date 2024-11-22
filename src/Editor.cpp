@@ -280,17 +280,23 @@ auto Editor::imgui_theme_selector(bool is_allowed_to_delete_themes) -> bool
 
     if (ImGui::BeginCombo("Theme", _use_os_theme.has_value() ? "Use OS color theme" : _current_theme.name().c_str()))
     {
-        if (ImGui::Selectable("Use OS color theme"))
         {
-            if (!_use_os_theme.has_value())
-                _use_os_theme.emplace();
-            b = true;
+            bool const is_selected = _use_os_theme.has_value();
+            if (ImGui::Selectable("Use OS color theme", is_selected))
+            {
+                if (!_use_os_theme.has_value())
+                    _use_os_theme.emplace();
+                b = true;
+            }
+            if (is_selected)
+                ImGui::SetItemDefaultFocus();
         }
         Theme const* theme_to_delete = nullptr;
         for (auto const& theme : _themes)
         {
             ImGui::PushID(&theme);
-            if (ImGui::Selectable(theme.name().c_str()))
+            bool const is_selected = !_use_os_theme.has_value() && theme.name() == _current_theme.name();
+            if (ImGui::Selectable(theme.name().c_str(), is_selected))
             {
                 _use_os_theme.reset();
                 _current_theme = theme;
@@ -298,6 +304,8 @@ auto Editor::imgui_theme_selector(bool is_allowed_to_delete_themes) -> bool
                 save_current_theme();
                 b = true;
             }
+            if (is_selected)
+                ImGui::SetItemDefaultFocus();
             if (is_allowed_to_delete_themes && ImGui::BeginPopupContextItem("##ctx"))
             {
                 if (ImGui::Button("Delete theme (This can't be undone!)"))
