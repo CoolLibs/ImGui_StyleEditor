@@ -4,8 +4,26 @@
 #include "color_conversions.hpp"
 #include "imgui/imgui.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
+#include "wants_dark_theme/wants_dark_theme.hpp"
 
 namespace ImStyleEd {
+
+void Editor::update()
+{
+    if (!_use_os_theme)
+        return;
+    _use_os_theme->update(*this);
+}
+
+void Editor::OsThemeChecker::update(Editor& editor)
+{
+    auto const prev_color_mode = _color_mode;
+    _color_mode                = Cool::wants_dark_theme().value_or(true) ? Mode::Dark : Mode::Light;
+    if (_color_mode == prev_color_mode)
+        return;
+
+    editor.apply_theme_if_any(_color_mode == Mode::Light ? "Light" : "Dark");
+}
 
 static auto lerp(float a, float b, float t) -> float
 {
@@ -138,6 +156,7 @@ void Editor::save_current_theme()
     {
         auto archive = cereal::JSONOutputArchive{os};
         archive(
+            cereal::make_nvp("Use OS Theme", _use_os_theme.has_value()),
             cereal::make_nvp("Current theme", _current_theme)
         );
     }
@@ -150,10 +169,18 @@ auto Editor::load_current_theme() -> bool
         return false;
     try
     {
-        auto archive = cereal::JSONInputArchive{is};
-        archive(
-            _current_theme
-        );
+        bool use_os_theme{};
+        {
+            auto archive = cereal::JSONInputArchive{is};
+            archive(
+                use_os_theme,
+                _current_theme
+            );
+        }
+        if (use_os_theme)
+            _use_os_theme.emplace();
+        else
+            _use_os_theme.reset();
         return true;
     }
     catch (...)
@@ -251,14 +278,21 @@ auto Editor::imgui_theme_selector(bool is_allowed_to_delete_themes) -> bool
 {
     bool b = false;
 
-    if (ImGui::BeginCombo("Theme", _current_theme.name().c_str()))
+    if (ImGui::BeginCombo("Theme", _use_os_theme.has_value() ? "Use OS color theme" : _current_theme.name().c_str()))
     {
+        if (ImGui::Selectable("Use OS color theme"))
+        {
+            if (!_use_os_theme.has_value())
+                _use_os_theme.emplace();
+            b = true;
+        }
         Theme const* theme_to_delete = nullptr;
         for (auto const& theme : _themes)
         {
             ImGui::PushID(&theme);
             if (ImGui::Selectable(theme.name().c_str()))
             {
+                _use_os_theme.reset();
                 _current_theme = theme;
                 apply_current_theme();
                 save_current_theme();

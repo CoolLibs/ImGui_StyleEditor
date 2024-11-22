@@ -1,5 +1,6 @@
 #pragma once
 #include <filesystem>
+#include <optional>
 #include <vector>
 #include "Config.hpp"
 #include "Theme.hpp"
@@ -39,6 +40,9 @@ public:
         }
     }
 
+    /// Must be called once every frame
+    void update();
+
     /// Applies the current theme to all the registered elements.
     void apply_current_theme();
 
@@ -69,11 +73,28 @@ private:
     void rename_category_in_themes(std::string const& old_category_name, std::string const& new_category_name);
 
 private:
-    Theme              _current_theme{};
-    std::vector<Theme> _themes{};
-    Config             _config{};
-    SerializationPaths _paths{};
-    std::string        _next_theme_name{};
+    class OsThemeChecker {
+    public:
+        void update(Editor&);
+
+    private:
+        enum class Mode {
+            Unknown,
+            Dark,
+            Light,
+        };
+
+    private:
+        Mode _color_mode{Mode::Unknown};
+    };
+
+private:
+    Theme                         _current_theme{};
+    std::vector<Theme>            _themes{};
+    Config                        _config{};
+    SerializationPaths            _paths{};
+    std::string                   _next_theme_name{};
+    std::optional<OsThemeChecker> _use_os_theme{OsThemeChecker{}};
 };
 
 } // namespace ImStyleEd

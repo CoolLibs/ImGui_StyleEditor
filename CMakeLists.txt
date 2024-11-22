@@ -12,6 +12,7 @@ if(WARNINGS_AS_ERRORS_FOR_IMSTYLEED)
 else()
     target_include_directories(ImStyleEd SYSTEM PUBLIC include)
 endif()
+
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS src/*.cpp)
 target_sources(ImStyleEd PRIVATE ${SRC_FILES})
 
@@ -50,3 +51,7 @@ FetchContent_Declare(
 )
 FetchContent_Populate(glm)
 target_include_directories(ImStyleEd SYSTEM PRIVATE ${glm_SOURCE_DIR})
+
+# ---wants_dark_theme library---
+add_subdirectory(lib/wants_dark_theme)
+target_link_libraries(ImStyleEd PRIVATE wants_dark_theme::wants_dark_theme)
