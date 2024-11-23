@@ -23,11 +23,6 @@ if(WARNINGS_AS_ERRORS_FOR_IMSTYLEED)
     endif()
 endif()
 
-# ---Set executable output directory---
-get_filename_component(PARENT_DIR ${CMAKE_SOURCE_DIR} DIRECTORY)
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${PARENT_DIR}/bin/${CMAKE_BUILD_TYPE})
-
 # ---Include our library---
 add_subdirectory(.. ${CMAKE_CURRENT_SOURCE_DIR}/build/ImStyleEd)
 target_link_libraries(${PROJECT_NAME} PRIVATE ImStyleEd::ImStyleEd)
@@ -57,7 +52,7 @@ include(FetchContent)
 FetchContent_Declare(
     quick_imgui
     GIT_REPOSITORY https://github.com/CoolLibs/quick_imgui
-    GIT_TAG 288ae3862f888d89520647d5e085d124cecb198a
+    GIT_TAG ee3de223f1d3b3ebed1e6b34963694b7e579a946
 )
 FetchContent_MakeAvailable(quick_imgui)
 target_include_directories(ImStyleEd PRIVATE ${quick_imgui_SOURCE_DIR}/lib) # Give our library access to Dear ImGui
