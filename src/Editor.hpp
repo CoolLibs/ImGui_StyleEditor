@@ -75,7 +75,6 @@ private:
 private:
     class OsThemeChecker {
     public:
-        OsThemeChecker() = default;
         void update(Editor&);
 
     private:

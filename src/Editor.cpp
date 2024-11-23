@@ -178,7 +178,7 @@ auto Editor::load_current_theme() -> bool
             );
         }
         if (use_os_theme)
-            _use_os_theme.emplace();
+            _use_os_theme = OsThemeChecker{};
         else
             _use_os_theme.reset();
         return true;
@@ -285,7 +285,7 @@ auto Editor::imgui_theme_selector(bool is_allowed_to_delete_themes) -> bool
             if (ImGui::Selectable("Use OS color theme", is_selected))
             {
                 if (!_use_os_theme.has_value())
-                    _use_os_theme.emplace();
+                    _use_os_theme = OsThemeChecker{};
                 b = true;
             }
             if (is_selected)
