@@ -1,4 +1,5 @@
 #include "Editor.hpp"
+#include <algorithm>
 #include <cereal/archives/json.hpp>
 #include <fstream>
 #include "color_conversions.hpp"
