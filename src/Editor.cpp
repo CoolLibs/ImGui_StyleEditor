@@ -2,12 +2,123 @@
 #include <algorithm>
 #include <cereal/archives/json.hpp>
 #include <fstream>
+#include "Element.hpp"
+#include "GroupID.hpp"
+#include "JsonSerializer.hpp"
 #include "color_conversions.hpp"
 #include "imgui/imgui.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 #include "wants_dark_theme/wants_dark_theme.hpp"
 
+static void to_json(nlohmann::json& json, ImVec2 const& v)
+{
+    ImStyleEd::json_set(json, "x", v.x);
+    ImStyleEd::json_set(json, "y", v.y);
+}
+static void from_json(nlohmann::json const& json, ImVec2& v)
+{
+    ImStyleEd::json_get(json, "x", v.x);
+    ImStyleEd::json_get(json, "y", v.y);
+}
+
+static void to_json(nlohmann::json& json, ImVec4 const& v)
+{
+    ImStyleEd::json_set(json, "x", v.x);
+    ImStyleEd::json_set(json, "y", v.y);
+    ImStyleEd::json_set(json, "z", v.z);
+    ImStyleEd::json_set(json, "w", v.w);
+}
+static void from_json(nlohmann::json const& json, ImVec4& v)
+{
+    ImStyleEd::json_get(json, "x", v.x);
+    ImStyleEd::json_get(json, "y", v.y);
+    ImStyleEd::json_get(json, "z", v.z);
+    ImStyleEd::json_get(json, "w", v.w);
+}
+
 namespace ImStyleEd {
+
+static void to_json(nlohmann::json& json, GroupID const& group_id)
+{
+    ImStyleEd::json_set(json, "Category", group_id.category_name);
+    ImStyleEd::json_set(json, "Group", group_id.group_name);
+}
+static void from_json(nlohmann::json const& json, GroupID& group_id)
+{
+    ImStyleEd::json_get(json, "Category", group_id.category_name);
+    ImStyleEd::json_get(json, "Group", group_id.group_name);
+}
+
+static void to_json(nlohmann::json& json, Element const& element)
+{
+    ImStyleEd::json_set(json, "Name", element.name);
+}
+static void from_json(nlohmann::json const& json, Element& element)
+{
+    ImStyleEd::json_get(json, "Name", element.name);
+}
+
+static void to_json(nlohmann::json& json, Group const& group)
+{
+    ImStyleEd::json_set(json, "Name", group.name);
+    ImStyleEd::json_set(json, "Brightness delta", group.brightness_delta);
+    ImStyleEd::json_set(json, "Opacity", group.opacity);
+}
+static void from_json(nlohmann::json const& json, Group& group)
+{
+    ImStyleEd::json_get(json, "Name", group.name);
+    ImStyleEd::json_get(json, "Brightness delta", group.brightness_delta);
+    ImStyleEd::json_get(json, "Opacity", group.opacity);
+}
+
+static void to_json(nlohmann::json& json, Category const& category)
+{
+    ImStyleEd::json_set(json, "Name", category.name);
+    ImStyleEd::json_set(json, "Behaves differently in light mode", category.behaves_differently_in_light_mode);
+    ImStyleEd::json_set(json, "Groups", category.groups);
+}
+static void from_json(nlohmann::json const& json, Category& category)
+{
+    ImStyleEd::json_get(json, "Name", category.name);
+    ImStyleEd::json_get(json, "Behaves differently in light mode", category.behaves_differently_in_light_mode);
+    ImStyleEd::json_get(json, "Groups", category.groups);
+}
+
+static void to_json(nlohmann::json& json, Config const& config)
+{
+    ImStyleEd::json_set(json, "Categories", config.categories());
+    for (auto const& element : config.elements())
+        ImStyleEd::json_set(json["Element's Group ID"], element.first.name, element.second);
+}
+static void from_json(nlohmann::json const& json, Config& config)
+{
+    ImStyleEd::json_get(json, "Categories", config.categories());
+    for (auto& element : config.elements())
+        ImStyleEd::json_get(json.at("Element's Group ID"), element.first.name, element.second);
+}
+
+Editor::Editor(SerializationPaths paths, std::function<void(ImStyleEd::Config&)> const& register_color_elements)
+    : _paths{std::move(paths)}
+    , _config_serializer{std::make_unique<JsonSerializer<Config>>()}
+{
+    register_color_elements(_config);
+    load_config(); // Must be done after registering the elements. Only the registered elements will be loaded from the JSON.
+    load_themes();
+    if (load_current_theme())
+    {
+        apply_current_theme(); // Must be done after the config and current theme have been loaded.
+    }
+    else
+    {
+        // Try to apply a default theme
+        if (!_themes.empty())
+        {
+            _current_theme = _themes[0];
+            save_current_theme();
+            apply_current_theme();
+        }
+    }
+}
 
 void Editor::update()
 {
@@ -99,26 +210,12 @@ auto Editor::get_color(std::string_view color_category) const -> Color
 
 void Editor::save_config()
 {
-    auto os = std::ofstream{_paths.config};
-    {
-        auto archive = cereal::JSONOutputArchive{os};
-        archive(cereal::make_nvp("Config", _config));
-    }
+    _config_serializer->save(_config, _paths.config_file);
 }
 
 void Editor::load_config()
 {
-    auto is = std::ifstream{_paths.config};
-    if (!is.is_open())
-        return;
-    try
-    {
-        auto archive = cereal::JSONInputArchive{is};
-        archive(_config);
-    }
-    catch (...)
-    {
-    }
+    _config_serializer->load(_config, _paths.config_file);
 }
 
 void Editor::save_themes()

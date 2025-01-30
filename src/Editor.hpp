@@ -3,6 +3,7 @@
 #include <optional>
 #include <vector>
 #include "Config.hpp"
+#include "ISerializer.hpp"
 #include "Theme.hpp"
 
 namespace ImStyleEd {
@@ -10,35 +11,14 @@ namespace ImStyleEd {
 struct SerializationPaths {
     std::filesystem::path current_theme;
     std::filesystem::path themes;
-    std::filesystem::path config;
+    std::filesystem::path config_file;
 };
 
 class Editor {
 public:
     /// Loads the themes, applies the current theme.
-    /// RegisterColorElements must be a functor that takes an `ImStyleEd::Config&` and registers all the desired color elements into it.
-    template<typename RegisterColorElements>
-    Editor(SerializationPaths paths, RegisterColorElements const& register_color_elements)
-        : _paths{std::move(paths)}
-    {
-        register_color_elements(_config);
-        load_config(); // Must be done after registering the elements. Only the registered elements will be loaded from the JSON.
-        load_themes();
-        if (load_current_theme())
-        {
-            apply_current_theme(); // Must be done after the config and current theme have been loaded.
-        }
-        else
-        {
-            // Try to apply a default theme
-            if (!_themes.empty())
-            {
-                _current_theme = _themes[0];
-                save_current_theme();
-                apply_current_theme();
-            }
-        }
-    }
+    /// `register_color_elements` must be a function that takes an `ImStyleEd::Config&` and registers all the desired color elements into it
+    Editor(SerializationPaths paths, std::function<void(ImStyleEd::Config&)> const& register_color_elements);
 
     /// Must be called once every frame
     void update();
@@ -78,7 +58,7 @@ private:
         void update(Editor&);
 
     private:
-        enum class Mode {
+        enum class Mode : uint8_t {
             Unknown,
             Dark,
             Light,
@@ -95,6 +75,8 @@ private:
     SerializationPaths            _paths{};
     std::string                   _next_theme_name{};
     std::optional<OsThemeChecker> _use_os_theme{OsThemeChecker{}};
+
+    std::unique_ptr<ISerializer<Config>> _config_serializer;
 };
 
 } // namespace ImStyleEd

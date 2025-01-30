@@ -55,3 +55,6 @@ target_include_directories(ImStyleEd SYSTEM PRIVATE ${glm_SOURCE_DIR})
 # ---wants_dark_theme library---
 add_subdirectory(lib/wants_dark_theme)
 target_link_libraries(ImStyleEd PRIVATE wants_dark_theme::wants_dark_theme)
+
+# ---nlohmann json library---
+target_include_directories(ImStyleEd SYSTEM PRIVATE lib/json/single_include)

@@ -4,3 +4,6 @@
 [submodule "lib/wants_dark_theme"]
 	path = lib/wants_dark_theme
 	url = https://github.com/CoolLibs/wants_dark_theme
+[submodule "lib/json"]
+	path = lib/json
+	url = https://github.com/nlohmann/json
