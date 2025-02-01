@@ -1,9 +1,7 @@
 #include "Editor.hpp"
 #include <algorithm>
-#include <cereal/archives/json.hpp>
 #include <exception>
 #include <filesystem>
-#include <fstream>
 #include "Element.hpp"
 #include "ErrorHandlers.hpp"
 #include "GroupID.hpp"

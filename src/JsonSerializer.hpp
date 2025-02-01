@@ -37,7 +37,6 @@ public:
     {
         try
         {
-            // _json = {}; // TODO(Launcher) tmp, remove this
             to_json(_json, val);
             auto ofs = std::ofstream{file_path};
             if (!ofs.is_open())

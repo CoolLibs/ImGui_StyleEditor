@@ -1,7 +1,4 @@
 #pragma once
-#include <cereal/cereal.hpp>
-#include <cereal/types/utility.hpp>
-#include <cereal/types/vector.hpp>
 #include <functional>
 #include <string>
 #include <utility>

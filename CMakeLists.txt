@@ -32,16 +32,6 @@ if(WARNINGS_AS_ERRORS_FOR_IMSTYLEED)
     endif()
 endif()
 
-# ---Cereal library---
-include(FetchContent)
-FetchContent_Declare(
-    cereal
-    GIT_REPOSITORY https://github.com/USCiLab/cereal
-    GIT_TAG ddd467244713ea4fe63733628992efcdd6a9187d
-)
-FetchContent_Populate(cereal)
-target_include_directories(ImStyleEd SYSTEM PUBLIC ${cereal_SOURCE_DIR}/include)
-
 # ---glm library---
 include(FetchContent)
 FetchContent_Declare(
