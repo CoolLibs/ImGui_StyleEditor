@@ -77,7 +77,7 @@ private:
 private:
     auto try_get_theme(std::string_view theme_name) -> Theme*;
     auto find_closest_theme(Theme const& target_theme) const -> Theme const*;
-    auto theme_file_path(Theme const& theme) const -> std::filesystem::path;
+    auto theme_file_path(std::string const& theme_name) const -> std::filesystem::path;
     auto get_default_theme() const -> Theme const*;
 
     void save_config() const;
@@ -88,6 +88,7 @@ private:
     void load_themes();
     void sort_themes();
     void load_current_theme();
+    void delete_theme(std::string const& theme_name);
 
     auto apply_theme_if_any(std::string_view theme_name) -> bool;
     void apply_current_theme_or_set_default();

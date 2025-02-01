@@ -400,15 +400,15 @@ void Editor::save_themes() const
         save_theme(theme);
 }
 
-auto Editor::theme_file_path(Theme const& theme) const -> std::filesystem::path
+auto Editor::theme_file_path(std::string const& theme_name) const -> std::filesystem::path
 {
-    return _paths.themes_folder / (theme.name + ".json");
+    return _paths.themes_folder / (theme_name + ".json");
 }
 
 void Editor::save_theme(ThemeAndSerializer const& theme) const
 {
     create_folders_if_they_dont_exist(_paths.themes_folder);
-    theme.serializer->save(theme.theme, theme_file_path(theme.theme));
+    theme.serializer->save(theme.theme, theme_file_path(theme.theme.name));
 }
 
 auto Editor::find_closest_theme(Theme const& target_theme) const -> Theme const*
@@ -540,6 +540,22 @@ void Editor::save_theme_and_add_it_to_the_list_of_themes(Theme& theme)
     }
 }
 
+void Editor::delete_theme(std::string const& theme_name)
+{
+    try
+    {
+        std::filesystem::remove(theme_file_path(theme_name));
+        bool const is_using_os_theme = std::get_if<internal::OsThemeChecker>(&_current_theme.name_or_os_theme);
+        if (!is_using_os_theme && theme_name == _current_theme.name())
+            set_default_theme();
+        _themes.erase(std::remove_if(_themes.begin(), _themes.end(), [&](ThemeAndSerializer const& theme) { return theme.theme.name == theme_name; }), _themes.end());
+    }
+    catch (std::exception const& e)
+    {
+        error_handlers().on_optional_warning("Failed to remove theme file \"" + theme_file_path(theme_name).string() + "\":\n" + e.what());
+    }
+}
+
 void Editor::rename_category_in_themes(std::string const& old_category_name, std::string const& new_category_name)
 {
     for (auto& theme : _themes)
@@ -624,12 +640,14 @@ auto Editor::imgui_themes_editor() -> bool
     std::string const err = file_name_error(_next_theme_name);
     ImGui::BeginGroup();
     ImGui::BeginDisabled(!err.empty());
-    if (ImGui::Button("Save theme"))
-    {
+    auto const do_save = [&]() {
         tmp_theme.name = _next_theme_name;
         save_theme_and_add_it_to_the_list_of_themes(tmp_theme);
         _next_theme_name = "";
-    }
+        delete_theme("Temporary");
+    };
+    if (ImGui::Button("Save theme"))
+        do_save();
     ImGui::EndDisabled();
     ImGui::EndGroup();
     if (!err.empty())
@@ -640,11 +658,7 @@ auto Editor::imgui_themes_editor() -> bool
     if (ImGui::InputText("##_next_theme_name", &_next_theme_name, ImGuiInputTextFlags_EnterReturnsTrue))
     {
         if (err.empty())
-        {
-            tmp_theme.name = _next_theme_name;
-            save_theme_and_add_it_to_the_list_of_themes(tmp_theme);
-            _next_theme_name = "";
-        }
+            do_save();
     }
 
     return b;
@@ -673,7 +687,7 @@ auto Editor::imgui_theme_selector(bool is_allowed_to_delete_themes) -> bool
             if (is_selected)
                 ImGui::SetItemDefaultFocus();
         }
-        ThemeAndSerializer const* theme_to_delete = nullptr;
+        std::optional<std::string> theme_to_delete{};
         for (auto const& theme : _themes)
         {
             ImGui::PushID(&theme);
@@ -691,7 +705,7 @@ auto Editor::imgui_theme_selector(bool is_allowed_to_delete_themes) -> bool
             {
                 if (ImGui::Button("Delete theme (This can't be undone!)"))
                 {
-                    theme_to_delete = &theme;
+                    theme_to_delete = theme.theme.name;
                     ImGui::CloseCurrentPopup();
                 }
                 ImGui::EndPopup();
@@ -699,19 +713,7 @@ auto Editor::imgui_theme_selector(bool is_allowed_to_delete_themes) -> bool
             ImGui::PopID();
         }
         if (theme_to_delete)
-        {
-            try
-            {
-                std::filesystem::remove(theme_file_path(theme_to_delete->theme));
-                if (!is_using_os_theme && theme_to_delete->theme.name == _current_theme.name())
-                    set_default_theme();
-                _themes.erase(std::remove_if(_themes.begin(), _themes.end(), [&](ThemeAndSerializer const& theme) { return &theme == theme_to_delete; }), _themes.end());
-            }
-            catch (std::exception const& e)
-            {
-                error_handlers().on_optional_warning("Failed to remove theme file \"" + theme_file_path(theme_to_delete->theme).string() + "\":\n" + e.what());
-            }
-        }
+            delete_theme(*theme_to_delete);
         ImGui::EndCombo();
     }
 
