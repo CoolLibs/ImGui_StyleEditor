@@ -37,16 +37,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(exe_path)
 target_link_libraries(${PROJECT_NAME} PRIVATE exe_path::exe_path)
 
-# ---Add doctest---
-include(FetchContent)
-FetchContent_Declare(
-    doctest
-    GIT_REPOSITORY https://github.com/doctest/doctest
-    GIT_TAG b7c21ec5ceeadb4951b00396fc1e4642dd347e5f
-)
-FetchContent_MakeAvailable(doctest)
-target_link_libraries(${PROJECT_NAME} PRIVATE doctest::doctest)
-
 # ---Add quick_imgui---
 include(FetchContent)
 FetchContent_Declare(
