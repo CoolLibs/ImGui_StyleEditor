@@ -574,10 +574,10 @@ auto Editor::imgui_themes_editor() -> bool
 
     // Edit current theme
     auto tmp_theme = Theme{};
-    if (auto const* theme = try_get_theme(_current_theme.name()))
-        tmp_theme = *theme;
-    else if (auto const* theme = get_default_theme())
-        tmp_theme = *theme;
+    if (auto const* current_theme = try_get_theme(_current_theme.name()))
+        tmp_theme = *current_theme;
+    else if (auto const* default_theme = get_default_theme())
+        tmp_theme = *default_theme;
 
     if (tmp_theme.imgui([&](std::function<void(std::string const&)> const& callback) {
             for (auto const& category : _config.categories())
