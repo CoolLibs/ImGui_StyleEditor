@@ -33,11 +33,17 @@ auto json_get(nlohmann::json const& json, std::string_view key, T& val) -> bool
 template<typename T>
 class JsonSerializer : public ISerializer<T> {
 public:
+    JsonSerializer(
+        std::function<void(nlohmann::json&, T const&)> save,
+        std::function<void(nlohmann::json const&, T&)> load
+    )
+        : _save{std::move(save)}, _load{std::move(load)}
+    {}
     void save(T const& val, std::filesystem::path const& file_path) override
     {
         try
         {
-            to_json(_json, val);
+            _save(_json, val);
             auto ofs = std::ofstream{file_path};
             if (!ofs.is_open())
             {
@@ -58,7 +64,7 @@ public:
         try
         {
             std::ifstream{file_path} >> _json; // NB: this clears the _json from its previous values. This means that when loading twice in a row (e.g. from UserDataDefault and then from UserData), only the last load will have its values stored in the _json. This is fine because we don't care about saving values from UserDataDefault into UserData if they are not used.
-            from_json(_json, val);
+            _load(_json, val);
         }
         catch (std::exception const& e)
         {
@@ -68,6 +74,9 @@ public:
 
 private:
     nlohmann::json _json{}; // We need to store the json, because when we save it we want to keep all the unused fields that we found when we loaded the json. Otherwise we might remove information that is usefull in another version of the software.
+
+    std::function<void(nlohmann::json&, T const&)> _save;
+    std::function<void(nlohmann::json const&, T&)> _load;
 };
 
 } // namespace ImStyleEd

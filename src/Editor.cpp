@@ -2,9 +2,11 @@
 #include <algorithm>
 #include <exception>
 #include <filesystem>
+#include <memory>
 #include "Element.hpp"
 #include "ErrorHandlers.hpp"
 #include "GroupID.hpp"
+#include "ISerializer.hpp"
 #include "JsonSerializer.hpp"
 #include "color_conversions.hpp"
 #include "imgui/imgui.h"
@@ -191,10 +193,36 @@ auto internal::CurrentTheme::update() -> bool
     );
 }
 
+static auto make_theme_serializer() -> std::unique_ptr<ISerializer<Theme>>
+{
+    return std::make_unique<JsonSerializer<Theme>>(
+        [](nlohmann::json& json, Theme const& val) {
+            to_json(json, val);
+        },
+        [](nlohmann::json const& json, Theme& val) {
+            from_json(json, val);
+        }
+    );
+}
+
 Editor::Editor(SerializationPaths paths, std::function<void(ImStyleEd::Config&)> const& register_color_elements)
     : _paths{std::move(paths)}
-    , _config_serializer{std::make_unique<JsonSerializer<Config>>()}
-    , _current_theme_serializer{std::make_unique<JsonSerializer<internal::CurrentTheme>>()}
+    , _config_serializer{std::make_unique<JsonSerializer<Config>>(
+          [](nlohmann::json& json, Config const& val) {
+              to_json(json, val);
+          },
+          [](nlohmann::json const& json, Config& val) {
+              from_json(json, val);
+          }
+      )}
+    , _current_theme_serializer{std::make_unique<JsonSerializer<internal::CurrentTheme>>(
+          [](nlohmann::json& json, internal::CurrentTheme const& val) {
+              to_json(json, val);
+          },
+          [](nlohmann::json const& json, internal::CurrentTheme& val) {
+              from_json(json, val);
+          }
+      )}
 {
     register_color_elements(_config);
     load_config(); // Must be done after registering the elements. Only the registered elements will be loaded from the JSON.
@@ -416,7 +444,7 @@ void Editor::load_themes()
             auto const& path = entry.path();
             if (!std::filesystem::is_regular_file(path) || path.extension() != ".json")
                 continue;
-            _themes.emplace_back(Theme{path.stem().string()}, std::make_unique<JsonSerializer<Theme>>());
+            _themes.emplace_back(Theme{path.stem().string()}, make_theme_serializer());
             _themes.back().serializer->load(_themes.back().theme, path);
         }
     }
@@ -447,7 +475,7 @@ void Editor::load_themes()
             }
             else
             {
-                _themes.emplace_back(Theme{theme_name}, std::make_unique<JsonSerializer<Theme>>());
+                _themes.emplace_back(Theme{theme_name}, make_theme_serializer());
                 _themes.back().serializer->load(_themes.back().theme, path);
 
                 // Fill all the missing categories from the new_theme from the ones in the closest_theme
@@ -506,7 +534,7 @@ void Editor::save_theme_and_add_it_to_the_list_of_themes(Theme& theme)
     else
     {
         // Create a new theme
-        _themes.emplace_back(theme, std::make_unique<JsonSerializer<Theme>>());
+        _themes.emplace_back(theme, make_theme_serializer());
         save_theme(_themes.back());
         sort_themes();
     }
