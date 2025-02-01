@@ -1,8 +1,11 @@
 #include "Editor.hpp"
 #include <algorithm>
 #include <cereal/archives/json.hpp>
+#include <exception>
+#include <filesystem>
 #include <fstream>
 #include "Element.hpp"
+#include "ErrorHandlers.hpp"
 #include "GroupID.hpp"
 #include "JsonSerializer.hpp"
 #include "color_conversions.hpp"
@@ -97,9 +100,36 @@ static void from_json(nlohmann::json const& json, Config& config)
         ImStyleEd::json_get(json.at("Element's Group ID"), element.first.name, element.second);
 }
 
+static void to_json(nlohmann::json& json, Color const& color)
+{
+    ImStyleEd::json_set(json, "R", color.r);
+    ImStyleEd::json_set(json, "G", color.g);
+    ImStyleEd::json_set(json, "B", color.b);
+}
+static void from_json(nlohmann::json const& json, Color& color)
+{
+    ImStyleEd::json_get(json, "R", color.r);
+    ImStyleEd::json_get(json, "G", color.g);
+    ImStyleEd::json_get(json, "B", color.b);
+}
+
+static void to_json(nlohmann::json& json, Theme const& theme)
+{
+    ImStyleEd::json_set(json, "Is Dark Mode", theme.is_dark_mode);
+    for (auto const& [name, color] : theme.categories_colors)
+        ImStyleEd::json_set(json["Categories"], name, color);
+}
+static void from_json(nlohmann::json const& json, Theme& theme)
+{
+    ImStyleEd::json_get(json, "Is Dark Mode", theme.is_dark_mode);
+    for (auto const& [name, color_json] : json.at("Categories").items())
+        from_json(color_json, theme.categories_colors[name]);
+}
+
 Editor::Editor(SerializationPaths paths, std::function<void(ImStyleEd::Config&)> const& register_color_elements)
     : _paths{std::move(paths)}
     , _config_serializer{std::make_unique<JsonSerializer<Config>>()}
+// , _current_theme_serializer{std::make_unique<JsonSerializer<Theme>>()}
 {
     register_color_elements(_config);
     load_config(); // Must be done after registering the elements. Only the registered elements will be loaded from the JSON.
@@ -113,7 +143,7 @@ Editor::Editor(SerializationPaths paths, std::function<void(ImStyleEd::Config&)>
         // Try to apply a default theme
         if (!_themes.empty())
         {
-            _current_theme = _themes[0];
+            _current_theme = _themes[0].theme;
             save_current_theme();
             apply_current_theme();
         }
@@ -165,7 +195,7 @@ void Editor::apply_current_theme()
         auto const category_color = _current_theme.color_for_category(category.name);
         for (auto const& group : category.groups)
         {
-            auto const group_color = compute_color(group, category_color, _current_theme.is_dark_mode(), category.behaves_differently_in_light_mode);
+            auto const group_color = compute_color(group, category_color, _current_theme.is_dark_mode, category.behaves_differently_in_light_mode);
             for (auto const& element : elements_per_group[idx])
             {
                 element->first.set_color(group_color);
@@ -187,12 +217,12 @@ void Editor::apply_theme_if_any(std::string_view theme_name)
 
 auto Editor::try_get_theme(std::string_view theme_name) const -> Theme const*
 {
-    auto const it = std::find_if(_themes.begin(), _themes.end(), [&](Theme const& theme) {
-        return theme.name() == theme_name;
+    auto const it = std::find_if(_themes.begin(), _themes.end(), [&](ThemeAndSerializer const& theme) {
+        return theme.theme.name == theme_name;
     });
     if (it == _themes.end())
         return nullptr;
-    return &*it;
+    return &it->theme;
 }
 
 auto Editor::get_color_from_theme_if_any(std::string_view theme_name, std::string_view color_category) const -> Color
@@ -208,7 +238,21 @@ auto Editor::get_color(std::string_view color_category) const -> Color
     return _current_theme.color_for_category(std::string{color_category});
 }
 
-void Editor::save_config()
+static void create_folders_if_they_dont_exist(std::filesystem::path const& folder_path)
+{
+    try
+    {
+        if (std::filesystem::exists(folder_path))
+            return;
+        std::filesystem::create_directories(folder_path);
+    }
+    catch (std::exception const& e)
+    {
+        error_handlers().on_optional_warning("Failed to create folder \"" + folder_path.string() + "\":\n" + e.what());
+    }
+}
+
+void Editor::save_config() const
 {
     _config_serializer->save(_config, _paths.config_file);
 }
@@ -218,62 +262,145 @@ void Editor::load_config()
     _config_serializer->load(_config, _paths.config_file);
 }
 
-void Editor::save_themes()
+void Editor::save_themes() const
 {
-    remove_unknown_categories_from_themes();
-    auto os = std::ofstream{_paths.themes};
+    for (auto const& theme : _themes)
+        save_theme(theme);
+}
+
+auto Editor::theme_file_path(Theme const& theme) const -> std::filesystem::path
+{
+    return _paths.themes_folder / (theme.name + ".json");
+}
+
+void Editor::save_theme(ThemeAndSerializer const& theme) const
+{
+    create_folders_if_they_dont_exist(_paths.themes_folder);
+    theme.serializer->save(theme.theme, theme_file_path(theme.theme));
+}
+
+auto Editor::find_closest_theme(Theme const& target_theme) const -> Theme const*
+{
+    for (auto const& theme : _themes)
     {
-        auto archive = cereal::JSONOutputArchive{os};
-        archive(
-            cereal::make_nvp("Themes", _themes)
-        );
+        // Don't return the exact same theme
+        if (&theme.theme == &target_theme)
+            continue;
+        // Return the first theme that has the same is_dark_mode()
+        if (theme.theme.is_dark_mode == target_theme.is_dark_mode)
+            return &theme.theme;
     }
+    // If no good match, just return the first theme
+    for (auto const& theme : _themes)
+    {
+        // Don't return the exact same theme
+        if (&theme.theme == &target_theme)
+            continue;
+        return &theme.theme;
+    }
+    return nullptr;
 }
 
 void Editor::load_themes()
 {
-    auto is = std::ifstream{_paths.themes};
-    if (!is.is_open())
-        return;
+    assert(_themes.empty());
+    // Load default themes
     try
     {
-        auto archive = cereal::JSONInputArchive{is};
-        archive(
-            _themes
-        );
+        for (auto const& entry : std::filesystem::directory_iterator(_paths.themes_default_folder))
+        {
+            auto const& path = entry.path();
+            if (!std::filesystem::is_regular_file(path) || path.extension() != ".json")
+                continue;
+            _themes.emplace_back(Theme{path.stem().string()}, std::make_unique<JsonSerializer<Theme>>());
+            _themes.back().serializer->load(_themes.back().theme, path);
+        }
     }
-    catch (...)
+    catch (std::exception const& e)
     {
+        error_handlers().on_optional_warning(std::string{"Failed to load default themes:\n"} + e.what());
     }
+    // Load user-defined themes
+    create_folders_if_they_dont_exist(_paths.themes_folder); // Prevents directory_iterator from throwing an error that we don't want to display to the user, because it is okay if they don't have a user-defined themes folder.
+                                                             // Also this makes sure they have the folder, so it will be easier for them if they want to drag and drop some themes from the internet into this folder, they won't have to create it themselves.
+    try
+    {
+        for (auto const& entry : std::filesystem::directory_iterator(_paths.themes_folder))
+        {
+            auto const& path = entry.path();
+            if (!std::filesystem::is_regular_file(path) || path.extension() != ".json")
+                continue;
+
+            auto const theme_name = path.stem().string();
+
+            auto const it = std::find_if(_themes.begin(), _themes.end(), [&](ThemeAndSerializer const& theme) {
+                return theme.theme.name == theme_name;
+            });
+            if (it != _themes.end())
+            {
+                // Overwrite some of the values of the default theme with the ones in the user-defined theme of the same name
+                it->serializer->load(it->theme, path);
+            }
+            else
+            {
+                _themes.emplace_back(Theme{theme_name}, std::make_unique<JsonSerializer<Theme>>());
+                _themes.back().serializer->load(_themes.back().theme, path);
+
+                // Fill all the missing categories from the new_theme from the ones in the closest_theme
+                auto&       new_theme     = _themes.back().theme;
+                auto const* closest_theme = find_closest_theme(new_theme);
+                if (closest_theme)
+                {
+                    for (auto const& category : _config.categories())
+                    {
+                        if (new_theme.categories_colors.find(category.name) == new_theme.categories_colors.end())
+                            new_theme.categories_colors[category.name] = closest_theme->color_for_category(category.name);
+                    }
+                }
+            }
+        }
+    }
+    catch (std::exception const& e)
+    {
+        error_handlers().on_optional_warning(std::string{"Failed to load user-defined themes:\n"} + e.what());
+    }
+
+    sort_themes();
 }
 
-void Editor::save_current_theme()
+void Editor::sort_themes()
 {
-    remove_unknown_categories_from_theme(_current_theme);
-    auto os = std::ofstream{_paths.current_theme};
-    {
-        auto archive = cereal::JSONOutputArchive{os};
-        archive(
-            cereal::make_nvp("Use OS Theme", _use_os_theme.has_value()),
-            cereal::make_nvp("Current theme", _current_theme)
-        );
-    }
+    std::sort(_themes.begin(), _themes.end(), [](ThemeAndSerializer const& a, ThemeAndSerializer const& b) {
+        return a.theme.name < b.theme.name;
+    });
+}
+
+void Editor::save_current_theme() const
+{
+    // auto os = std::ofstream{_paths.current_theme_file};
+    // {
+    //     auto archive = cereal::JSONOutputArchive{os};
+    //     archive(
+    //         cereal::make_nvp("Use OS Theme", _use_os_theme.has_value()),
+    //         cereal::make_nvp("Current theme", _current_theme)
+    //     );
+    // }
 }
 
 auto Editor::load_current_theme() -> bool
 {
-    auto is = std::ifstream{_paths.current_theme};
+    auto is = std::ifstream{_paths.current_theme_file};
     if (!is.is_open())
         return false;
     try
     {
         bool use_os_theme{};
         {
-            auto archive = cereal::JSONInputArchive{is};
-            archive(
-                use_os_theme,
-                _current_theme
-            );
+            // auto archive = cereal::JSONInputArchive{is};
+            // archive(
+            //     use_os_theme,
+            //     _current_theme
+            // );
         }
         if (use_os_theme)
             _use_os_theme = OsThemeChecker{};
@@ -289,36 +416,22 @@ auto Editor::load_current_theme() -> bool
 
 void Editor::add_current_theme_to_the_list_of_recorded_themes()
 {
-    _current_theme.set_name(_next_theme_name);
+    _current_theme.name = _next_theme_name;
     save_current_theme();
 
-    _themes.push_back(_current_theme);
-    save_themes();
+    _themes.emplace_back(_current_theme, std::make_unique<JsonSerializer<Theme>>());
+    save_theme(_themes.back());
 
     _next_theme_name = "";
-}
 
-void Editor::remove_unknown_categories_from_theme(Theme& theme) const
-{
-    auto keep = std::unordered_map<std::string, Color>{};
-    for (auto const& category : _config.categories())
-    {
-        keep[category.name] = theme.color_for_category(category.name);
-    }
-    theme.set_colors_for_categories(keep);
-}
-
-void Editor::remove_unknown_categories_from_themes()
-{
-    for (auto& theme : _themes)
-        remove_unknown_categories_from_theme(theme);
+    sort_themes();
 }
 
 void Editor::rename_category_in_themes(std::string const& old_category_name, std::string const& new_category_name)
 {
     _current_theme.rename_category(old_category_name, new_category_name);
     for (auto& theme : _themes)
-        theme.rename_category(old_category_name, new_category_name);
+        theme.theme.rename_category(old_category_name, new_category_name);
 }
 
 auto Editor::imgui_config_editor() -> bool
@@ -352,7 +465,7 @@ auto Editor::imgui_themes_editor() -> bool
             }
         }))
     {
-        _current_theme.set_name("");
+        _current_theme.name = "";
         apply_current_theme();
         save_current_theme();
         b = true;
@@ -376,7 +489,7 @@ auto Editor::imgui_theme_selector(bool is_allowed_to_delete_themes) -> bool
 {
     bool b = false;
 
-    if (ImGui::BeginCombo("Theme", _use_os_theme.has_value() ? "Use OS color theme" : _current_theme.name().c_str()))
+    if (ImGui::BeginCombo("Theme", _use_os_theme.has_value() ? "Use OS color theme" : _current_theme.name.c_str()))
     {
         {
             bool const is_selected = _use_os_theme.has_value();
@@ -389,15 +502,15 @@ auto Editor::imgui_theme_selector(bool is_allowed_to_delete_themes) -> bool
             if (is_selected)
                 ImGui::SetItemDefaultFocus();
         }
-        Theme const* theme_to_delete = nullptr;
+        ThemeAndSerializer const* theme_to_delete = nullptr;
         for (auto const& theme : _themes)
         {
             ImGui::PushID(&theme);
-            bool const is_selected = !_use_os_theme.has_value() && theme.name() == _current_theme.name();
-            if (ImGui::Selectable(theme.name().c_str(), is_selected))
+            bool const is_selected = !_use_os_theme.has_value() && theme.theme.name == _current_theme.name;
+            if (ImGui::Selectable(theme.theme.name.c_str(), is_selected))
             {
                 _use_os_theme.reset();
-                _current_theme = theme;
+                _current_theme = theme.theme;
                 apply_current_theme();
                 save_current_theme();
                 b = true;
@@ -414,13 +527,20 @@ auto Editor::imgui_theme_selector(bool is_allowed_to_delete_themes) -> bool
         }
         if (theme_to_delete)
         {
-            if (theme_to_delete->name() == _current_theme.name())
+            if (theme_to_delete->theme.name == _current_theme.name)
             {
-                _current_theme.set_name("");
+                _current_theme.name = "";
                 save_current_theme();
             }
-            _themes.erase(std::remove_if(_themes.begin(), _themes.end(), [&](Theme const& theme) { return &theme == theme_to_delete; }), _themes.end());
-            save_themes();
+            try
+            {
+                std::filesystem::remove(theme_file_path(theme_to_delete->theme));
+            }
+            catch (std::exception const& e)
+            {
+                error_handlers().on_optional_warning("Failed to remove theme file \"" + theme_file_path(theme_to_delete->theme).string() + "\":\n" + e.what());
+            }
+            _themes.erase(std::remove_if(_themes.begin(), _themes.end(), [&](ThemeAndSerializer const& theme) { return &theme == theme_to_delete; }), _themes.end());
         }
         ImGui::EndCombo();
     }

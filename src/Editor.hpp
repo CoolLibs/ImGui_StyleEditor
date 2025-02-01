@@ -9,8 +9,9 @@
 namespace ImStyleEd {
 
 struct SerializationPaths {
-    std::filesystem::path current_theme;
-    std::filesystem::path themes;
+    std::filesystem::path current_theme_file;
+    std::filesystem::path themes_folder;
+    std::filesystem::path themes_default_folder;
     std::filesystem::path config_file;
 };
 
@@ -37,18 +38,31 @@ public:
     auto imgui_theme_selector(bool is_allowed_to_delete_themes = false) -> bool;
 
 private:
-    void save_config();
-    void save_themes();
-    void save_current_theme();
+    struct ThemeAndSerializer {
+        Theme                               theme;
+        std::unique_ptr<ISerializer<Theme>> serializer;
+
+        ThemeAndSerializer(Theme theme, std::unique_ptr<ISerializer<Theme>> serializer)
+            : theme{std::move(theme)}
+            , serializer{std::move(serializer)}
+        {}
+    };
+
+private:
+    auto find_closest_theme(Theme const& target_theme) const -> Theme const*;
+    auto theme_file_path(Theme const& theme) const -> std::filesystem::path;
+
+    void save_config() const;
+    void save_theme(ThemeAndSerializer const&) const;
+    void save_themes() const;
+    void save_current_theme() const;
     void load_config();
     void load_themes();
+    void sort_themes();
     /// Returns true iff the theme has successfully been loaded
     auto load_current_theme() -> bool;
 
     void add_current_theme_to_the_list_of_recorded_themes();
-
-    void remove_unknown_categories_from_theme(Theme& theme) const;
-    void remove_unknown_categories_from_themes();
 
     void rename_category_in_themes(std::string const& old_category_name, std::string const& new_category_name);
 
@@ -69,14 +83,15 @@ private:
     };
 
 private:
-    Theme                         _current_theme{};
-    std::vector<Theme>            _themes{};
-    Config                        _config{};
-    SerializationPaths            _paths{};
-    std::string                   _next_theme_name{};
-    std::optional<OsThemeChecker> _use_os_theme{OsThemeChecker{}};
+    Theme                           _current_theme{};
+    std::vector<ThemeAndSerializer> _themes{};
+    Config                          _config{};
+    SerializationPaths              _paths{};
+    std::string                     _next_theme_name{};
+    std::optional<OsThemeChecker>   _use_os_theme{OsThemeChecker{}};
 
     std::unique_ptr<ISerializer<Config>> _config_serializer;
+    // std::unique_ptr<ISerializer<Config>> _current_theme_serializer;
 };
 
 } // namespace ImStyleEd

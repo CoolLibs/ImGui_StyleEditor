@@ -3,6 +3,7 @@
 
 namespace ImStyleEd {
 
+// We go through this interface because we don't want users of our library to receive nlohmann::json as a public dependency
 template<typename T>
 class ISerializer {
 public:
