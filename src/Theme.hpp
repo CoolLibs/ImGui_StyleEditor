@@ -4,7 +4,6 @@
 #include <functional>
 #include <string>
 #include <unordered_map>
-#include <utility>
 #include "Color.hpp"
 
 namespace ImStyleEd {
