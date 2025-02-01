@@ -331,6 +331,8 @@ auto Editor::get_color_from_theme_or_default(std::string_view theme_name, std::s
 {
     auto const* theme = try_get_theme(theme_name);
     if (!theme)
+        theme = get_default_theme();
+    if (!theme)
         return Color{1.f, 0.f, 1.f};
     return theme->color_for_category(std::string{color_category});
 }
