@@ -5,7 +5,6 @@
 #include <vector>
 #include "Category.hpp"
 #include "Element.hpp"
-#include "Group.hpp"
 #include "GroupID.hpp"
 
 namespace ImStyleEd {

@@ -11,25 +11,34 @@
 #include "imgui/misc/cpp/imgui_stdlib.h"
 #include "wants_dark_theme/wants_dark_theme.hpp"
 
-static void to_json(nlohmann::json& json, ImVec2 const& v)
+namespace {
+template<class... Ts>
+struct overloaded : Ts... { // NOLINT(*multiple-inheritance)
+    using Ts::operator()...;
+};
+template<class... Ts>
+overloaded(Ts...) -> overloaded<Ts...>;
+} // namespace
+
+[[maybe_unused]] static void to_json(nlohmann::json& json, ImVec2 const& v)
 {
     ImStyleEd::json_set(json, "x", v.x);
     ImStyleEd::json_set(json, "y", v.y);
 }
-static void from_json(nlohmann::json const& json, ImVec2& v)
+[[maybe_unused]] static void from_json(nlohmann::json const& json, ImVec2& v)
 {
     ImStyleEd::json_get(json, "x", v.x);
     ImStyleEd::json_get(json, "y", v.y);
 }
 
-static void to_json(nlohmann::json& json, ImVec4 const& v)
+[[maybe_unused]] static void to_json(nlohmann::json& json, ImVec4 const& v)
 {
     ImStyleEd::json_set(json, "x", v.x);
     ImStyleEd::json_set(json, "y", v.y);
     ImStyleEd::json_set(json, "z", v.z);
     ImStyleEd::json_set(json, "w", v.w);
 }
-static void from_json(nlohmann::json const& json, ImVec4& v)
+[[maybe_unused]] static void from_json(nlohmann::json const& json, ImVec4& v)
 {
     ImStyleEd::json_get(json, "x", v.x);
     ImStyleEd::json_get(json, "y", v.y);
@@ -39,101 +48,92 @@ static void from_json(nlohmann::json const& json, ImVec4& v)
 
 namespace ImStyleEd {
 
-static void to_json(nlohmann::json& json, GroupID const& group_id)
+[[maybe_unused]] static void to_json(nlohmann::json& json, GroupID const& group_id)
 {
     ImStyleEd::json_set(json, "Category", group_id.category_name);
     ImStyleEd::json_set(json, "Group", group_id.group_name);
 }
-static void from_json(nlohmann::json const& json, GroupID& group_id)
+[[maybe_unused]] static void from_json(nlohmann::json const& json, GroupID& group_id)
 {
     ImStyleEd::json_get(json, "Category", group_id.category_name);
     ImStyleEd::json_get(json, "Group", group_id.group_name);
 }
 
-static void to_json(nlohmann::json& json, Element const& element)
+[[maybe_unused]] static void to_json(nlohmann::json& json, Element const& element)
 {
     ImStyleEd::json_set(json, "Name", element.name);
 }
-static void from_json(nlohmann::json const& json, Element& element)
+[[maybe_unused]] static void from_json(nlohmann::json const& json, Element& element)
 {
     ImStyleEd::json_get(json, "Name", element.name);
 }
 
-static void to_json(nlohmann::json& json, Group const& group)
+[[maybe_unused]] static void to_json(nlohmann::json& json, Group const& group)
 {
     ImStyleEd::json_set(json, "Name", group.name);
     ImStyleEd::json_set(json, "Brightness delta", group.brightness_delta);
     ImStyleEd::json_set(json, "Opacity", group.opacity);
 }
-static void from_json(nlohmann::json const& json, Group& group)
+[[maybe_unused]] static void from_json(nlohmann::json const& json, Group& group)
 {
     ImStyleEd::json_get(json, "Name", group.name);
     ImStyleEd::json_get(json, "Brightness delta", group.brightness_delta);
     ImStyleEd::json_get(json, "Opacity", group.opacity);
 }
 
-static void to_json(nlohmann::json& json, Category const& category)
+[[maybe_unused]] static void to_json(nlohmann::json& json, Category const& category)
 {
     ImStyleEd::json_set(json, "Name", category.name);
     ImStyleEd::json_set(json, "Behaves differently in light mode", category.behaves_differently_in_light_mode);
     ImStyleEd::json_set(json, "Groups", category.groups);
 }
-static void from_json(nlohmann::json const& json, Category& category)
+[[maybe_unused]] static void from_json(nlohmann::json const& json, Category& category)
 {
     ImStyleEd::json_get(json, "Name", category.name);
     ImStyleEd::json_get(json, "Behaves differently in light mode", category.behaves_differently_in_light_mode);
     ImStyleEd::json_get(json, "Groups", category.groups);
 }
 
-static void to_json(nlohmann::json& json, Config const& config)
+[[maybe_unused]] static void to_json(nlohmann::json& json, Config const& config)
 {
     ImStyleEd::json_set(json, "Categories", config.categories());
     for (auto const& element : config.elements())
         ImStyleEd::json_set(json["Element's Group ID"], element.first.name, element.second);
 }
-static void from_json(nlohmann::json const& json, Config& config)
+[[maybe_unused]] static void from_json(nlohmann::json const& json, Config& config)
 {
     ImStyleEd::json_get(json, "Categories", config.categories());
     for (auto& element : config.elements())
         ImStyleEd::json_get(json.at("Element's Group ID"), element.first.name, element.second);
 }
 
-static void to_json(nlohmann::json& json, Color const& color)
+[[maybe_unused]] static void to_json(nlohmann::json& json, Color const& color)
 {
     ImStyleEd::json_set(json, "R", color.r);
     ImStyleEd::json_set(json, "G", color.g);
     ImStyleEd::json_set(json, "B", color.b);
 }
-static void from_json(nlohmann::json const& json, Color& color)
+[[maybe_unused]] static void from_json(nlohmann::json const& json, Color& color)
 {
     ImStyleEd::json_get(json, "R", color.r);
     ImStyleEd::json_get(json, "G", color.g);
     ImStyleEd::json_get(json, "B", color.b);
 }
 
-static void to_json(nlohmann::json& json, Theme const& theme)
+[[maybe_unused]] static void to_json(nlohmann::json& json, Theme const& theme)
 {
     ImStyleEd::json_set(json, "Is Dark Mode", theme.is_dark_mode);
     for (auto const& [name, color] : theme.categories_colors)
         ImStyleEd::json_set(json["Categories"], name, color);
 }
-static void from_json(nlohmann::json const& json, Theme& theme)
+[[maybe_unused]] static void from_json(nlohmann::json const& json, Theme& theme)
 {
     ImStyleEd::json_get(json, "Is Dark Mode", theme.is_dark_mode);
     for (auto const& [name, color_json] : json.at("Categories").items())
         from_json(color_json, theme.categories_colors[name]);
 }
 
-namespace {
-template<class... Ts>
-struct overloaded : Ts... {
-    using Ts::operator()...;
-};
-template<class... Ts>
-overloaded(Ts...) -> overloaded<Ts...>;
-} // namespace
-
-static void to_json(nlohmann::json& json, internal::CurrentTheme const& current)
+[[maybe_unused]] static void to_json(nlohmann::json& json, internal::CurrentTheme const& current)
 {
     std::visit(
         overloaded{
@@ -147,7 +147,7 @@ static void to_json(nlohmann::json& json, internal::CurrentTheme const& current)
         current.name_or_os_theme
     );
 }
-static void from_json(nlohmann::json const& json, internal::CurrentTheme& current)
+[[maybe_unused]] static void from_json(nlohmann::json const& json, internal::CurrentTheme& current)
 {
     if (json.at("Name").is_null())
         current.name_or_os_theme = internal::OsThemeChecker{};

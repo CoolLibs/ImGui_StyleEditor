@@ -99,7 +99,7 @@ static void imgui_color_element(GroupedElement& element)
     {
         {                                   // Set payload to carry the index of our item (could be anything)
             GroupedElement* ptr = &element; // /!\ Assumes this is safe to store this pointer as it should never change (`_element_to_group_id` doesn't change unless we call `register_element()`, which should only happen once at the creation of the Editor / Config.)
-            ImGui::SetDragDropPayload("color_theme_drag_drop", &ptr, sizeof(GroupedElement*));
+            ImGui::SetDragDropPayload("color_theme_drag_drop", static_cast<void*>(&ptr), sizeof(GroupedElement*));
         }
 
         // Display preview
