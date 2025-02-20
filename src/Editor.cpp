@@ -592,18 +592,23 @@ static auto file_name_error(std::string const& name) -> std::string
             return std::string{"Name cannot contain a "} + invalid_char;
     }
 
-    auto upper_case_name = name;
-    std::transform(upper_case_name.begin(), upper_case_name.end(), upper_case_name.begin(), [](char c) {
-        return static_cast<char>(std::toupper(static_cast<unsigned char>(c))); // We need those static_casts to avoid undefined behaviour, cf. https://en.cppreference.com/w/cpp/string/byte/toupper
-    });
-    for (const char* invalid_name : {
-             "CON", "PRN", "AUX", "NUL",
-             "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
-             "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
-         })
+    if (name.ends_with(' '))
+        return "Name cannot end with a space";
+
     {
-        if (upper_case_name == invalid_name)
-            return '\"' + std::string{name} + '\"' + " is a reserved name";
+        auto upper_case_name = name;
+        std::transform(upper_case_name.begin(), upper_case_name.end(), upper_case_name.begin(), [](char c) {
+            return static_cast<char>(std::toupper(static_cast<unsigned char>(c))); // We need those static_casts to avoid undefined behaviour, cf. https://en.cppreference.com/w/cpp/string/byte/toupper
+        });
+        for (const char* invalid_name : {
+                 "CON", "PRN", "AUX", "NUL",
+                 "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+                 "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
+             })
+        {
+            if (upper_case_name == invalid_name)
+                return '\"' + std::string{name} + '\"' + " is a reserved name";
+        }
     }
 
     return "";
