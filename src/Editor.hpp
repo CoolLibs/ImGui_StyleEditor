@@ -8,7 +8,6 @@
 
 namespace ImStyleEd {
 
-namespace internal {
 class OsThemeChecker {
 public:
     /// Returns true iff the color theme has changed
@@ -33,7 +32,6 @@ struct CurrentTheme {
     /// Returns true iff the color theme has changed
     auto update() -> bool;
 };
-} // namespace internal
 
 struct SerializationPaths {
     std::filesystem::path current_theme_file;
@@ -46,7 +44,7 @@ class Editor {
 public:
     /// Loads the themes, applies the current theme.
     /// `register_color_elements` must be a function that takes an `ImStyleEd::Config&` and registers all the desired color elements into it
-    Editor(SerializationPaths paths, std::function<void(ImStyleEd::Config&)> const& register_color_elements);
+    Editor(SerializationPaths paths, CurrentTheme initial_theme, std::function<void(ImStyleEd::Config&)> const& register_color_elements);
 
     /// Must be called once every frame
     void update();
@@ -103,10 +101,10 @@ private:
     Config                          _config{};
     SerializationPaths              _paths{};
     std::string                     _next_theme_name{};
-    internal::CurrentTheme          _current_theme{};
+    CurrentTheme                    _current_theme{};
 
-    std::unique_ptr<ISerializer<Config>>                 _config_serializer;
-    std::unique_ptr<ISerializer<internal::CurrentTheme>> _current_theme_serializer;
+    std::unique_ptr<ISerializer<Config>>       _config_serializer;
+    std::unique_ptr<ISerializer<CurrentTheme>> _current_theme_serializer;
 };
 
 } // namespace ImStyleEd

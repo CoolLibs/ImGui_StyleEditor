@@ -135,11 +135,11 @@ namespace ImStyleEd {
         from_json(color_json, theme.categories_colors[name]);
 }
 
-[[maybe_unused]] static void to_json(nlohmann::json& json, internal::CurrentTheme const& current)
+[[maybe_unused]] static void to_json(nlohmann::json& json, CurrentTheme const& current)
 {
     std::visit(
         overloaded{
-            [&](internal::OsThemeChecker const&) {
+            [&](OsThemeChecker const&) {
                 json["Name"] = nullptr;
             },
             [&](std::string const& theme_name) {
@@ -149,15 +149,15 @@ namespace ImStyleEd {
         current.name_or_os_theme
     );
 }
-[[maybe_unused]] static void from_json(nlohmann::json const& json, internal::CurrentTheme& current)
+[[maybe_unused]] static void from_json(nlohmann::json const& json, CurrentTheme& current)
 {
     if (json.at("Name").is_null())
-        current.name_or_os_theme = internal::OsThemeChecker{};
+        current.name_or_os_theme = OsThemeChecker{};
     else if (json.at("Name").is_string())
         current.name_or_os_theme = json.at("Name").get<std::string>();
 }
 
-auto internal::CurrentTheme::name() const -> std::string
+auto CurrentTheme::name() const -> std::string
 {
     return std::visit(
         overloaded{
@@ -178,7 +178,7 @@ auto internal::CurrentTheme::name() const -> std::string
     );
 }
 
-auto internal::CurrentTheme::update() -> bool
+auto CurrentTheme::update() -> bool
 {
     return std::visit(
         overloaded{
@@ -205,8 +205,9 @@ static auto make_theme_serializer() -> std::unique_ptr<ISerializer<Theme>>
     );
 }
 
-Editor::Editor(SerializationPaths paths, std::function<void(ImStyleEd::Config&)> const& register_color_elements)
+Editor::Editor(SerializationPaths paths, CurrentTheme initial_theme, std::function<void(ImStyleEd::Config&)> const& register_color_elements)
     : _paths{std::move(paths)}
+    , _current_theme{std::move(initial_theme)}
     , _config_serializer{std::make_unique<JsonSerializer<Config>>(
           [](nlohmann::json& json, Config const& val) {
               to_json(json, val);
@@ -215,11 +216,11 @@ Editor::Editor(SerializationPaths paths, std::function<void(ImStyleEd::Config&)>
               from_json(json, val);
           }
       )}
-    , _current_theme_serializer{std::make_unique<JsonSerializer<internal::CurrentTheme>>(
-          [](nlohmann::json& json, internal::CurrentTheme const& val) {
+    , _current_theme_serializer{std::make_unique<JsonSerializer<CurrentTheme>>(
+          [](nlohmann::json& json, CurrentTheme const& val) {
               to_json(json, val);
           },
-          [](nlohmann::json const& json, internal::CurrentTheme& val) {
+          [](nlohmann::json const& json, CurrentTheme& val) {
               from_json(json, val);
           }
       )}
@@ -238,7 +239,7 @@ void Editor::update()
         apply_current_theme_or_set_default();
 }
 
-auto internal::OsThemeChecker::update() -> bool
+auto OsThemeChecker::update() -> bool
 {
     auto const prev_color_mode = _color_mode;
     _color_mode                = Cool::wants_dark_theme().value_or(true) ? Mode::Dark : Mode::Light;
@@ -545,7 +546,7 @@ void Editor::delete_theme(std::string const& theme_name)
     try
     {
         std::filesystem::remove(theme_file_path(theme_name));
-        bool const is_using_os_theme = std::get_if<internal::OsThemeChecker>(&_current_theme.name_or_os_theme);
+        bool const is_using_os_theme = std::get_if<OsThemeChecker>(&_current_theme.name_or_os_theme);
         if (!is_using_os_theme && theme_name == _current_theme.name())
             set_default_theme();
         _themes.erase(std::remove_if(_themes.begin(), _themes.end(), [&](ThemeAndSerializer const& theme) { return theme.theme.name == theme_name; }), _themes.end());
@@ -673,7 +674,7 @@ auto Editor::imgui_theme_selector(bool is_allowed_to_delete_themes) -> bool
 {
     bool b = false;
 
-    bool const is_using_os_theme = std::get_if<internal::OsThemeChecker>(&_current_theme.name_or_os_theme);
+    bool const is_using_os_theme = std::get_if<OsThemeChecker>(&_current_theme.name_or_os_theme);
 
     if (ImGui::BeginCombo("Theme", is_using_os_theme ? "Use OS color theme" : _current_theme.name().c_str()))
     {
@@ -683,7 +684,7 @@ auto Editor::imgui_theme_selector(bool is_allowed_to_delete_themes) -> bool
             {
                 if (!is_using_os_theme)
                 {
-                    _current_theme.name_or_os_theme = internal::OsThemeChecker{};
+                    _current_theme.name_or_os_theme = OsThemeChecker{};
                     save_current_theme();
                     // No need to apply the theme, it will be applied on the next update() next frame
                     b = true;
