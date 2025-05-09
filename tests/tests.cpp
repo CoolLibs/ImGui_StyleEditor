@@ -17,6 +17,7 @@ auto main(int argc, char* argv[]) -> int
                 .themes_default_folder = exe_path::dir() / "imstyleed_themes",
                 .config_file           = exe_path::dir() / "imstyleed_config.json",
             },
+            ImStyleEd::CurrentTheme{ImStyleEd::OsThemeChecker{}},
             [](ImStyleEd::Config& config) {
                 ImStyleEd::register_all_imgui_color_elements(config);
             }
