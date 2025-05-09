@@ -36,7 +36,7 @@ endif()
 include(FetchContent)
 FetchContent_Declare(
     glm
-    GIT_REPOSITORY https://github.com/CoolLibs/glm
+    GIT_REPOSITORY https://github.com/Coollab-Art/glm
     GIT_TAG 41628991f848835d36042173eb45874c1859e1c2
 )
 FetchContent_Populate(glm)
